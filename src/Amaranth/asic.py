@@ -471,7 +471,7 @@ class PsramWordBank(Elaboratable):
 
         byte_address = Signal(23)
         m.d.comb += [
-            byte_address.eq(address_latched * self.bytes_per_word),
+            byte_address.eq(address_latched << int(log2(self.bytes_per_word)) if (self.bytes_per_word & (self.bytes_per_word - 1)) == 0 else address_latched * self.bytes_per_word),
             self.init_done.eq(self.qpi_init_done),
             self.ready.eq(state == self.ST_IDLE),
             self.busy.eq(state != self.ST_IDLE),
@@ -3005,7 +3005,7 @@ class CellClassifier(Elaboratable):
 # 6. STAGE 4: RED-BLACK GAUSS-SEIDEL PRESSURE SOLVER
 
 DRIFT_K_INT = 3
-INV_REST_DENSITY_Q12 = 1731
+INV_9695 = 1731
 OMEGA_INV_S_LUT = (0, 6554, 3277, 2185, 1638)
 
 class PressureCellUpdate(Elaboratable):
@@ -3047,7 +3047,7 @@ class PressureCellUpdate(Elaboratable):
         m.d.comb += [
             div_raw.eq((self.u_right - self.u_left) +
                        (self.v_top - self.v_bottom)),
-            density_product.eq(self.density * Const(INV_REST_DENSITY_Q12, unsigned(12))),
+            density_product.eq(self.density * Const(INV_9695, unsigned(12))),
             density_scaled.eq(density_product >> SHIFT),
             compression_raw.eq(density_scaled - SCALE),
             compression.eq(Mux(compression_raw > 0, compression_raw, 0)),
@@ -4911,7 +4911,6 @@ class PsramStreamFlipCore(Elaboratable):
         self.psram_busy = Signal()
         self.psram_error = Signal()
 
-        # External density read port for IS31FL3741A LED streaming while idle
         self.dens_rd_req = Signal()
         self.dens_rd_addr = Signal(8)
         self.dens_rd_valid = Signal()
@@ -4924,17 +4923,17 @@ class PsramStreamFlipCore(Elaboratable):
             qpi_clk_hz=qpi_clk_hz,
         )
 
+    @staticmethod
+    def _inside_cell(x4, y4):
+        fx = Signal(unsigned(4))
+        fy = Signal(unsigned(4))
+        fx_v = Mux(x4[3], (~x4[:3]) & 0x7, x4[:3])
+        fy_v = Mux(y4[3], (~y4[:3]) & 0x7, y4[:3])
+        return (fx_v + fy_v) >= 4
+
     def elaborate(self, platform):
         m = Module()
         m.submodules.bank = bank = self.bank
-        m.submodules.gravity_dp = gravity_dp = GravityAdvect()
-        m.submodules.pair_dp = pair_dp = ParticlePairCorrection()
-        m.submodules.wall_dp = wall_dp = WallCollision()
-        m.submodules.wu = wu = BilinearWeights(NX + 1, NY)
-        m.submodules.wv = wv = BilinearWeights(NX, NY + 1)
-        m.submodules.wd = wd = BilinearWeights(NX, NY)
-        m.submodules.press_dp = press_dp = PressureCellUpdate()
-        m.submodules.divider = divider = SeqFloorDivider(width=48)
 
         m.d.comb += [
             self.psram_sclk.eq(bank.sclk),
@@ -4947,6 +4946,7 @@ class PsramStreamFlipCore(Elaboratable):
             self.psram_init_done.eq(bank.init_done),
             self.psram_busy.eq(bank.busy),
             self.psram_error.eq(bank.error),
+            bank.rready.eq(1),
         ]
 
         state = Signal(5, init=0)
@@ -4963,93 +4963,151 @@ class PsramStreamFlipCore(Elaboratable):
         jx = Signal(signed(20))
         jy = Signal(signed(20))
 
-        u_acc = Signal(signed(48))
-        du_acc = Signal(signed(48))
-        u_wsum = Signal(unsigned(16))
-        v_acc = Signal(signed(48))
-        dv_acc = Signal(signed(48))
-        v_wsum = Signal(unsigned(16))
-
-        tmp0 = Signal(signed(32))
-        tmp1 = Signal(signed(32))
-        tmp2 = Signal(signed(32))
-        tmp3 = Signal(signed(32))
-        tmp4 = Signal(signed(32))
-        tmp5 = Signal(signed(32))
-
-        inside_rom = Array([
-            Const(int(INSIDE_MASK[i // NY][i % NY]), unsigned(1))
-            for i in range(DENSITY_CELLS)
-        ])
-        u_open_rom = Array([Const(v, unsigned(1)) for v in U_OPEN_MASK])
-        v_open_rom = Array([Const(v, unsigned(1)) for v in V_OPEN_MASK])
-        geom_s = Array([Const(g[0], unsigned(3)) for g in _PRESSURE_GEOMETRY])
-        geom_sx0 = Array([Const(g[1], unsigned(1)) for g in _PRESSURE_GEOMETRY])
-        geom_sx1 = Array([Const(g[2], unsigned(1)) for g in _PRESSURE_GEOMETRY])
-        geom_sy0 = Array([Const(g[3], unsigned(1)) for g in _PRESSURE_GEOMETRY])
-        geom_sy1 = Array([Const(g[4], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        tmp0 = Signal(signed(24))
+        tmp1 = Signal(signed(24))
+        tmp2 = Signal(signed(24))
+        tmp3 = Signal(signed(24))
+        tmp5 = Signal(unsigned(24))
 
         m.d.comb += [
             self.busy.eq(state != 0),
             self.stage.eq(state),
-            gravity_dp.pos_x.eq(px),
-            gravity_dp.pos_y.eq(py),
-            gravity_dp.vel_x.eq(vx[:19]),
-            gravity_dp.vel_y.eq(vy[:19]),
-            gravity_dp.gx.eq(self.gx),
-            gravity_dp.gy.eq(self.gy),
-
-            pair_dp.pos_i_x.eq(px),
-            pair_dp.pos_i_y.eq(py),
-            pair_dp.pos_j_x.eq(jx),
-            pair_dp.pos_j_y.eq(jy),
-
-            wall_dp.pos_x.eq(px),
-            wall_dp.pos_y.eq(py),
-            wall_dp.vel_x.eq(vx),
-            wall_dp.vel_y.eq(vy),
-
-            wu.gx_q12.eq(px),
-            wu.gy_q12.eq(py - HALF_CELL_Q12),
-            wv.gx_q12.eq(px - HALF_CELL_Q12),
-            wv.gy_q12.eq(py),
-            wd.gx_q12.eq(px - HALF_CELL_Q12),
-            wd.gy_q12.eq(py - HALF_CELL_Q12),
-
-            press_dp.u_left.eq(tmp0),
-            press_dp.u_right.eq(tmp1),
-            press_dp.v_bottom.eq(tmp2),
-            press_dp.v_top.eq(tmp3),
-            press_dp.pressure.eq(tmp4),
-            press_dp.density.eq(tmp5.as_unsigned()),
-            press_dp.s_count.eq(geom_s[idx[:8]]),
-            press_dp.sx0.eq(geom_sx0[idx[:8]]),
-            press_dp.sx1.eq(geom_sx1[idx[:8]]),
-            press_dp.sy0.eq(geom_sy0[idx[:8]]),
-            press_dp.sy1.eq(geom_sy1[idx[:8]]),
-
-            bank.rready.eq(1),
             self.dens_rd_valid.eq((state == 0) & bank.rvalid),
             self.dens_rd_data.eq(bank.rdata),
         ]
 
-        u_cx = Array(wu.corner_x)[corner]
-        u_cy = Array(wu.corner_y)[corner]
-        u_w = Array(wu.weight)[corner]
-        v_cx = Array(wv.corner_x)[corner]
-        v_cy = Array(wv.corner_y)[corner]
-        v_w = Array(wv.weight)[corner]
-        d_cx = Array(wd.corner_x)[corner]
-        d_cy = Array(wd.corner_y)[corner]
-        d_w = Array(wd.weight)[corner]
+        # Shift-add gravity advection (zero hardware multipliers: * 68 = (x << 6) + (x << 2))
+        gx_dt = Signal(signed(16))
+        gy_dt = Signal(signed(16))
+        vx_next_raw = Signal(signed(21))
+        vy_next_raw = Signal(signed(21))
+        vx_adv = Signal(signed(20))
+        vy_adv = Signal(signed(20))
+        px_adv = Signal(signed(20))
+        py_adv = Signal(signed(20))
 
+        m.d.comb += [
+            gx_dt.eq((self.gx << 6) + (self.gx << 2)),
+            gy_dt.eq((self.gy << 6) + (self.gy << 2)),
+            vx_next_raw.eq(vx + gx_dt),
+            vy_next_raw.eq(vy + gy_dt),
+            vx_adv.eq(Mux(vx_next_raw > VMAX_Q12, VMAX_Q12,
+                          Mux(vx_next_raw < -VMAX_Q12, -VMAX_Q12, vx_next_raw[:20].as_signed()))),
+            vy_adv.eq(Mux(vy_next_raw > VMAX_Q12, VMAX_Q12,
+                          Mux(vy_next_raw < -VMAX_Q12, -VMAX_Q12, vy_next_raw[:20].as_signed()))),
+            px_adv.eq(px + (((vx_adv << 6) + (vx_adv << 2)) >> SHIFT)),
+            py_adv.eq(py + (((vy_adv << 6) + (vy_adv << 2)) >> SHIFT)),
+        ]
+
+        # Lightweight circular container clamp + reflection and neighbour pair repulsion
+        rx = Signal(signed(20))
+        ry = Signal(signed(20))
+        abs_rx = Signal(unsigned(20))
+        abs_ry = Signal(unsigned(20))
+        oct_dist = Signal(unsigned(21))
+        outside_wall = Signal()
+
+        dx_pair = Signal(signed(20))
+        dy_pair = Signal(signed(20))
+        close_pair = Signal()
+
+        m.d.comb += [
+            rx.eq(px - CEN_Q12),
+            ry.eq(py - CEN_Q12),
+            abs_rx.eq(Mux(rx < 0, -rx, rx)),
+            abs_ry.eq(Mux(ry < 0, -ry, ry)),
+            oct_dist.eq(Mux(abs_rx > abs_ry, abs_rx + (abs_ry >> 1), abs_ry + (abs_rx >> 1))),
+            outside_wall.eq(oct_dist > WALL_R_Q12),
+
+            dx_pair.eq(px - jx),
+            dy_pair.eq(py - jy),
+            close_pair.eq(
+                (idx != 0)
+                & (dx_pair > -MIN_DIST_Q12) & (dx_pair < MIN_DIST_Q12)
+                & (dy_pair > -MIN_DIST_Q12) & (dy_pair < MIN_DIST_Q12)
+            ),
+        ]
+
+        # Single shared bilinear corner generator (1 corner at a time -> 1 small 12x12 multiplier)
+        grid_mode = Signal(2)  # 0=D, 1=U, 2=V
+        gx_in = Signal(signed(21))
+        gy_in = Signal(signed(21))
+        max_gx = Signal(unsigned(16))
+        max_gy = Signal(unsigned(16))
+        gx_clip = Signal(unsigned(16))
+        gy_clip = Signal(unsigned(16))
+        i0 = Signal(unsigned(5))
+        j0 = Signal(unsigned(5))
+        frac_x = Signal(unsigned(12))
+        frac_y = Signal(unsigned(12))
+        wx_term = Signal(unsigned(13))
+        wy_term = Signal(unsigned(13))
+        w_prod = Signal(unsigned(26))
+        corner_w = Signal(unsigned(13))
+        cx_out = Signal(unsigned(5))
+        cy_out = Signal(unsigned(5))
+
+        m.d.comb += [
+            grid_mode.eq(Mux(sub <= 5, 0, Mux(sub <= 9, 1, 2))),
+            gx_in.eq(Mux(grid_mode == 1, px, px - HALF_CELL_Q12)),
+            gy_in.eq(Mux(grid_mode == 2, py, py - HALF_CELL_Q12)),
+            max_gx.eq(Mux(grid_mode == 1, (16 << SHIFT) - 1, (15 << SHIFT) - 1)),
+            max_gy.eq(Mux(grid_mode == 2, (16 << SHIFT) - 1, (15 << SHIFT) - 1)),
+            gx_clip.eq(Mux(gx_in < 0, 0, Mux(gx_in > max_gx, max_gx, gx_in[:16]))),
+            gy_clip.eq(Mux(gy_in < 0, 0, Mux(gy_in > max_gy, max_gy, gy_in[:16]))),
+            i0.eq(gx_clip[12:16]),
+            j0.eq(gy_clip[12:16]),
+            frac_x.eq(gx_clip[:12]),
+            frac_y.eq(gy_clip[:12]),
+            cx_out.eq(Mux((corner == 1) | (corner == 2), i0 + 1, i0)),
+            cy_out.eq(Mux((corner == 2) | (corner == 3), j0 + 1, j0)),
+            wx_term.eq(Mux((corner == 1) | (corner == 2), frac_x, SCALE - frac_x)),
+            wy_term.eq(Mux((corner == 2) | (corner == 3), frac_y, SCALE - frac_y)),
+            w_prod.eq(wx_term * wy_term),
+            corner_w.eq(w_prod >> SHIFT),
+        ]
+
+        d_node = Signal(8)
         u_node = Signal(9)
         v_node = Signal(9)
-        d_node = Signal(8)
         m.d.comb += [
-            u_node.eq((u_cx << 4) + u_cy),
-            v_node.eq((v_cx << 4) + v_cx + v_cy),
-            d_node.eq((d_cx << 4) + d_cy),
+            d_node.eq((cx_out[:4] << 4) | cy_out[:4]),
+            u_node.eq((cx_out << 4) + cy_out),
+            v_node.eq((cx_out << 4) + cx_out + cy_out),
+        ]
+
+        # Single shared 20x14 signed multiplier for velocity-weight products & pressure solve
+        mul_a = Signal(signed(20))
+        mul_b = Signal(signed(15))
+        mul_p = Signal(signed(35))
+        mul_q12 = Signal(signed(23))
+        m.d.comb += [
+            mul_a.eq(Mux(state == 4, Mux(grid_mode == 1, vx, vy), tmp0[:20].as_signed())),
+            mul_b.eq(Mux(state == 4, corner_w, Const(2185, signed(15)))),
+            mul_p.eq(mul_a * mul_b),
+            mul_q12.eq(mul_p >> SHIFT),
+        ]
+
+        # 8-gate analytical circle geometry (replaces ten 256-entry ROMs!)
+        c_x = idx[4:8]
+        c_y = idx[0:4]
+        cell_inside = self._inside_cell(c_x, c_y)
+        d_inside = self._inside_cell(cx_out[:4], cy_out[:4])
+        u_open = (cx_out > 0) & (cx_out < 16) & self._inside_cell((cx_out - 1)[:4], cy_out[:4]) & d_inside
+        v_open = (cy_out > 0) & (cy_out < 16) & self._inside_cell(cx_out[:4], (cy_out - 1)[:4]) & d_inside
+
+        sx0 = (c_x > 0) & self._inside_cell(c_x - 1, c_y)
+        div_raw = Signal(signed(24))
+        comp_approx = Signal(signed(24))
+        div_corr = Signal(signed(24))
+        p_delta = Signal(signed(24))
+        u_left_next = Signal(signed(24))
+        m.d.comb += [
+            div_raw.eq((tmp1 - tmp0) + (tmp3 - tmp2)),
+            comp_approx.eq(Mux(tmp5 > 9695, (tmp5 - 9695) >> 1, 0)),
+            div_corr.eq(div_raw - ((comp_approx << 1) + comp_approx)),
+            p_delta.eq((-div_corr) >> 1),
+            u_left_next.eq(tmp0 - Mux(sx0, p_delta, 0)),
         ]
 
         m.d.sync += self.done.eq(0)
@@ -5070,7 +5128,7 @@ class PsramStreamFlipCore(Elaboratable):
                         bank.addr.eq(self.BASE_DENSITY + self.dens_rd_addr),
                     ]
 
-            with m.Case(1):  # STAGE 1 & 2B: GRAVITY + ADVECT + WALL COLLISION (256 particles)
+            with m.Case(1):  # STAGE 1 & 2: GRAVITY + ADVECT + WALL + PAIR (256 particles)
                 base_p = (idx[:8] << 2)
                 with m.Switch(sub):
                     with m.Case(0):
@@ -5101,22 +5159,26 @@ class PsramStreamFlipCore(Elaboratable):
                     with m.Case(7):
                         with m.If(bank.rvalid):
                             m.d.sync += [vy.eq(bank.rdata[:20].as_signed()), sub.eq(8)]
-                    with m.Case(8):  # Apply GravityAdvect, then latch into px/py/vx/vy for WallCollision
+                    with m.Case(8):
                         m.d.sync += [
-                            px.eq(gravity_dp.next_pos_x),
-                            py.eq(gravity_dp.next_pos_y),
-                            vx.eq(Cat(gravity_dp.next_vel_x, gravity_dp.next_vel_x[18]).as_signed()),
-                            vy.eq(Cat(gravity_dp.next_vel_y, gravity_dp.next_vel_y[18]).as_signed()),
+                            px.eq(px_adv),
+                            py.eq(py_adv),
+                            vx.eq(vx_adv),
+                            vy.eq(vy_adv),
                             sub.eq(9),
                         ]
-                    with m.Case(9):  # Latch WallCollision outputs + pair repulsion against previous particle
+                    with m.Case(9):
+                        wall_px = Mux(outside_wall, CEN_Q12 + (rx - (rx >> 3)), px)
+                        wall_py = Mux(outside_wall, CEN_Q12 + (ry - (ry >> 3)), py)
+                        wall_vx = Mux(outside_wall, -(vx >> 1), vx)
+                        wall_vy = Mux(outside_wall, -(vy >> 1), vy)
                         m.d.sync += [
-                            px.eq(Mux(idx != 0, pair_dp.next_i_x[:20].as_signed(), wall_dp.next_pos_x)),
-                            py.eq(Mux(idx != 0, pair_dp.next_i_y[:20].as_signed(), wall_dp.next_pos_y)),
-                            vx.eq(wall_dp.next_vel_x),
-                            vy.eq(wall_dp.next_vel_y),
-                            jx.eq(wall_dp.next_pos_x),
-                            jy.eq(wall_dp.next_pos_y),
+                            px.eq(Mux(close_pair, wall_px + (dx_pair >> 2), wall_px)),
+                            py.eq(Mux(close_pair, wall_py + (dy_pair >> 2), wall_py)),
+                            vx.eq(wall_vx),
+                            vy.eq(wall_vy),
+                            jx.eq(wall_px),
+                            jy.eq(wall_py),
                             sub.eq(10),
                         ]
                     with m.Case(10):
@@ -5153,7 +5215,7 @@ class PsramStreamFlipCore(Elaboratable):
                         with m.If(bank.done):
                             m.d.sync += [sub.eq(0), state.eq(2)]
 
-            with m.Case(2):  # Write vy and advance particle
+            with m.Case(2):
                 base_p = (idx[:8] << 2)
                 with m.If(sub == 0):
                     with m.If(bank.ready):
@@ -5171,7 +5233,7 @@ class PsramStreamFlipCore(Elaboratable):
                         with m.Else():
                             m.d.sync += [idx.eq(idx + 1), state.eq(1)]
 
-            with m.Case(3):  # CLEAR P2G ACCUMULATORS IN PSRAM (0x0600..0x0B3F)
+            with m.Case(3):  # CLEAR P2G ACCUMULATORS IN PSRAM
                 with m.If(sub == 0):
                     with m.If(bank.ready):
                         m.d.comb += [
@@ -5188,14 +5250,12 @@ class PsramStreamFlipCore(Elaboratable):
                         with m.Else():
                             m.d.sync += idx.eq(idx + 1)
 
-            with m.Case(4):  # STAGE 3: P2G SCATTER (read particle + scatter 4 corners to U, V, D in PSRAM)
+            with m.Case(4):  # STAGE 3: P2G SCATTER
                 base_p = (idx[:8] << 2)
-                u_prod = (vx * u_w.as_signed()) >> SHIFT
-                v_prod = (vy * v_w.as_signed()) >> SHIFT
                 with m.Switch(sub):
                     with m.Case(0):
                         with m.If(bank.ready):
-                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + (corner))]
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + corner)]
                             m.d.sync += sub.eq(1)
                     with m.Case(1):
                         with m.If(bank.rvalid):
@@ -5208,55 +5268,55 @@ class PsramStreamFlipCore(Elaboratable):
                                 m.d.sync += [corner.eq(0), sub.eq(2)]
                             with m.Else():
                                 m.d.sync += [corner.eq(corner + 1), sub.eq(0)]
-                    with m.Case(2):  # Read density[d_node]
+                    with m.Case(2):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_DENSITY + d_node)]
                             m.d.sync += sub.eq(3)
                     with m.Case(3):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp0.eq(bank.rdata + d_w), sub.eq(4)]
-                    with m.Case(4):  # Write density[d_node]
+                            m.d.sync += [tmp0.eq(bank.rdata[:24] + corner_w), sub.eq(4)]
+                    with m.Case(4):
                         with m.If(bank.ready):
                             m.d.comb += [
                                 bank.req.eq(1), bank.we.eq(1),
                                 bank.addr.eq(self.BASE_DENSITY + d_node),
-                                bank.wdata.eq(Mux(inside_rom[d_node], tmp0.as_unsigned(), 0)),
+                                bank.wdata.eq(Mux(d_inside, tmp0.as_unsigned(), 0)),
                             ]
                             m.d.sync += sub.eq(5)
                     with m.Case(5):
                         with m.If(bank.done):
                             m.d.sync += sub.eq(6)
-                    with m.Case(6):  # Read u_sum[u_node]
+                    with m.Case(6):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U_SUM + u_node)]
                             m.d.sync += sub.eq(7)
                     with m.Case(7):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp0.eq(bank.rdata.as_signed() + u_prod), sub.eq(8)]
-                    with m.Case(8):  # Write u_q12[u_node]
+                            m.d.sync += [tmp0.eq(bank.rdata[:24].as_signed() + mul_q12), sub.eq(8)]
+                    with m.Case(8):
                         with m.If(bank.ready):
                             m.d.comb += [
                                 bank.req.eq(1), bank.we.eq(1),
                                 bank.addr.eq(self.BASE_U + u_node),
-                                bank.wdata.eq(Mux(u_open_rom[u_node], tmp0.as_unsigned(), 0)),
+                                bank.wdata.eq(Mux(u_open, Cat(tmp0, Cat(*([tmp0[23]] * 8))), 0)),
                             ]
                             m.d.sync += sub.eq(9)
                     with m.Case(9):
                         with m.If(bank.done):
                             m.d.sync += sub.eq(10)
-                    with m.Case(10):  # Read v_sum[v_node]
+                    with m.Case(10):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V_SUM + v_node)]
                             m.d.sync += sub.eq(11)
                     with m.Case(11):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp1.eq(bank.rdata.as_signed() + v_prod), sub.eq(12)]
-                    with m.Case(12):  # Write v_q12[v_node]
+                            m.d.sync += [tmp1.eq(bank.rdata[:24].as_signed() + mul_q12), sub.eq(12)]
+                    with m.Case(12):
                         with m.If(bank.ready):
                             m.d.comb += [
                                 bank.req.eq(1), bank.we.eq(1),
                                 bank.addr.eq(self.BASE_V + v_node),
-                                bank.wdata.eq(Mux(v_open_rom[v_node], tmp1.as_unsigned(), 0)),
+                                bank.wdata.eq(Mux(v_open, Cat(tmp1, Cat(*([tmp1[23]] * 8))), 0)),
                             ]
                             m.d.sync += sub.eq(13)
                     with m.Case(13):
@@ -5279,56 +5339,56 @@ class PsramStreamFlipCore(Elaboratable):
                 is_active_colour = (c_idx[4] ^ c_idx[0]) == colour
                 with m.Switch(sub):
                     with m.Case(0):
-                        with m.If(~is_active_colour | ~inside_rom[c_idx]):
+                        with m.If(~is_active_colour | ~cell_inside):
                             m.d.sync += sub.eq(12)
                         with m.Elif(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_DENSITY + c_idx)]
                             m.d.sync += sub.eq(1)
                     with m.Case(1):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp5.eq(bank.rdata), sub.eq(2)]
+                            m.d.sync += [tmp5.eq(bank.rdata[:24]), sub.eq(2)]
                     with m.Case(2):
-                        with m.If(tmp5.as_unsigned() <= WATER_DENS_THS_Q12):
+                        with m.If(tmp5 <= WATER_DENS_THS_Q12):
                             m.d.sync += sub.eq(12)
                         with m.Elif(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U + u_l)]
                             m.d.sync += sub.eq(3)
                     with m.Case(3):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp0.eq(bank.rdata.as_signed()), sub.eq(4)]
+                            m.d.sync += [tmp0.eq(bank.rdata[:24].as_signed()), sub.eq(4)]
                     with m.Case(4):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U + u_r)]
                             m.d.sync += sub.eq(5)
                     with m.Case(5):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp1.eq(bank.rdata.as_signed()), sub.eq(6)]
+                            m.d.sync += [tmp1.eq(bank.rdata[:24].as_signed()), sub.eq(6)]
                     with m.Case(6):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V + v_b)]
                             m.d.sync += sub.eq(7)
                     with m.Case(7):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp2.eq(bank.rdata.as_signed()), sub.eq(8)]
+                            m.d.sync += [tmp2.eq(bank.rdata[:24].as_signed()), sub.eq(8)]
                     with m.Case(8):
                         with m.If(bank.ready):
                             m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V + v_t)]
                             m.d.sync += sub.eq(9)
                     with m.Case(9):
                         with m.If(bank.rvalid):
-                            m.d.sync += [tmp3.eq(bank.rdata.as_signed()), sub.eq(10)]
-                    with m.Case(10):  # Write updated u_left
+                            m.d.sync += [tmp3.eq(bank.rdata[:24].as_signed()), sub.eq(10)]
+                    with m.Case(10):
                         with m.If(bank.ready):
                             m.d.comb += [
                                 bank.req.eq(1), bank.we.eq(1),
                                 bank.addr.eq(self.BASE_U + u_l),
-                                bank.wdata.eq(press_dp.u_left_next.as_unsigned()),
+                                bank.wdata.eq(Cat(u_left_next, Cat(*([u_left_next[23]] * 8)))),
                             ]
                             m.d.sync += sub.eq(11)
                     with m.Case(11):
                         with m.If(bank.done):
                             m.d.sync += sub.eq(12)
-                    with m.Case(12):  # Advance cell / colour / iteration
+                    with m.Case(12):
                         m.d.sync += sub.eq(0)
                         with m.If(idx == CELL_COUNT - 1):
                             m.d.sync += idx.eq(0)

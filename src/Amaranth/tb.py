@@ -958,7 +958,7 @@ def export_verilog(path, export_system=False):
         tt_path.write_text(tt_v)
         print("Exported %s (%s bytes)." % (tt_path.resolve(), format(tt_path.stat().st_size, ",")))
         for candidate in (Path("../project.v"), Path("src/project.v")):
-            if candidate.parent.exists() and (candidate.exists() or candidate.parent.name == "src"):
+            if candidate.resolve().parent.exists() and (candidate.exists() or candidate.resolve().parent.name == "src"):
                 candidate.write_text(tt_v)
                 print("Updated  %s (%s bytes)." % (candidate.resolve(), format(candidate.stat().st_size, ",")))
 
