@@ -7,34 +7,34 @@ module PendantSystemTop(rst, frame_sync, lis_int2_sleep, i2c_sda_i, psram_dq_i, 
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input rst;
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5382" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5442" *)
   input frame_sync;
   wire frame_sync;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5383" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5443" *)
   input lis_int2_sleep;
   wire lis_int2_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5389" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5449" *)
   input i2c_sda_i;
   wire i2c_sda_i;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4905" *)
   input [3:0] psram_dq_i;
   wire [3:0] psram_dq_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5384" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5444" *)
   output clock_gated_sleep;
   wire clock_gated_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5385" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5445" *)
   output [6:0] sleep_hold_frames;
   wire [6:0] sleep_hold_frames;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5390" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5450" *)
   output i2c_scl_o;
   wire i2c_scl_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5388" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5448" *)
   output i2c_scl_oe;
   wire i2c_scl_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5390" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5450" *)
   output i2c_sda_o;
   wire i2c_sda_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5391" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5451" *)
   output i2c_sda_oe;
   wire i2c_sda_oe;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4903" *)
@@ -85,20 +85,20 @@ module PendantSystemTop(rst, frame_sync, lis_int2_sleep, i2c_sda_i, psram_dq_i, 
   assign i2c_sda_o = 1'h0;
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5394" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5454" *)
 (* generator = "Amaranth" *)
 module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i, busy, psram_ce_n, psram_dq_o, psram_dq_oe, i2c_scl_oe, i2c_sda_oe, clock_gated_sleep, sleep_hold_frames, \done$67 , stage, psram_sclk, clk);
   reg \$auto$verilog_backend.cc:2524:dump_module$1  = 0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input rst;
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5382" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5442" *)
   input frame_sync;
   wire frame_sync;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5383" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5443" *)
   input lis_int2_sleep;
   wire lis_int2_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5389" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5449" *)
   input sda_i;
   wire sda_i;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4905" *)
@@ -122,10 +122,10 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4294" *)
   output i2c_sda_oe;
   wire i2c_sda_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5384" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5444" *)
   output clock_gated_sleep;
   reg clock_gated_sleep = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5385" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5445" *)
   output [6:0] sleep_hold_frames;
   reg [6:0] sleep_hold_frames = 7'h00;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4899" *)
@@ -219,7 +219,7 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   reg [6:0] \$79 ;
   wire \$8 ;
   wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5453" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5513" *)
   wire accel_changed;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4279" *)
   wire cmd_read;
@@ -233,29 +233,29 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   wire cmd_valid;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4278" *)
   wire cmd_write;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4916" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4915" *)
   wire [7:0] dens_rd_addr;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4601" *)
   wire [7:0] \dens_rd_addr$3 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4603" *)
   wire [31:0] dens_rd_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4918" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4917" *)
   wire [31:0] \dens_rd_data$7 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4915" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4914" *)
   wire dens_rd_req;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4600" *)
   wire \dens_rd_req$1 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4602" *)
   wire dens_rd_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4917" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4916" *)
   wire \dens_rd_valid$5 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4452" *)
   wire done;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4598" *)
   wire \done$62 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5451" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5511" *)
   wire signed [8:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5452" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5512" *)
   wire signed [8:0] dy;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4595" *)
   wire frame_req;
@@ -293,11 +293,11 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   wire [7:0] i2c_rx_data;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4467" *)
   wire i2c_rx_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5387" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5447" *)
   wire i2c_scl_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5389" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5449" *)
   wire i2c_sda_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5390" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5450" *)
   wire i2c_sda_o;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4465" *)
   wire i2c_tx_ack;
@@ -309,9 +309,9 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   wire init_req;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4594" *)
   wire \init_req$52 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5401" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5461" *)
   reg signed [7:0] last_gx = 8'h00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5402" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5462" *)
   reg signed [7:0] last_gy = 8'hc4;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4449" *)
   wire poll_req;
@@ -329,119 +329,119 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
   wire sda_oe;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4895" *)
   wire start;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5400" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5460" *)
   reg [3:0] state = 4'h0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4283" *)
   wire tx_ack;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4282" *)
   wire [7:0] tx_data;
-  assign \$19  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$20  = \$18  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$19 ;
-  assign \$21  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$22  = \$20  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$21 ;
-  assign cmd_start = \$22  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5434" *) \i2c_cmd_start$28  : i2c_cmd_start;
-  assign \$23  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$24  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$25  = \$23  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$24 ;
-  assign \$26  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$27  = \$25  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$26 ;
-  assign \$28  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$29  = \$27  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$28 ;
-  assign cmd_stop = \$29  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5435" *) \i2c_cmd_stop$31  : i2c_cmd_stop;
-  assign \$30  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$31  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$32  = \$30  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$31 ;
-  assign \$33  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$34  = \$32  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$33 ;
-  assign \$35  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$36  = \$34  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$35 ;
-  assign cmd_write = \$36  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5436" *) \i2c_cmd_write$34  : i2c_cmd_write;
-  assign \$37  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$38  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$39  = \$37  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$38 ;
-  assign \$40  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$41  = \$39  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$40 ;
-  assign \$42  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$43  = \$41  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$42 ;
-  assign cmd_read = \$43  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5437" *) 1'h0 : i2c_cmd_read;
-  assign \$44  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$45  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$46  = \$44  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$45 ;
-  assign \$47  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$48  = \$46  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$47 ;
-  assign \$49  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$50  = \$48  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$49 ;
-  assign cmd_valid = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5438" *) \i2c_cmd_valid$39  : i2c_cmd_valid;
-  assign \$51  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$53  = \$51  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$52 ;
-  assign \$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$55  = \$53  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$54 ;
-  assign \$56  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$57  = \$55  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$56 ;
-  assign tx_data = \$57  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5439" *) \i2c_tx_data$42  : i2c_tx_data;
-  assign \$58  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$59  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$60  = \$58  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$59 ;
-  assign \$61  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$62  = \$60  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$61 ;
-  assign \$63  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$64  = \$62  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$63 ;
-  assign tx_ack = \$64  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5440" *) 1'h0 : i2c_tx_ack;
-  assign start = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5444" *) 3'h7;
-  assign init_req = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5445" *) state;
-  assign poll_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5446" *) 3'h4;
-  assign \init_req$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5447" *) 2'h2;
-  assign frame_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5448" *) 4'h9;
-  assign dx = $signed(gx) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5455" *) $signed(last_gx);
-  assign dy = $signed(gy) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5456" *) $signed(last_gy);
-  assign \$65  = $signed(dx) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) $signed(2'h1);
-  assign \$66  = $signed(dx) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) $signed(1'h1);
-  assign \$67  = \$65  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) \$66 ;
-  assign \$68  = $signed(dy) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) $signed(2'h1);
-  assign \$69  = \$67  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) \$68 ;
-  assign \$70  = $signed(dy) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) $signed(1'h1);
-  assign accel_changed = \$69  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *) \$70 ;
-  assign \$71  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5479" *) lis_int2_sleep;
-  assign \$72  = accel_changed | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5479" *) \$71 ;
-  assign \$73  = sleep_hold_frames >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5488" *) 7'h59;
-  assign \$74  = sleep_hold_frames + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5495" *) 1'h1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5400" *)
+  assign \$19  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$20  = \$18  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$19 ;
+  assign \$21  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$22  = \$20  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$21 ;
+  assign cmd_start = \$22  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5494" *) \i2c_cmd_start$28  : i2c_cmd_start;
+  assign \$23  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$24  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$25  = \$23  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$24 ;
+  assign \$26  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$27  = \$25  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$26 ;
+  assign \$28  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$29  = \$27  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$28 ;
+  assign cmd_stop = \$29  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5495" *) \i2c_cmd_stop$31  : i2c_cmd_stop;
+  assign \$30  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$31  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$32  = \$30  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$31 ;
+  assign \$33  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$34  = \$32  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$33 ;
+  assign \$35  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$36  = \$34  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$35 ;
+  assign cmd_write = \$36  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5496" *) \i2c_cmd_write$34  : i2c_cmd_write;
+  assign \$37  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$38  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$39  = \$37  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$38 ;
+  assign \$40  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$41  = \$39  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$40 ;
+  assign \$42  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$43  = \$41  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$42 ;
+  assign cmd_read = \$43  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5497" *) 1'h0 : i2c_cmd_read;
+  assign \$44  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$45  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$46  = \$44  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$45 ;
+  assign \$47  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$48  = \$46  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$47 ;
+  assign \$49  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$50  = \$48  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$49 ;
+  assign cmd_valid = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5498" *) \i2c_cmd_valid$39  : i2c_cmd_valid;
+  assign \$51  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$53  = \$51  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$52 ;
+  assign \$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$55  = \$53  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$54 ;
+  assign \$56  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$57  = \$55  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$56 ;
+  assign tx_data = \$57  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5499" *) \i2c_tx_data$42  : i2c_tx_data;
+  assign \$58  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$59  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$60  = \$58  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$59 ;
+  assign \$61  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$62  = \$60  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$61 ;
+  assign \$63  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$64  = \$62  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$63 ;
+  assign tx_ack = \$64  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5500" *) 1'h0 : i2c_tx_ack;
+  assign start = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5504" *) 3'h7;
+  assign init_req = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5505" *) state;
+  assign poll_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5506" *) 3'h4;
+  assign \init_req$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5507" *) 2'h2;
+  assign frame_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5508" *) 4'h9;
+  assign dx = $signed(gx) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5515" *) $signed(last_gx);
+  assign dy = $signed(gy) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5516" *) $signed(last_gy);
+  assign \$65  = $signed(dx) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) $signed(2'h1);
+  assign \$66  = $signed(dx) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) $signed(1'h1);
+  assign \$67  = \$65  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) \$66 ;
+  assign \$68  = $signed(dy) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) $signed(2'h1);
+  assign \$69  = \$67  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) \$68 ;
+  assign \$70  = $signed(dy) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) $signed(1'h1);
+  assign accel_changed = \$69  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5517" *) \$70 ;
+  assign \$71  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5539" *) lis_int2_sleep;
+  assign \$72  = accel_changed | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5539" *) \$71 ;
+  assign \$73  = sleep_hold_frames >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5548" *) 7'h59;
+  assign \$74  = sleep_hold_frames + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5555" *) 1'h1;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5460" *)
   always @(posedge clk)
     state <= \$75 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5401" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5461" *)
   always @(posedge clk)
     last_gx <= \$76 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5402" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5462" *)
   always @(posedge clk)
     last_gy <= \$77 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5384" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5444" *)
   always @(posedge clk)
     clock_gated_sleep <= \$78 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5385" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5445" *)
   always @(posedge clk)
     sleep_hold_frames <= \$79 ;
-  assign \$1  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$2  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$3  = \$1  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$2 ;
-  assign \$4  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$5  = \$3  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$4 ;
-  assign \$6  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$7  = \$5  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$6 ;
-  assign \$8  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5429" *) \$7 ;
-  assign i2c_cmd_ready = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5429" *) \$8 ;
-  assign \$9  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$10  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$11  = \$9  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$10 ;
-  assign \$12  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5407" *) 4'h9;
-  assign \$13  = \$11  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$12 ;
-  assign \$14  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5408" *) 4'ha;
-  assign \$15  = \$13  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$14 ;
-  assign \i2c_cmd_ready$25  = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5432" *) \$15 ;
-  assign \$16  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) 2'h2;
-  assign \$17  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5406" *) 2'h3;
-  assign \$18  = \$16  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5405" *) \$17 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5397" *)
+  assign \$1  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$2  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$3  = \$1  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$2 ;
+  assign \$4  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$5  = \$3  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$4 ;
+  assign \$6  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$7  = \$5  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$6 ;
+  assign \$8  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5489" *) \$7 ;
+  assign i2c_cmd_ready = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5489" *) \$8 ;
+  assign \$9  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$10  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$11  = \$9  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$10 ;
+  assign \$12  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5467" *) 4'h9;
+  assign \$13  = \$11  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$12 ;
+  assign \$14  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5468" *) 4'ha;
+  assign \$15  = \$13  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$14 ;
+  assign \i2c_cmd_ready$25  = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5492" *) \$15 ;
+  assign \$16  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) 2'h2;
+  assign \$17  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5466" *) 2'h3;
+  assign \$18  = \$16  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5465" *) \$17 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5457" *)
   \PendantSystemTop.sys.accel  accel (
     .clk(clk),
     .done(done),
@@ -461,9 +461,9 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
     .poll_req(poll_req),
     .rst(rst)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5395" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5455" *)
   \PendantSystemTop.sys.core  core (
-    .\busy$20 (busy),
+    .\busy$21 (busy),
     .clk(clk),
     .dens_rd_addr(dens_rd_addr),
     .dens_rd_data(dens_rd_data),
@@ -481,7 +481,7 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
     .start(start),
     .state(stage)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5396" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5456" *)
   \PendantSystemTop.sys.i2c  i2c (
     .clk(clk),
     .cmd_read(cmd_read),
@@ -499,7 +499,7 @@ module \PendantSystemTop.sys (rst, frame_sync, lis_int2_sleep, sda_i, psram_dq_i
     .tx_ack(tx_ack),
     .tx_data(tx_data)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5398" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5458" *)
   \PendantSystemTop.sys.leds  leds (
     .cell_addr(dens_rd_addr),
     .clk(clk),
@@ -1337,9 +1337,9 @@ module \PendantSystemTop.sys.accel (rst, i2c_cmd_ready, init_req, poll_req, i2c_
   end
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4928" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4935" *)
 (* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, psram_ce_n, psram_dq_o, psram_dq_oe, dens_rd_addr, done, state, dens_rd_data, psram_sclk, gx, gy, dens_rd_req, clk);
+module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$21 , dens_rd_valid, psram_ce_n, psram_dq_o, psram_dq_oe, dens_rd_addr, done, state, dens_rd_data, psram_sclk, gx, gy, dens_rd_req, clk);
   reg \$auto$verilog_backend.cc:2524:dump_module$3  = 0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input rst;
@@ -1351,9 +1351,9 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   input start;
   wire start;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4898" *)
-  output \busy$20 ;
-  wire \busy$20 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4917" *)
+  output \busy$21 ;
+  wire \busy$21 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4916" *)
   output dens_rd_valid;
   wire dens_rd_valid;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:409" *)
@@ -1365,7 +1365,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:412" *)
   output [3:0] psram_dq_oe;
   wire [3:0] psram_dq_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4916" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4915" *)
   input [7:0] dens_rd_addr;
   wire [7:0] dens_rd_addr;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4899" *)
@@ -1386,287 +1386,429 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4897" *)
   input signed [7:0] gy;
   wire signed [7:0] gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4915" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4914" *)
   input dens_rd_req;
   wire dens_rd_req;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input clk;
   wire clk;
   wire \$1 ;
-  reg [4:0] \$10 ;
-  wire \$100 ;
-  wire \$101 ;
-  reg \$102 ;
-  wire \$103 ;
-  wire \$104 ;
+  wire \$10 ;
+  wire [24:0] \$100 ;
+  wire [25:0] \$101 ;
+  wire [26:0] \$102 ;
+  wire [24:0] \$103 ;
+  wire [24:0] \$104 ;
   wire \$105 ;
-  wire \$106 ;
-  wire \$107 ;
-  wire \$108 ;
-  wire [6:0] \$109 ;
-  wire [13:0] \$11 ;
-  wire [10:0] \$110 ;
-  reg \$111 ;
-  reg [9:0] \$112 ;
-  reg [3:0] \$113 ;
-  reg \$114 ;
-  reg [4:0] \$115 ;
-  reg [19:0] \$116 ;
-  reg [19:0] \$117 ;
-  reg [19:0] \$118 ;
-  reg [19:0] \$119 ;
-  reg [4:0] \$12 ;
-  reg [19:0] \$120 ;
-  reg [19:0] \$121 ;
-  reg [1:0] \$122 ;
-  reg [31:0] \$123 ;
-  reg [31:0] \$124 ;
-  reg [5:0] \$125 ;
-  reg \$126 ;
-  reg [31:0] \$127 ;
-  reg [31:0] \$128 ;
-  reg [31:0] \$129 ;
-  wire [11:0] \$13 ;
-  wire [3:0] \$130 ;
-  wire [3:0] \$131 ;
-  wire [3:0] \$132 ;
-  wire [3:0] \$133 ;
-  wire [3:0] \$134 ;
-  wire [3:0] \$135 ;
-  reg [4:0] \$14 ;
-  wire [12:0] \$15 ;
-  wire \$16 ;
-  wire \$17 ;
-  wire [12:0] \$18 ;
-  wire [10:0] \$19 ;
-  reg [4:0] \$2 ;
-  wire [11:0] \$20 ;
-  wire [10:0] \$21 ;
-  wire [11:0] \$22 ;
-  wire [10:0] \$23 ;
-  wire [11:0] \$24 ;
-  wire [10:0] \$25 ;
-  wire [11:0] \$26 ;
-  wire [10:0] \$27 ;
-  wire [11:0] \$28 ;
-  wire [10:0] \$29 ;
-  wire [11:0] \$3 ;
-  wire [11:0] \$30 ;
-  wire [10:0] \$31 ;
-  wire [11:0] \$32 ;
-  wire \$33 ;
-  wire [10:0] \$34 ;
-  wire [11:0] \$35 ;
-  wire \$36 ;
-  wire [11:0] \$37 ;
-  wire [10:0] \$38 ;
-  wire [11:0] \$39 ;
-  reg [4:0] \$4 ;
-  wire [12:0] \$40 ;
-  wire [12:0] \$41 ;
-  reg \$42 ;
-  wire [31:0] \$43 ;
-  wire [11:0] \$44 ;
-  wire [12:0] \$45 ;
-  reg \$46 ;
-  wire [31:0] \$47 ;
-  wire [12:0] \$48 ;
-  wire [12:0] \$49 ;
-  wire [12:0] \$5 ;
-  reg \$50 ;
-  wire [31:0] \$51 ;
+  wire [4:0] \$106 ;
+  wire [4:0] \$107 ;
+  wire [2:0] \$108 ;
+  wire [2:0] \$109 ;
+  wire [19:0] \$11 ;
+  wire [4:0] \$110 ;
+  wire [2:0] \$111 ;
+  wire [2:0] \$112 ;
+  wire [2:0] \$113 ;
+  wire [2:0] \$114 ;
+  wire [3:0] \$115 ;
+  wire \$116 ;
+  wire \$117 ;
+  wire [23:0] \$118 ;
+  wire [24:0] \$119 ;
+  wire [26:0] \$12 ;
+  wire \$120 ;
+  wire \$121 ;
+  wire [12:0] \$122 ;
+  wire [10:0] \$123 ;
+  wire [11:0] \$124 ;
+  wire [10:0] \$125 ;
+  wire [11:0] \$126 ;
+  wire [10:0] \$127 ;
+  wire [11:0] \$128 ;
+  wire [10:0] \$129 ;
+  wire [22:0] \$13 ;
+  wire [11:0] \$130 ;
+  wire [10:0] \$131 ;
+  wire [11:0] \$132 ;
+  wire [10:0] \$133 ;
+  wire [11:0] \$134 ;
+  wire [10:0] \$135 ;
+  wire [11:0] \$136 ;
+  wire \$137 ;
+  wire [10:0] \$138 ;
+  wire [11:0] \$139 ;
+  wire [27:0] \$14 ;
+  wire \$140 ;
+  wire [11:0] \$141 ;
+  wire [10:0] \$142 ;
+  wire [11:0] \$143 ;
+  wire [12:0] \$144 ;
+  wire [12:0] \$145 ;
+  wire [2:0] \$146 ;
+  wire [2:0] \$147 ;
+  wire [2:0] \$148 ;
+  wire [2:0] \$149 ;
+  wire [27:0] \$15 ;
+  wire [2:0] \$150 ;
+  wire [2:0] \$151 ;
+  wire [3:0] \$152 ;
+  wire \$153 ;
+  wire [23:0] \$154 ;
+  wire [11:0] \$155 ;
+  wire [12:0] \$156 ;
+  wire \$157 ;
+  wire \$158 ;
+  wire \$159 ;
+  wire [28:0] \$16 ;
+  wire [5:0] \$160 ;
+  wire [5:0] \$161 ;
+  wire [2:0] \$162 ;
+  wire [2:0] \$163 ;
+  wire [5:0] \$164 ;
+  wire [2:0] \$165 ;
+  wire [2:0] \$166 ;
+  wire [2:0] \$167 ;
+  wire [2:0] \$168 ;
+  wire [3:0] \$169 ;
+  wire [26:0] \$17 ;
+  wire \$170 ;
+  wire \$171 ;
+  wire [2:0] \$172 ;
+  wire [2:0] \$173 ;
+  wire [2:0] \$174 ;
+  wire [2:0] \$175 ;
+  wire [2:0] \$176 ;
+  wire [2:0] \$177 ;
+  wire [3:0] \$178 ;
+  wire \$179 ;
+  wire [22:0] \$18 ;
+  wire \$180 ;
+  wire [31:0] \$181 ;
+  wire [12:0] \$182 ;
+  wire [12:0] \$183 ;
+  wire \$184 ;
+  wire \$185 ;
+  wire \$186 ;
+  wire [2:0] \$187 ;
+  wire [2:0] \$188 ;
+  wire [2:0] \$189 ;
+  wire [27:0] \$19 ;
+  wire [5:0] \$190 ;
+  wire [5:0] \$191 ;
+  wire [2:0] \$192 ;
+  wire [2:0] \$193 ;
+  wire [5:0] \$194 ;
+  wire [2:0] \$195 ;
+  wire [3:0] \$196 ;
+  wire \$197 ;
+  wire \$198 ;
+  wire [2:0] \$199 ;
+  wire [14:0] \$2 ;
+  wire [27:0] \$20 ;
+  wire [2:0] \$200 ;
+  wire [2:0] \$201 ;
+  wire [2:0] \$202 ;
+  wire [2:0] \$203 ;
+  wire [2:0] \$204 ;
+  wire [3:0] \$205 ;
+  wire \$206 ;
+  wire \$207 ;
+  wire [31:0] \$208 ;
+  wire \$209 ;
+  wire [28:0] \$21 ;
+  wire \$210 ;
+  wire \$211 ;
+  wire [2:0] \$212 ;
+  wire [2:0] \$213 ;
+  wire [2:0] \$214 ;
+  wire [2:0] \$215 ;
+  wire [2:0] \$216 ;
+  wire [2:0] \$217 ;
+  wire [3:0] \$218 ;
+  wire \$219 ;
+  wire [20:0] \$22 ;
+  wire \$220 ;
+  wire \$221 ;
+  wire [12:0] \$222 ;
+  wire \$223 ;
+  wire [12:0] \$224 ;
+  wire [8:0] \$225 ;
+  wire [12:0] \$226 ;
+  wire [7:0] \$227 ;
+  wire [8:0] \$228 ;
+  wire [12:0] \$229 ;
+  wire [20:0] \$23 ;
+  wire [7:0] \$230 ;
+  wire [8:0] \$231 ;
+  wire [9:0] \$232 ;
+  wire [12:0] \$233 ;
+  wire [12:0] \$234 ;
+  wire \$235 ;
+  wire \$236 ;
+  wire [19:0] \$237 ;
+  wire [20:0] \$238 ;
+  wire [21:0] \$239 ;
+  wire \$24 ;
+  wire [21:0] \$240 ;
+  wire [19:0] \$241 ;
+  wire [22:0] \$242 ;
+  wire [19:0] \$243 ;
+  wire [20:0] \$244 ;
+  wire [21:0] \$245 ;
+  wire [21:0] \$246 ;
+  wire [22:0] \$247 ;
+  wire [19:0] \$248 ;
+  wire [20:0] \$249 ;
+  wire [20:0] \$25 ;
+  wire [21:0] \$250 ;
+  wire [21:0] \$251 ;
+  wire [19:0] \$252 ;
+  wire [22:0] \$253 ;
+  wire [19:0] \$254 ;
+  wire [20:0] \$255 ;
+  wire [21:0] \$256 ;
+  wire [21:0] \$257 ;
+  wire [22:0] \$258 ;
+  wire [19:0] \$259 ;
+  wire [20:0] \$26 ;
+  wire [20:0] \$260 ;
+  wire [20:0] \$261 ;
+  wire [19:0] \$262 ;
+  wire [20:0] \$263 ;
+  wire [20:0] \$264 ;
+  wire [19:0] \$265 ;
+  wire [20:0] \$266 ;
+  wire [21:0] \$267 ;
+  wire [21:0] \$268 ;
+  wire [19:0] \$269 ;
+  wire \$27 ;
+  wire [20:0] \$270 ;
+  wire [21:0] \$271 ;
+  wire [21:0] \$272 ;
+  wire \$273 ;
+  wire \$274 ;
+  wire [10:0] \$275 ;
+  wire \$276 ;
+  wire \$277 ;
+  wire [10:0] \$278 ;
+  wire \$279 ;
+  wire [20:0] \$28 ;
+  wire [2:0] \$280 ;
+  wire [24:0] \$281 ;
+  wire [24:0] \$282 ;
+  wire [24:0] \$283 ;
+  wire \$284 ;
+  wire \$285 ;
+  wire [10:0] \$286 ;
+  wire [2:0] \$287 ;
+  wire \$288 ;
+  wire \$289 ;
+  wire [20:0] \$29 ;
+  wire \$290 ;
+  wire [2:0] \$291 ;
+  wire [2:0] \$292 ;
+  wire [2:0] \$293 ;
+  wire [2:0] \$294 ;
+  wire [2:0] \$295 ;
+  wire [2:0] \$296 ;
+  wire [3:0] \$297 ;
+  wire \$298 ;
+  wire \$299 ;
+  wire [10:0] \$3 ;
+  wire \$30 ;
+  wire \$300 ;
+  wire \$301 ;
+  wire \$302 ;
+  wire \$303 ;
+  wire \$304 ;
+  wire [6:0] \$305 ;
+  wire [10:0] \$306 ;
+  reg \$307 ;
+  reg [9:0] \$308 ;
+  reg [3:0] \$309 ;
+  wire [19:0] \$31 ;
+  reg \$310 ;
+  reg [4:0] \$311 ;
+  reg [19:0] \$312 ;
+  reg [19:0] \$313 ;
+  reg [19:0] \$314 ;
+  reg [19:0] \$315 ;
+  reg [19:0] \$316 ;
+  reg [19:0] \$317 ;
+  reg [1:0] \$318 ;
+  reg [23:0] \$319 ;
+  wire [20:0] \$32 ;
+  reg [23:0] \$320 ;
+  reg [5:0] \$321 ;
+  reg \$322 ;
+  reg [23:0] \$323 ;
+  reg [23:0] \$324 ;
+  reg [23:0] \$325 ;
+  wire [19:0] \$33 ;
+  wire [20:0] \$34 ;
+  wire [20:0] \$35 ;
+  wire [20:0] \$36 ;
+  wire \$37 ;
+  wire \$38 ;
+  wire \$39 ;
+  wire [14:0] \$4 ;
+  wire \$40 ;
+  wire \$41 ;
+  wire \$42 ;
+  wire \$43 ;
+  wire \$44 ;
+  wire \$45 ;
+  wire \$46 ;
+  wire [1:0] \$47 ;
+  wire \$48 ;
+  wire [20:0] \$49 ;
+  wire [10:0] \$5 ;
+  wire \$50 ;
+  wire [20:0] \$51 ;
   wire \$52 ;
   wire \$53 ;
   wire \$54 ;
-  reg \$55 ;
-  wire \$56 ;
+  wire \$55 ;
+  wire [15:0] \$56 ;
   wire \$57 ;
-  wire [12:0] \$58 ;
-  wire \$59 ;
-  reg [4:0] \$6 ;
-  wire [12:0] \$60 ;
-  wire [8:0] \$61 ;
-  wire [12:0] \$62 ;
-  wire [7:0] \$63 ;
-  wire [8:0] \$64 ;
-  wire [12:0] \$65 ;
-  wire [7:0] \$66 ;
-  wire [8:0] \$67 ;
-  wire [9:0] \$68 ;
-  wire [12:0] \$69 ;
-  wire [11:0] \$7 ;
-  wire [12:0] \$70 ;
+  wire \$58 ;
+  wire [15:0] \$59 ;
+  wire \$6 ;
+  wire \$60 ;
+  wire \$61 ;
+  wire \$62 ;
+  wire [5:0] \$63 ;
+  wire [5:0] \$64 ;
+  wire \$65 ;
+  wire \$66 ;
+  wire \$67 ;
+  wire [5:0] \$68 ;
+  wire [5:0] \$69 ;
+  wire \$7 ;
+  wire \$70 ;
   wire \$71 ;
   wire \$72 ;
-  wire \$73 ;
-  wire [19:0] \$74 ;
+  wire [13:0] \$73 ;
+  wire [13:0] \$74 ;
   wire \$75 ;
-  wire [19:0] \$76 ;
+  wire \$76 ;
   wire \$77 ;
-  wire \$78 ;
-  wire [10:0] \$79 ;
-  reg [4:0] \$8 ;
-  wire \$80 ;
-  wire \$81 ;
+  wire [13:0] \$78 ;
+  wire [13:0] \$79 ;
+  wire [19:0] \$8 ;
+  wire [25:0] \$80 ;
+  wire [10:0] \$81 ;
   wire [10:0] \$82 ;
-  wire \$83 ;
-  wire [2:0] \$84 ;
-  reg [12:0] \$85 ;
-  wire [32:0] \$86 ;
-  reg [12:0] \$87 ;
-  wire [32:0] \$88 ;
-  wire [32:0] \$89 ;
-  wire [12:0] \$9 ;
-  wire [33:0] \$90 ;
-  reg [12:0] \$91 ;
-  wire [32:0] \$92 ;
-  wire [32:0] \$93 ;
-  wire [33:0] \$94 ;
-  wire \$95 ;
+  wire [11:0] \$83 ;
+  wire [12:0] \$84 ;
+  wire [11:0] \$85 ;
+  wire [12:0] \$86 ;
+  wire [13:0] \$87 ;
+  wire \$88 ;
+  wire \$89 ;
+  wire \$9 ;
+  wire [19:0] \$90 ;
+  wire \$91 ;
+  wire [34:0] \$92 ;
+  wire [24:0] \$93 ;
+  wire [24:0] \$94 ;
+  wire [25:0] \$95 ;
   wire \$96 ;
-  wire [10:0] \$97 ;
-  wire [2:0] \$98 ;
-  wire \$99 ;
+  wire [24:0] \$97 ;
+  wire [24:0] \$98 ;
+  wire [24:0] \$99 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5005" *)
+  wire [19:0] abs_rx;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5006" *)
+  wire [19:0] abs_ry;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:397" *)
   reg [20:0] addr;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:406" *)
   wire busy;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:409" *)
   wire ce_n;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5012" *)
+  wire close_pair;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4957" *)
   reg colour = 1'h0;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5101" *)
+  wire signed [23:0] comp_approx;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4955" *)
   reg [1:0] corner = 2'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_0$85 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_0$94 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_1$86 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_1$95 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_2$87 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_2$96 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_3$88 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] \corner_x_3$97 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_0$89 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_0$98 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_1$90 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_1$99 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_2$100 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_2$91 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_3$101 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] \corner_y_3$92 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5046" *)
+  wire [12:0] corner_w;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5047" *)
+  wire [4:0] cx_out;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5048" *)
+  wire [4:0] cy_out;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5070" *)
   wire [7:0] d_node;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3018" *)
-  reg [31:0] density = 32'd0;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5102" *)
+  wire signed [23:0] div_corr;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5100" *)
+  wire signed [23:0] div_raw;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:400" *)
-  wire \done$127 ;
+  wire \done$103 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:411" *)
   wire [3:0] dq_o;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:412" *)
   wire [3:0] dq_oe;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5010" *)
+  wire signed [19:0] dx_pair;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5011" *)
+  wire signed [19:0] dy_pair;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:401" *)
   wire error;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4896" *)
-  wire signed [7:0] \gx$32 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  wire signed [20:0] gx_q12;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  wire signed [20:0] \gx_q12$47 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  wire signed [20:0] \gx_q12$49 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4897" *)
-  wire signed [7:0] \gy$34 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  wire signed [20:0] gy_q12;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  wire signed [20:0] \gy_q12$48 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  wire signed [20:0] \gy_q12$50 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5041" *)
+  wire [11:0] frac_x;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5042" *)
+  wire [11:0] frac_y;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5032" *)
+  wire [1:0] grid_mode;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5037" *)
+  wire [15:0] gx_clip;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4980" *)
+  wire signed [15:0] gx_dt;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5033" *)
+  wire signed [20:0] gx_in;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5038" *)
+  wire [15:0] gy_clip;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4981" *)
+  wire signed [15:0] gy_dt;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5034" *)
+  wire signed [20:0] gy_in;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5039" *)
+  wire [4:0] i0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4954" *)
   reg [9:0] idx = 10'h000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:405" *)
   wire init_done;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4956" *)
   reg [5:0] iter_idx = 6'h00;
-  (* init = 20'h00000 *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5040" *)
+  wire [4:0] j0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4963" *)
-  wire signed [19:0] jx;
-  (* init = 20'h00000 *)
+  reg signed [19:0] jx = 20'h00000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4964" *)
-  wire signed [19:0] jy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1948" *)
-  wire signed [20:0] next_i_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1949" *)
-  wire signed [20:0] next_i_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1510" *)
-  wire signed [19:0] next_pos_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2242" *)
-  wire signed [19:0] \next_pos_x$121 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1511" *)
-  wire signed [19:0] next_pos_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2243" *)
-  wire signed [19:0] \next_pos_y$123 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1512" *)
-  wire signed [18:0] next_vel_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2244" *)
-  wire signed [19:0] \next_vel_x$125 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1513" *)
-  wire signed [18:0] next_vel_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2245" *)
-  wire signed [19:0] \next_vel_y$126 ;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1943" *)
-  wire signed [19:0] pos_i_x;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1944" *)
-  wire signed [19:0] pos_i_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1945" *)
-  reg signed [19:0] pos_j_x = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1946" *)
-  reg signed [19:0] pos_j_y = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1503" *)
-  reg signed [19:0] pos_x = 20'h00000;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2237" *)
-  wire signed [19:0] \pos_x$41 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1504" *)
-  reg signed [19:0] pos_y = 20'h00000;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2238" *)
-  wire signed [19:0] \pos_y$42 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3017" *)
-  wire signed [31:0] pressure;
+  reg signed [19:0] jy = 20'h00000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5035" *)
+  wire [15:0] max_gx;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5036" *)
+  wire [15:0] max_gy;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5080" *)
+  wire signed [19:0] mul_a;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5081" *)
+  wire signed [14:0] mul_b;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5082" *)
+  wire signed [34:0] mul_p;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5083" *)
+  wire signed [22:0] mul_q12;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5007" *)
+  wire [20:0] oct_dist;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5008" *)
+  wire outside_wall;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5103" *)
+  wire signed [23:0] p_delta;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4911" *)
   wire psram_busy;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4905" *)
@@ -1679,12 +1821,14 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   wire psram_translator_dir;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4909" *)
   wire [3:0] psram_translator_oe_n;
-  (* init = 20'h00000 *)
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4959" *)
-  wire signed [19:0] px;
-  (* init = 20'h00000 *)
+  reg signed [19:0] px = 20'h00000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4986" *)
+  wire signed [19:0] px_adv;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4960" *)
-  wire signed [19:0] py;
+  reg signed [19:0] py = 20'h00000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4987" *)
+  wire signed [19:0] py_adv;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:404" *)
   wire [31:0] rdata;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:399" *)
@@ -1695,8 +1839,10 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   wire rready;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:402" *)
   wire rvalid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3019" *)
-  reg [2:0] s_count;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5003" *)
+  wire signed [19:0] rx;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5004" *)
+  wire signed [19:0] ry;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:408" *)
   wire sclk;
   (* init = 5'h00 *)
@@ -1704,241 +1850,384 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   wire [4:0] stage;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4953" *)
   reg [3:0] sub = 4'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3020" *)
-  reg sx0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3021" *)
-  reg sx1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3022" *)
-  reg sy0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3023" *)
-  reg sy1;
-  (* init = 32'd0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4973" *)
-  wire signed [31:0] tmp0;
-  (* init = 32'd0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4974" *)
-  wire signed [31:0] tmp1;
-  (* init = 32'd0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4975" *)
-  wire signed [31:0] tmp2;
-  (* init = 32'd0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4976" *)
-  wire signed [31:0] tmp3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4977" *)
-  wire signed [31:0] tmp4;
-  (* init = 32'd0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4978" *)
-  wire signed [31:0] tmp5;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4966" *)
+  reg signed [23:0] tmp0 = 24'h000000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4967" *)
+  reg signed [23:0] tmp1 = 24'h000000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4968" *)
+  reg signed [23:0] tmp2 = 24'h000000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4969" *)
+  reg signed [23:0] tmp3 = 24'h000000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4970" *)
+  reg [23:0] tmp5 = 24'h000000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:413" *)
   wire translator_dir;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:414" *)
   wire [3:0] translator_oe_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3013" *)
-  reg signed [31:0] u_left = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3028" *)
-  wire signed [31:0] u_left_next;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5046" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5104" *)
+  wire signed [23:0] u_left_next;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5071" *)
   wire [8:0] u_node;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3014" *)
-  reg signed [31:0] u_right = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3015" *)
-  reg signed [31:0] v_bottom = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5047" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5072" *)
   wire [8:0] v_node;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3016" *)
-  reg signed [31:0] v_top = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1505" *)
-  wire signed [18:0] vel_x;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2239" *)
-  wire signed [19:0] \vel_x$43 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1506" *)
-  wire signed [18:0] vel_y;
-  (* init = 20'h00000 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2240" *)
-  wire signed [19:0] \vel_y$44 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4901" *)
   reg velocity_overflow = 1'h0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4961" *)
   reg signed [19:0] vx = 20'h00000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4984" *)
+  wire signed [19:0] vx_adv;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4982" *)
+  wire signed [20:0] vx_next_raw;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4962" *)
   reg signed [19:0] vy = 20'h00000;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4985" *)
+  wire signed [19:0] vy_adv;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4983" *)
+  wire signed [20:0] vy_next_raw;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5045" *)
+  wire [25:0] w_prod;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:398" *)
   reg [31:0] wdata;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:396" *)
   reg we;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] weight_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_0$132 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_0$136 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] weight_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_1$133 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_1$137 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] weight_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_2$134 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_2$138 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] weight_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_3$135 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  wire [12:0] \weight_3$139 ;
-  assign \busy$20  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4993" *) state;
-  assign gy_q12 = $signed(pos_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5013" *) $signed(13'h0800);
-  assign \gx_q12$47  = $signed(pos_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5014" *) $signed(13'h0800);
-  assign \gx_q12$49  = $signed(pos_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5016" *) $signed(13'h0800);
-  assign \gy_q12$50  = $signed(pos_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5017" *) $signed(13'h0800);
-  assign \$1  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5032" *) state;
-  assign dens_rd_valid = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5032" *) rvalid;
-  assign \$5  = \$3  + (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$4 ;
-  assign \$9  = \$7  + (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$8 ;
-  assign \$11  = \$9  + (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$10 ;
-  assign \$15  = \$13  + (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$14 ;
-  assign \$16  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5059" *) psram_init_done;
-  assign \$17  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5066" *) ready;
-  assign \$18  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5070" *) dens_rd_addr;
-  assign \$20  = \$19  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5078" *) 1'h0;
-  assign \$22  = \$21  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5085" *) 1'h1;
-  assign \$24  = \$23  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5092" *) 2'h2;
-  assign \$26  = \$25  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) 2'h3;
-  assign \$28  = \$27  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5126" *) 1'h0;
-  assign \$30  = \$29  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5137" *) 1'h1;
-  assign \$32  = \$31  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5148" *) 2'h2;
-  assign \$33  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5158" *) sub;
-  assign \$35  = \$34  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5162" *) 2'h3;
-  assign \$36  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5175" *) sub;
-  assign \$37  = 11'h600 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5179" *) idx;
-  assign \$39  = \$38  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5198" *) corner;
-  assign \$40  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5213" *) \$15 [7:0];
-  assign \$41  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5222" *) \$15 [7:0];
-  assign \$43  = \$42  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5223" *) u_left : 32'd0;
-  assign \$44  = 11'h600 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5231" *) \$5 [8:0];
-  assign \$45  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5240" *) \$5 [8:0];
-  assign \$47  = \$46  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5241" *) u_left : 32'd0;
-  assign \$48  = 12'h820 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5249" *) \$11 [8:0];
-  assign \$49  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5258" *) \$11 [8:0];
-  assign \$51  = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5259" *) u_right : 32'd0;
-  assign \$52  = idx[4] ^ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5279" *) idx[0];
-  assign \$53  = \$52  == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5279" *) colour;
-  assign \$54  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5282" *) \$53 ;
-  assign \$56  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$55 ;
-  assign \$57  = \$54  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5282" *) \$56 ;
-  assign \$58  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5285" *) idx[7:0];
-  assign \$59  = density <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5291" *) 10'h3c9;
-  assign \$60  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5294" *) idx[7:0];
-  assign \$61  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5276" *) 5'h10;
-  assign \$62  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5301" *) \$61 ;
-  assign \$64  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5277" *) \$63 ;
-  assign \$65  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5308" *) \$64 ;
-  assign \$67  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5278" *) \$66 ;
-  assign \$68  = \$67  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5278" *) 1'h1;
-  assign \$69  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5315" *) \$68 ;
-  assign \$70  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5324" *) idx[7:0];
-  assign \$71  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5059" *) psram_init_done;
-  assign \$72  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5066" *) ready;
-  assign \$73  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5114" *) idx;
-  assign \$74  = \$73  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5114" *) next_i_x[19:0] : \next_pos_x$121 ;
-  assign \$75  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5115" *) idx;
-  assign \$76  = \$75  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5115" *) next_i_y[19:0] : \next_pos_y$123 ;
-  assign \$77  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5158" *) sub;
-  assign \$78  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5169" *) 8'hff;
-  assign \$79  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) 1'h1;
-  assign \$80  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5175" *) sub;
-  assign \$82  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5189" *) 1'h1;
-  assign \$83  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5207" *) 2'h3;
-  assign \$84  = corner + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5210" *) 1'h1;
-  assign \$86  = dens_rd_data + (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$85 ;
-  assign \$88  = $signed(vx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5193" *) $signed(\$87 );
-  assign \$90  = $signed(dens_rd_data) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5235" *) $signed(\$89 );
-  assign \$92  = $signed(vy) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5194" *) $signed(\$91 );
-  assign \$94  = $signed(dens_rd_data) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5253" *) $signed(\$93 );
-  assign \$95  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5264" *) 2'h3;
-  assign \$96  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5266" *) 8'hff;
-  assign \$97  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5269" *) 1'h1;
-  assign \$98  = corner + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5271" *) 1'h1;
-  assign \$99  = idx[4] ^ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5279" *) idx[0];
-  assign \$100  = \$99  == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5279" *) colour;
-  assign \$101  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5282" *) \$100 ;
-  assign \$103  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) \$102 ;
-  assign \$104  = \$101  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5282" *) \$103 ;
-  assign \$105  = density <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5291" *) 10'h3c9;
-  assign \$106  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5333" *) 8'hff;
-  assign \$107  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5335" *) colour;
-  assign \$108  = iter_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5339" *) 5'h1d;
-  assign \$109  = iter_idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) 1'h1;
-  assign \$110  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5344" *) 1'h1;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5043" *)
+  wire [12:0] wx_term;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5044" *)
+  wire [12:0] wy_term;
+  assign \busy$21  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4973" *) state;
+  assign \$1  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4975" *) state;
+  assign dens_rd_valid = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4975" *) rvalid;
+  assign gx_dt = $signed(\$2 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4990" *) $signed(\$3 );
+  assign gy_dt = $signed(\$4 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4991" *) $signed(\$5 );
+  assign vx_next_raw = $signed(vx) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4992" *) $signed(gx_dt);
+  assign vy_next_raw = $signed(vy) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4993" *) $signed(gy_dt);
+  assign \$6  = $signed(vx_next_raw) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4994" *) $signed(19'h28000);
+  assign \$7  = $signed(vx_next_raw) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4995" *) $signed(19'h58000);
+  assign \$8  = \$7  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4995" *) 20'hd8000 : vx_next_raw[19:0];
+  assign vx_adv = \$6  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4994" *) 20'h28000 : \$8 ;
+  assign \$9  = $signed(vy_next_raw) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4996" *) $signed(19'h28000);
+  assign \$10  = $signed(vy_next_raw) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4997" *) $signed(19'h58000);
+  assign \$11  = \$10  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4997" *) 20'hd8000 : vy_next_raw[19:0];
+  assign vy_adv = \$9  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4996" *) 20'h28000 : \$11 ;
+  assign \$14  = $signed(\$12 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4998" *) $signed(\$13 );
+  assign \$16  = $signed(px) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4998" *) $signed(\$15 );
+  assign \$19  = $signed(\$17 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4999" *) $signed(\$18 );
+  assign \$21  = $signed(py) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4999" *) $signed(\$20 );
+  assign \$22  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5015" *) $signed(17'h08000);
+  assign \$23  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5016" *) $signed(17'h08000);
+  assign \$24  = $signed(\$22 [19:0]) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5017" *) $signed(1'h0);
+  assign \$25  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5017" *) $signed(\$22 [19:0]);
+  assign \$26  = \$24  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5017" *) \$25  : { \$22 [19], \$22 [19:0] };
+  assign \$27  = $signed(\$23 [19:0]) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5018" *) $signed(1'h0);
+  assign \$28  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5018" *) $signed(\$23 [19:0]);
+  assign \$29  = \$27  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5018" *) \$28  : { \$23 [19], \$23 [19:0] };
+  assign \$30  = \$26 [19:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5019" *) \$29 [19:0];
+  assign \$32  = \$26 [19:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5019" *) \$31 ;
+  assign \$34  = \$29 [19:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5019" *) \$33 ;
+  assign oct_dist = \$30  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5019" *) \$32  : \$34 ;
+  assign outside_wall = oct_dist > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5020" *) 15'h7c00;
+  assign \$35  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5022" *) $signed(jx);
+  assign \$36  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5023" *) $signed(jy);
+  assign \$37  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5025" *) idx;
+  assign \$38  = $signed(\$35 [19:0]) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5026" *) $signed(13'h1666);
+  assign \$39  = \$37  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5025" *) \$38 ;
+  assign \$40  = $signed(\$35 [19:0]) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5026" *) $signed(13'h099a);
+  assign \$41  = \$39  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5025" *) \$40 ;
+  assign \$42  = $signed(\$36 [19:0]) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5027" *) $signed(13'h1666);
+  assign \$43  = \$41  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5025" *) \$42 ;
+  assign \$44  = $signed(\$36 [19:0]) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5027" *) $signed(13'h099a);
+  assign close_pair = \$43  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5025" *) \$44 ;
+  assign \$45  = sub <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5051" *) 3'h5;
+  assign \$46  = sub <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5051" *) 4'h9;
+  assign \$47  = \$46  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5051" *) 2'h1 : 2'h2;
+  assign grid_mode = \$45  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5051" *) 2'h0 : \$47 ;
+  assign \$48  = grid_mode == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5052" *) 1'h1;
+  assign \$49  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5052" *) $signed(13'h0800);
+  assign gx_in = \$48  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5052" *) { px[19], px } : \$49 ;
+  assign \$50  = grid_mode == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5053" *) 2'h2;
+  assign \$51  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5053" *) $signed(13'h0800);
+  assign gy_in = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5053" *) { py[19], py } : \$51 ;
+  assign \$52  = grid_mode == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5054" *) 1'h1;
+  assign max_gx = \$52  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5054" *) 16'hffff : 16'hefff;
+  assign \$53  = grid_mode == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5055" *) 2'h2;
+  assign max_gy = \$53  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5055" *) 16'hffff : 16'hefff;
+  assign \$54  = $signed(gx_in) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5056" *) $signed(1'h0);
+  assign \$55  = $signed(gx_in) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5056" *) $signed({ 1'h0, max_gx });
+  assign \$56  = \$55  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5056" *) max_gx : gx_in[15:0];
+  assign gx_clip = \$54  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5056" *) 16'h0000 : \$56 ;
+  assign \$57  = $signed(gy_in) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5057" *) $signed(1'h0);
+  assign \$58  = $signed(gy_in) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5057" *) $signed({ 1'h0, max_gy });
+  assign \$59  = \$58  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5057" *) max_gy : gy_in[15:0];
+  assign gy_clip = \$57  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5057" *) 16'h0000 : \$59 ;
+  assign \$60  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5062" *) 1'h1;
+  assign \$61  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5062" *) 2'h2;
+  assign \$62  = \$60  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5062" *) \$61 ;
+  assign \$63  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5062" *) 1'h1;
+  assign \$64  = \$62  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5062" *) \$63  : { 2'h0, gx_clip[15:12] };
+  assign \$65  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5063" *) 2'h2;
+  assign \$66  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5063" *) 2'h3;
+  assign \$67  = \$65  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5063" *) \$66 ;
+  assign \$68  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5063" *) 1'h1;
+  assign \$69  = \$67  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5063" *) \$68  : { 2'h0, gy_clip[15:12] };
+  assign \$70  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5064" *) 1'h1;
+  assign \$71  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5064" *) 2'h2;
+  assign \$72  = \$70  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5064" *) \$71 ;
+  assign \$73  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5064" *) gx_clip[11:0];
+  assign \$74  = \$72  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5064" *) { 2'h0, gx_clip[11:0] } : \$73 ;
+  assign \$75  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5065" *) 2'h2;
+  assign \$76  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5065" *) 2'h3;
+  assign \$77  = \$75  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5065" *) \$76 ;
+  assign \$78  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5065" *) gy_clip[11:0];
+  assign \$79  = \$77  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5065" *) { 2'h0, gy_clip[11:0] } : \$78 ;
+  assign w_prod = \$74 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5066" *) \$79 [12:0];
+  assign \$82  = \$81  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5074" *) { 7'h00, \$69 [3:0] };
+  assign \$84  = \$83  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5075" *) \$69 [4:0];
+  assign \$86  = \$85  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5076" *) \$64 [4:0];
+  assign \$87  = \$86  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5076" *) \$69 [4:0];
+  assign \$88  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5085" *) 3'h4;
+  assign \$89  = grid_mode == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5085" *) 1'h1;
+  assign \$90  = \$89  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5085" *) vx : vy;
+  assign mul_a = \$88  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5085" *) \$90  : tmp0[19:0];
+  assign \$91  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5086" *) 3'h4;
+  assign mul_b = \$91  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5086" *) { 2'h0, \$80 [12:0] } : 15'h0889;
+  assign mul_p = $signed(mul_a) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5087" *) $signed(mul_b);
+  assign \$93  = $signed(tmp1) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5106" *) $signed(tmp0);
+  assign \$94  = $signed(tmp3) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5106" *) $signed(tmp2);
+  assign \$95  = $signed(\$93 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5106" *) $signed(\$94 );
+  assign \$96  = tmp5 > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5107" *) 14'h25df;
+  assign \$97  = tmp5 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5107" *) 14'h25df;
+  assign \$99  = \$96  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5107" *) \$98  : 25'h0000000;
+  assign \$101  = $signed(\$100 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5108" *) $signed(\$99 [23:0]);
+  assign \$102  = $signed(\$95 [23:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5108" *) $signed(\$101 );
+  assign \$103  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5109" *) $signed(\$102 [23:0]);
+  assign \$105  = idx[7:4] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) 1'h0;
+  assign \$106  = idx[7:4] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) 1'h1;
+  assign \$107  = idx[7:4] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) 1'h1;
+  assign \$108  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$107 [2:0];
+  assign \$110  = idx[7:4] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) 1'h1;
+  assign \$111  = \$106 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$109  : \$110 [2:0];
+  assign \$112  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) idx[2:0];
+  assign \$114  = idx[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$113  : idx[2:0];
+  assign \$115  = \$111  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$114 ;
+  assign \$116  = \$115  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$117  = \$105  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5099" *) \$116 ;
+  assign \$118  = \$117  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5110" *) \$104 [23:0] : 24'h000000;
+  assign \$119  = $signed(tmp0) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5110" *) $signed(\$118 );
+  assign \$120  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5117" *) psram_init_done;
+  assign \$121  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5124" *) ready;
+  assign \$122  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5128" *) dens_rd_addr;
+  assign \$124  = \$123  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5136" *) 1'h0;
+  assign \$126  = \$125  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5143" *) 1'h1;
+  assign \$128  = \$127  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5150" *) 2'h2;
+  assign \$130  = \$129  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5157" *) 2'h3;
+  assign \$132  = \$131  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5188" *) 1'h0;
+  assign \$134  = \$133  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5199" *) 1'h1;
+  assign \$136  = \$135  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5210" *) 2'h2;
+  assign \$137  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5220" *) sub;
+  assign \$139  = \$138  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5224" *) 2'h3;
+  assign \$140  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5237" *) sub;
+  assign \$141  = 11'h600 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5241" *) idx;
+  assign \$143  = \$142  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5258" *) corner;
+  assign \$144  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5273" *) \$82 [7:0];
+  assign \$145  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5282" *) \$82 [7:0];
+  assign \$146  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$64 [2:0];
+  assign \$148  = \$64 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$147  : \$64 [2:0];
+  assign \$149  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$69 [2:0];
+  assign \$151  = \$69 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$150  : \$69 [2:0];
+  assign \$152  = \$148  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$151 ;
+  assign \$153  = \$152  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$154  = \$153  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5283" *) tmp0 : 24'h000000;
+  assign \$155  = 11'h600 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5291" *) \$84 [8:0];
+  assign \$156  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5300" *) \$84 [8:0];
+  assign \$157  = \$64 [4:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) 1'h0;
+  assign \$158  = \$64 [4:0] < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) 5'h10;
+  assign \$159  = \$157  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) \$158 ;
+  assign \$160  = \$64 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) 1'h1;
+  assign \$161  = \$64 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) 1'h1;
+  assign \$162  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$161 [2:0];
+  assign \$164  = \$64 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) 1'h1;
+  assign \$165  = \$160 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$163  : \$164 [2:0];
+  assign \$166  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$69 [2:0];
+  assign \$168  = \$69 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$167  : \$69 [2:0];
+  assign \$169  = \$165  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$168 ;
+  assign \$170  = \$169  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$171  = \$159  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) \$170 ;
+  assign \$172  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$64 [2:0];
+  assign \$174  = \$64 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$173  : \$64 [2:0];
+  assign \$175  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$69 [2:0];
+  assign \$177  = \$69 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$176  : \$69 [2:0];
+  assign \$178  = \$174  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$177 ;
+  assign \$179  = \$178  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$180  = \$171  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5096" *) \$179 ;
+  assign \$181  = \$180  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5301" *) { tmp0[23], tmp0[23], tmp0[23], tmp0[23], tmp0[23], tmp0[23], tmp0[23], tmp0[23], tmp0 } : 32'd0;
+  assign \$182  = 12'h820 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5309" *) \$87 [8:0];
+  assign \$183  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5318" *) \$87 [8:0];
+  assign \$184  = \$69 [4:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) 1'h0;
+  assign \$185  = \$69 [4:0] < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) 5'h10;
+  assign \$186  = \$184  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) \$185 ;
+  assign \$187  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$64 [2:0];
+  assign \$189  = \$64 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$188  : \$64 [2:0];
+  assign \$190  = \$69 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) 1'h1;
+  assign \$191  = \$69 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) 1'h1;
+  assign \$192  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$191 [2:0];
+  assign \$194  = \$69 [4:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) 1'h1;
+  assign \$195  = \$190 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$193  : \$194 [2:0];
+  assign \$196  = \$189  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$195 ;
+  assign \$197  = \$196  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$198  = \$186  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) \$197 ;
+  assign \$199  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$64 [2:0];
+  assign \$201  = \$64 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$200  : \$64 [2:0];
+  assign \$202  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$69 [2:0];
+  assign \$204  = \$69 [3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$203  : \$69 [2:0];
+  assign \$205  = \$201  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$204 ;
+  assign \$206  = \$205  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$207  = \$198  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5097" *) \$206 ;
+  assign \$208  = \$207  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5319" *) { tmp1[23], tmp1[23], tmp1[23], tmp1[23], tmp1[23], tmp1[23], tmp1[23], tmp1[23], tmp1 } : 32'd0;
+  assign \$209  = idx[4] ^ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5339" *) idx[0];
+  assign \$210  = \$209  == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5339" *) colour;
+  assign \$211  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$210 ;
+  assign \$212  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) idx[6:4];
+  assign \$214  = idx[7] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$213  : idx[6:4];
+  assign \$215  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) idx[2:0];
+  assign \$217  = idx[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$216  : idx[2:0];
+  assign \$218  = \$214  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$217 ;
+  assign \$219  = \$218  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$220  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$219 ;
+  assign \$221  = \$211  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$220 ;
+  assign \$222  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5345" *) idx[7:0];
+  assign \$223  = tmp5 <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5351" *) 10'h3c9;
+  assign \$224  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5354" *) idx[7:0];
+  assign \$225  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5336" *) 5'h10;
+  assign \$226  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5361" *) \$225 ;
+  assign \$228  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5337" *) \$227 ;
+  assign \$229  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5368" *) \$228 ;
+  assign \$231  = idx[7:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5338" *) \$230 ;
+  assign \$232  = \$231  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5338" *) 1'h1;
+  assign \$233  = 12'he70 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5375" *) \$232 ;
+  assign \$234  = 12'hd60 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5384" *) idx[7:0];
+  assign \$235  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5117" *) psram_init_done;
+  assign \$236  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5124" *) ready;
+  assign \$238  = $signed(\$22 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$237 );
+  assign \$239  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$238 );
+  assign \$240  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) \$239  : { px[19], px[19], px };
+  assign \$242  = $signed(\$240 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5176" *) $signed(\$241 );
+  assign \$244  = $signed(\$22 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$243 );
+  assign \$245  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$244 );
+  assign \$246  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) \$245  : { px[19], px[19], px };
+  assign \$247  = close_pair ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5176" *) \$242  : { \$246 [21], \$246  };
+  assign \$249  = $signed(\$23 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$248 );
+  assign \$250  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$249 );
+  assign \$251  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) \$250  : { py[19], py[19], py };
+  assign \$253  = $signed(\$251 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5177" *) $signed(\$252 );
+  assign \$255  = $signed(\$23 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$254 );
+  assign \$256  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$255 );
+  assign \$257  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) \$256  : { py[19], py[19], py };
+  assign \$258  = close_pair ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5177" *) \$253  : { \$257 [21], \$257  };
+  assign \$260  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5173" *) $signed(\$259 );
+  assign \$261  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5173" *) \$260  : { vx[19], vx };
+  assign \$263  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5174" *) $signed(\$262 );
+  assign \$264  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5174" *) \$263  : { vy[19], vy };
+  assign \$266  = $signed(\$22 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$265 );
+  assign \$267  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) $signed(\$266 );
+  assign \$268  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5171" *) \$267  : { px[19], px[19], px };
+  assign \$270  = $signed(\$23 [19:0]) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$269 );
+  assign \$271  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) $signed(\$270 );
+  assign \$272  = outside_wall ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5172" *) \$271  : { py[19], py[19], py };
+  assign \$273  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5220" *) sub;
+  assign \$274  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5231" *) 8'hff;
+  assign \$275  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5234" *) 1'h1;
+  assign \$276  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5237" *) sub;
+  assign \$278  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5251" *) 1'h1;
+  assign \$279  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5267" *) 2'h3;
+  assign \$280  = corner + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5270" *) 1'h1;
+  assign \$281  = dens_rd_data[23:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5277" *) \$80 [12:0];
+  assign \$282  = $signed(dens_rd_data[23:0]) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5295" *) $signed(\$92 [22:0]);
+  assign \$283  = $signed(dens_rd_data[23:0]) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5313" *) $signed(\$92 [22:0]);
+  assign \$284  = corner == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5324" *) 2'h3;
+  assign \$285  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5326" *) 8'hff;
+  assign \$286  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5329" *) 1'h1;
+  assign \$287  = corner + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5331" *) 1'h1;
+  assign \$288  = idx[4] ^ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5339" *) idx[0];
+  assign \$289  = \$288  == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5339" *) colour;
+  assign \$290  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$289 ;
+  assign \$291  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) idx[6:4];
+  assign \$293  = idx[7] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *) \$292  : idx[6:4];
+  assign \$294  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) idx[2:0];
+  assign \$296  = idx[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *) \$295  : idx[2:0];
+  assign \$297  = \$293  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) \$296 ;
+  assign \$298  = \$297  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *) 3'h4;
+  assign \$299  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$298 ;
+  assign \$300  = \$290  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5342" *) \$299 ;
+  assign \$301  = tmp5 <= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5351" *) 10'h3c9;
+  assign \$302  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5393" *) 8'hff;
+  assign \$303  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5395" *) colour;
+  assign \$304  = iter_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5399" *) 5'h1d;
+  assign \$305  = iter_idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5402" *) 1'h1;
+  assign \$306  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:5404" *) 1'h1;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4899" *)
   always @(posedge clk)
-    done <= \$111 ;
+    done <= \$307 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4954" *)
   always @(posedge clk)
-    idx <= \$112 ;
+    idx <= \$308 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4953" *)
   always @(posedge clk)
-    sub <= \$113 ;
+    sub <= \$309 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4901" *)
   always @(posedge clk)
-    velocity_overflow <= \$114 ;
+    velocity_overflow <= \$310 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4952" *)
   always @(posedge clk)
-    state <= \$115 ;
+    state <= \$311 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4959" *)
   always @(posedge clk)
-    pos_x <= \$116 ;
+    px <= \$312 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4960" *)
   always @(posedge clk)
-    pos_y <= \$117 ;
+    py <= \$313 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4961" *)
   always @(posedge clk)
-    vx <= \$118 ;
+    vx <= \$314 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4962" *)
   always @(posedge clk)
-    vy <= \$119 ;
+    vy <= \$315 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4963" *)
   always @(posedge clk)
-    pos_j_x <= \$120 ;
+    jx <= \$316 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4964" *)
   always @(posedge clk)
-    pos_j_y <= \$121 ;
+    jy <= \$317 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4955" *)
   always @(posedge clk)
-    corner <= \$122 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4973" *)
+    corner <= \$318 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4966" *)
   always @(posedge clk)
-    u_left <= \$123 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4974" *)
+    tmp0 <= \$319 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4967" *)
   always @(posedge clk)
-    u_right <= \$124 ;
+    tmp1 <= \$320 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4956" *)
   always @(posedge clk)
-    iter_idx <= \$125 ;
+    iter_idx <= \$321 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4957" *)
   always @(posedge clk)
-    colour <= \$126 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4978" *)
+    colour <= \$322 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4970" *)
   always @(posedge clk)
-    density <= \$127 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4975" *)
+    tmp5 <= \$323 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4968" *)
   always @(posedge clk)
-    v_bottom <= \$128 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4976" *)
+    tmp2 <= \$324 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4969" *)
   always @(posedge clk)
-    v_top <= \$129 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4929" *)
+    tmp3 <= \$325 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4936" *)
   \PendantSystemTop.sys.core.bank  bank (
     .\addr$56 (addr),
     .busy(psram_busy),
     .ce_n(psram_ce_n),
     .clk(clk),
-    .\done$53 (\done$127 ),
+    .\done$53 (\done$103 ),
     .dq_i(dq_i),
     .dq_o(psram_dq_o),
     .dq_oe(psram_dq_oe),
@@ -1955,5494 +2244,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
     .\wdata$58 (wdata),
     .we(we)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4937" *)
-  \PendantSystemTop.sys.core.divider  divider (
-    .clk(clk),
-    .rst(rst)
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4930" *)
-  \PendantSystemTop.sys.core.gravity_dp  gravity_dp (
-    .gx(gx),
-    .gy(gy),
-    .next_pos_x(next_pos_x),
-    .next_pos_y(next_pos_y),
-    .next_vel_x(next_vel_x),
-    .next_vel_y(next_vel_y),
-    .pos_x(pos_x),
-    .pos_y(pos_y),
-    .vel_x(vx[18:0]),
-    .vel_y(vy[18:0])
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4931" *)
-  \PendantSystemTop.sys.core.pair_dp  pair_dp (
-    .next_i_x(next_i_x),
-    .next_i_y(next_i_y),
-    .pos_i_x(pos_x),
-    .pos_i_y(pos_y),
-    .pos_j_x(pos_j_x),
-    .pos_j_y(pos_j_y)
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4936" *)
-  \PendantSystemTop.sys.core.press_dp  press_dp (
-    .density(density),
-    .s_count(s_count),
-    .sx0(sx0),
-    .sx1(sx1),
-    .sy0(sy0),
-    .sy1(sy1),
-    .u_left(u_left),
-    .u_left_next(u_left_next),
-    .u_right(u_right),
-    .v_bottom(v_bottom),
-    .v_top(v_top)
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4932" *)
-  \PendantSystemTop.sys.core.wall_dp  wall_dp (
-    .next_pos_x(\next_pos_x$121 ),
-    .next_pos_y(\next_pos_y$123 ),
-    .next_vel_x(\next_vel_x$125 ),
-    .next_vel_y(\next_vel_y$126 ),
-    .pos_x(pos_x),
-    .pos_y(pos_y),
-    .vel_x(vx),
-    .vel_y(vy)
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4935" *)
-  \PendantSystemTop.sys.core.wd  wd (
-    .corner_x_1(\corner_x_1$95 ),
-    .corner_x_2(\corner_x_2$96 ),
-    .corner_y_2(\corner_y_2$100 ),
-    .corner_y_3(\corner_y_3$101 ),
-    .gx_q12(\gx_q12$49 ),
-    .gy_q12(\gy_q12$50 ),
-    .\port$3312$12 (\$134 ),
-    .\port$3316$12 (\$135 ),
-    .weight_0(weight_0),
-    .weight_1(weight_1),
-    .weight_2(weight_2),
-    .weight_3(weight_3)
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4933" *)
-  \PendantSystemTop.sys.core.wu  wu (
-    .corner_x_1(corner_x_1),
-    .corner_x_2(corner_x_2),
-    .corner_y_2(corner_y_2),
-    .corner_y_3(corner_y_3),
-    .gy_q12(gy_q12),
-    .\port$3268$12 (\$130 ),
-    .\port$3272$12 (\$131 ),
-    .\port$3853$0 (pos_x),
-    .weight_0(\weight_0$132 ),
-    .weight_1(\weight_1$133 ),
-    .weight_2(\weight_2$134 ),
-    .weight_3(\weight_3$135 )
-  );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4934" *)
-  \PendantSystemTop.sys.core.wv  wv (
-    .corner_x_1(\corner_x_1$86 ),
-    .corner_x_2(\corner_x_2$87 ),
-    .corner_y_2(\corner_y_2$91 ),
-    .corner_y_3(\corner_y_3$92 ),
-    .gx_q12(\gx_q12$47 ),
-    .\port$3290$12 (\$132 ),
-    .\port$3294$12 (\$133 ),
-    .\port$3855$0 (pos_y),
-    .weight_0(\weight_0$136 ),
-    .weight_1(\weight_1$137 ),
-    .weight_2(\weight_2$138 ),
-    .weight_3(\weight_3$139 )
-  );
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          s_count = 3'h0;
-      8'h01:
-          s_count = 3'h0;
-      8'h02:
-          s_count = 3'h0;
-      8'h03:
-          s_count = 3'h2;
-      8'h04:
-          s_count = 3'h2;
-      8'h05:
-          s_count = 3'h3;
-      8'h06:
-          s_count = 3'h3;
-      8'h07:
-          s_count = 3'h3;
-      8'h08:
-          s_count = 3'h3;
-      8'h09:
-          s_count = 3'h3;
-      8'h0a:
-          s_count = 3'h3;
-      8'h0b:
-          s_count = 3'h2;
-      8'h0c:
-          s_count = 3'h2;
-      8'h0d:
-          s_count = 3'h0;
-      8'h0e:
-          s_count = 3'h0;
-      8'h0f:
-          s_count = 3'h0;
-      8'h10:
-          s_count = 3'h0;
-      8'h11:
-          s_count = 3'h0;
-      8'h12:
-          s_count = 3'h2;
-      8'h13:
-          s_count = 3'h2;
-      8'h14:
-          s_count = 3'h4;
-      8'h15:
-          s_count = 3'h4;
-      8'h16:
-          s_count = 3'h4;
-      8'h17:
-          s_count = 3'h4;
-      8'h18:
-          s_count = 3'h4;
-      8'h19:
-          s_count = 3'h4;
-      8'h1a:
-          s_count = 3'h4;
-      8'h1b:
-          s_count = 3'h4;
-      8'h1c:
-          s_count = 3'h2;
-      8'h1d:
-          s_count = 3'h2;
-      8'h1e:
-          s_count = 3'h0;
-      8'h1f:
-          s_count = 3'h0;
-      8'h20:
-          s_count = 3'h0;
-      8'h21:
-          s_count = 3'h2;
-      8'h22:
-          s_count = 3'h2;
-      8'h23:
-          s_count = 3'h4;
-      8'h24:
-          s_count = 3'h4;
-      8'h25:
-          s_count = 3'h4;
-      8'h26:
-          s_count = 3'h4;
-      8'h27:
-          s_count = 3'h4;
-      8'h28:
-          s_count = 3'h4;
-      8'h29:
-          s_count = 3'h4;
-      8'h2a:
-          s_count = 3'h4;
-      8'h2b:
-          s_count = 3'h4;
-      8'h2c:
-          s_count = 3'h4;
-      8'h2d:
-          s_count = 3'h2;
-      8'h2e:
-          s_count = 3'h2;
-      8'h2f:
-          s_count = 3'h0;
-      8'h30:
-          s_count = 3'h2;
-      8'h31:
-          s_count = 3'h2;
-      8'h32:
-          s_count = 3'h4;
-      8'h33:
-          s_count = 3'h4;
-      8'h34:
-          s_count = 3'h4;
-      8'h35:
-          s_count = 3'h4;
-      8'h36:
-          s_count = 3'h4;
-      8'h37:
-          s_count = 3'h4;
-      8'h38:
-          s_count = 3'h4;
-      8'h39:
-          s_count = 3'h4;
-      8'h3a:
-          s_count = 3'h4;
-      8'h3b:
-          s_count = 3'h4;
-      8'h3c:
-          s_count = 3'h4;
-      8'h3d:
-          s_count = 3'h4;
-      8'h3e:
-          s_count = 3'h2;
-      8'h3f:
-          s_count = 3'h2;
-      8'h40:
-          s_count = 3'h2;
-      8'h41:
-          s_count = 3'h4;
-      8'h42:
-          s_count = 3'h4;
-      8'h43:
-          s_count = 3'h4;
-      8'h44:
-          s_count = 3'h4;
-      8'h45:
-          s_count = 3'h4;
-      8'h46:
-          s_count = 3'h4;
-      8'h47:
-          s_count = 3'h4;
-      8'h48:
-          s_count = 3'h4;
-      8'h49:
-          s_count = 3'h4;
-      8'h4a:
-          s_count = 3'h4;
-      8'h4b:
-          s_count = 3'h4;
-      8'h4c:
-          s_count = 3'h4;
-      8'h4d:
-          s_count = 3'h4;
-      8'h4e:
-          s_count = 3'h4;
-      8'h4f:
-          s_count = 3'h2;
-      8'h50:
-          s_count = 3'h3;
-      8'h51:
-          s_count = 3'h4;
-      8'h52:
-          s_count = 3'h4;
-      8'h53:
-          s_count = 3'h4;
-      8'h54:
-          s_count = 3'h4;
-      8'h55:
-          s_count = 3'h4;
-      8'h56:
-          s_count = 3'h4;
-      8'h57:
-          s_count = 3'h4;
-      8'h58:
-          s_count = 3'h4;
-      8'h59:
-          s_count = 3'h4;
-      8'h5a:
-          s_count = 3'h4;
-      8'h5b:
-          s_count = 3'h4;
-      8'h5c:
-          s_count = 3'h4;
-      8'h5d:
-          s_count = 3'h4;
-      8'h5e:
-          s_count = 3'h4;
-      8'h5f:
-          s_count = 3'h3;
-      8'h60:
-          s_count = 3'h3;
-      8'h61:
-          s_count = 3'h4;
-      8'h62:
-          s_count = 3'h4;
-      8'h63:
-          s_count = 3'h4;
-      8'h64:
-          s_count = 3'h4;
-      8'h65:
-          s_count = 3'h4;
-      8'h66:
-          s_count = 3'h4;
-      8'h67:
-          s_count = 3'h4;
-      8'h68:
-          s_count = 3'h4;
-      8'h69:
-          s_count = 3'h4;
-      8'h6a:
-          s_count = 3'h4;
-      8'h6b:
-          s_count = 3'h4;
-      8'h6c:
-          s_count = 3'h4;
-      8'h6d:
-          s_count = 3'h4;
-      8'h6e:
-          s_count = 3'h4;
-      8'h6f:
-          s_count = 3'h3;
-      8'h70:
-          s_count = 3'h3;
-      8'h71:
-          s_count = 3'h4;
-      8'h72:
-          s_count = 3'h4;
-      8'h73:
-          s_count = 3'h4;
-      8'h74:
-          s_count = 3'h4;
-      8'h75:
-          s_count = 3'h4;
-      8'h76:
-          s_count = 3'h4;
-      8'h77:
-          s_count = 3'h4;
-      8'h78:
-          s_count = 3'h4;
-      8'h79:
-          s_count = 3'h4;
-      8'h7a:
-          s_count = 3'h4;
-      8'h7b:
-          s_count = 3'h4;
-      8'h7c:
-          s_count = 3'h4;
-      8'h7d:
-          s_count = 3'h4;
-      8'h7e:
-          s_count = 3'h4;
-      8'h7f:
-          s_count = 3'h3;
-      8'h80:
-          s_count = 3'h3;
-      8'h81:
-          s_count = 3'h4;
-      8'h82:
-          s_count = 3'h4;
-      8'h83:
-          s_count = 3'h4;
-      8'h84:
-          s_count = 3'h4;
-      8'h85:
-          s_count = 3'h4;
-      8'h86:
-          s_count = 3'h4;
-      8'h87:
-          s_count = 3'h4;
-      8'h88:
-          s_count = 3'h4;
-      8'h89:
-          s_count = 3'h4;
-      8'h8a:
-          s_count = 3'h4;
-      8'h8b:
-          s_count = 3'h4;
-      8'h8c:
-          s_count = 3'h4;
-      8'h8d:
-          s_count = 3'h4;
-      8'h8e:
-          s_count = 3'h4;
-      8'h8f:
-          s_count = 3'h3;
-      8'h90:
-          s_count = 3'h3;
-      8'h91:
-          s_count = 3'h4;
-      8'h92:
-          s_count = 3'h4;
-      8'h93:
-          s_count = 3'h4;
-      8'h94:
-          s_count = 3'h4;
-      8'h95:
-          s_count = 3'h4;
-      8'h96:
-          s_count = 3'h4;
-      8'h97:
-          s_count = 3'h4;
-      8'h98:
-          s_count = 3'h4;
-      8'h99:
-          s_count = 3'h4;
-      8'h9a:
-          s_count = 3'h4;
-      8'h9b:
-          s_count = 3'h4;
-      8'h9c:
-          s_count = 3'h4;
-      8'h9d:
-          s_count = 3'h4;
-      8'h9e:
-          s_count = 3'h4;
-      8'h9f:
-          s_count = 3'h3;
-      8'ha0:
-          s_count = 3'h3;
-      8'ha1:
-          s_count = 3'h4;
-      8'ha2:
-          s_count = 3'h4;
-      8'ha3:
-          s_count = 3'h4;
-      8'ha4:
-          s_count = 3'h4;
-      8'ha5:
-          s_count = 3'h4;
-      8'ha6:
-          s_count = 3'h4;
-      8'ha7:
-          s_count = 3'h4;
-      8'ha8:
-          s_count = 3'h4;
-      8'ha9:
-          s_count = 3'h4;
-      8'haa:
-          s_count = 3'h4;
-      8'hab:
-          s_count = 3'h4;
-      8'hac:
-          s_count = 3'h4;
-      8'had:
-          s_count = 3'h4;
-      8'hae:
-          s_count = 3'h4;
-      8'haf:
-          s_count = 3'h3;
-      8'hb0:
-          s_count = 3'h2;
-      8'hb1:
-          s_count = 3'h4;
-      8'hb2:
-          s_count = 3'h4;
-      8'hb3:
-          s_count = 3'h4;
-      8'hb4:
-          s_count = 3'h4;
-      8'hb5:
-          s_count = 3'h4;
-      8'hb6:
-          s_count = 3'h4;
-      8'hb7:
-          s_count = 3'h4;
-      8'hb8:
-          s_count = 3'h4;
-      8'hb9:
-          s_count = 3'h4;
-      8'hba:
-          s_count = 3'h4;
-      8'hbb:
-          s_count = 3'h4;
-      8'hbc:
-          s_count = 3'h4;
-      8'hbd:
-          s_count = 3'h4;
-      8'hbe:
-          s_count = 3'h4;
-      8'hbf:
-          s_count = 3'h2;
-      8'hc0:
-          s_count = 3'h2;
-      8'hc1:
-          s_count = 3'h2;
-      8'hc2:
-          s_count = 3'h4;
-      8'hc3:
-          s_count = 3'h4;
-      8'hc4:
-          s_count = 3'h4;
-      8'hc5:
-          s_count = 3'h4;
-      8'hc6:
-          s_count = 3'h4;
-      8'hc7:
-          s_count = 3'h4;
-      8'hc8:
-          s_count = 3'h4;
-      8'hc9:
-          s_count = 3'h4;
-      8'hca:
-          s_count = 3'h4;
-      8'hcb:
-          s_count = 3'h4;
-      8'hcc:
-          s_count = 3'h4;
-      8'hcd:
-          s_count = 3'h4;
-      8'hce:
-          s_count = 3'h2;
-      8'hcf:
-          s_count = 3'h2;
-      8'hd0:
-          s_count = 3'h0;
-      8'hd1:
-          s_count = 3'h2;
-      8'hd2:
-          s_count = 3'h2;
-      8'hd3:
-          s_count = 3'h4;
-      8'hd4:
-          s_count = 3'h4;
-      8'hd5:
-          s_count = 3'h4;
-      8'hd6:
-          s_count = 3'h4;
-      8'hd7:
-          s_count = 3'h4;
-      8'hd8:
-          s_count = 3'h4;
-      8'hd9:
-          s_count = 3'h4;
-      8'hda:
-          s_count = 3'h4;
-      8'hdb:
-          s_count = 3'h4;
-      8'hdc:
-          s_count = 3'h4;
-      8'hdd:
-          s_count = 3'h2;
-      8'hde:
-          s_count = 3'h2;
-      8'hdf:
-          s_count = 3'h0;
-      8'he0:
-          s_count = 3'h0;
-      8'he1:
-          s_count = 3'h0;
-      8'he2:
-          s_count = 3'h2;
-      8'he3:
-          s_count = 3'h2;
-      8'he4:
-          s_count = 3'h4;
-      8'he5:
-          s_count = 3'h4;
-      8'he6:
-          s_count = 3'h4;
-      8'he7:
-          s_count = 3'h4;
-      8'he8:
-          s_count = 3'h4;
-      8'he9:
-          s_count = 3'h4;
-      8'hea:
-          s_count = 3'h4;
-      8'heb:
-          s_count = 3'h4;
-      8'hec:
-          s_count = 3'h2;
-      8'hed:
-          s_count = 3'h2;
-      8'hee:
-          s_count = 3'h0;
-      8'hef:
-          s_count = 3'h0;
-      8'hf0:
-          s_count = 3'h0;
-      8'hf1:
-          s_count = 3'h0;
-      8'hf2:
-          s_count = 3'h0;
-      8'hf3:
-          s_count = 3'h2;
-      8'hf4:
-          s_count = 3'h2;
-      8'hf5:
-          s_count = 3'h3;
-      8'hf6:
-          s_count = 3'h3;
-      8'hf7:
-          s_count = 3'h3;
-      8'hf8:
-          s_count = 3'h3;
-      8'hf9:
-          s_count = 3'h3;
-      8'hfa:
-          s_count = 3'h3;
-      8'hfb:
-          s_count = 3'h2;
-      8'hfc:
-          s_count = 3'h2;
-      8'hfd:
-          s_count = 3'h0;
-      8'hfe:
-          s_count = 3'h0;
-      8'hff:
-          s_count = 3'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          sx0 = 1'h0;
-      8'h01:
-          sx0 = 1'h0;
-      8'h02:
-          sx0 = 1'h0;
-      8'h03:
-          sx0 = 1'h0;
-      8'h04:
-          sx0 = 1'h0;
-      8'h05:
-          sx0 = 1'h0;
-      8'h06:
-          sx0 = 1'h0;
-      8'h07:
-          sx0 = 1'h0;
-      8'h08:
-          sx0 = 1'h0;
-      8'h09:
-          sx0 = 1'h0;
-      8'h0a:
-          sx0 = 1'h0;
-      8'h0b:
-          sx0 = 1'h0;
-      8'h0c:
-          sx0 = 1'h0;
-      8'h0d:
-          sx0 = 1'h0;
-      8'h0e:
-          sx0 = 1'h0;
-      8'h0f:
-          sx0 = 1'h0;
-      8'h10:
-          sx0 = 1'h0;
-      8'h11:
-          sx0 = 1'h0;
-      8'h12:
-          sx0 = 1'h0;
-      8'h13:
-          sx0 = 1'h0;
-      8'h14:
-          sx0 = 1'h1;
-      8'h15:
-          sx0 = 1'h1;
-      8'h16:
-          sx0 = 1'h1;
-      8'h17:
-          sx0 = 1'h1;
-      8'h18:
-          sx0 = 1'h1;
-      8'h19:
-          sx0 = 1'h1;
-      8'h1a:
-          sx0 = 1'h1;
-      8'h1b:
-          sx0 = 1'h1;
-      8'h1c:
-          sx0 = 1'h0;
-      8'h1d:
-          sx0 = 1'h0;
-      8'h1e:
-          sx0 = 1'h0;
-      8'h1f:
-          sx0 = 1'h0;
-      8'h20:
-          sx0 = 1'h0;
-      8'h21:
-          sx0 = 1'h0;
-      8'h22:
-          sx0 = 1'h0;
-      8'h23:
-          sx0 = 1'h1;
-      8'h24:
-          sx0 = 1'h1;
-      8'h25:
-          sx0 = 1'h1;
-      8'h26:
-          sx0 = 1'h1;
-      8'h27:
-          sx0 = 1'h1;
-      8'h28:
-          sx0 = 1'h1;
-      8'h29:
-          sx0 = 1'h1;
-      8'h2a:
-          sx0 = 1'h1;
-      8'h2b:
-          sx0 = 1'h1;
-      8'h2c:
-          sx0 = 1'h1;
-      8'h2d:
-          sx0 = 1'h0;
-      8'h2e:
-          sx0 = 1'h0;
-      8'h2f:
-          sx0 = 1'h0;
-      8'h30:
-          sx0 = 1'h0;
-      8'h31:
-          sx0 = 1'h0;
-      8'h32:
-          sx0 = 1'h1;
-      8'h33:
-          sx0 = 1'h1;
-      8'h34:
-          sx0 = 1'h1;
-      8'h35:
-          sx0 = 1'h1;
-      8'h36:
-          sx0 = 1'h1;
-      8'h37:
-          sx0 = 1'h1;
-      8'h38:
-          sx0 = 1'h1;
-      8'h39:
-          sx0 = 1'h1;
-      8'h3a:
-          sx0 = 1'h1;
-      8'h3b:
-          sx0 = 1'h1;
-      8'h3c:
-          sx0 = 1'h1;
-      8'h3d:
-          sx0 = 1'h1;
-      8'h3e:
-          sx0 = 1'h0;
-      8'h3f:
-          sx0 = 1'h0;
-      8'h40:
-          sx0 = 1'h0;
-      8'h41:
-          sx0 = 1'h1;
-      8'h42:
-          sx0 = 1'h1;
-      8'h43:
-          sx0 = 1'h1;
-      8'h44:
-          sx0 = 1'h1;
-      8'h45:
-          sx0 = 1'h1;
-      8'h46:
-          sx0 = 1'h1;
-      8'h47:
-          sx0 = 1'h1;
-      8'h48:
-          sx0 = 1'h1;
-      8'h49:
-          sx0 = 1'h1;
-      8'h4a:
-          sx0 = 1'h1;
-      8'h4b:
-          sx0 = 1'h1;
-      8'h4c:
-          sx0 = 1'h1;
-      8'h4d:
-          sx0 = 1'h1;
-      8'h4e:
-          sx0 = 1'h1;
-      8'h4f:
-          sx0 = 1'h0;
-      8'h50:
-          sx0 = 1'h1;
-      8'h51:
-          sx0 = 1'h1;
-      8'h52:
-          sx0 = 1'h1;
-      8'h53:
-          sx0 = 1'h1;
-      8'h54:
-          sx0 = 1'h1;
-      8'h55:
-          sx0 = 1'h1;
-      8'h56:
-          sx0 = 1'h1;
-      8'h57:
-          sx0 = 1'h1;
-      8'h58:
-          sx0 = 1'h1;
-      8'h59:
-          sx0 = 1'h1;
-      8'h5a:
-          sx0 = 1'h1;
-      8'h5b:
-          sx0 = 1'h1;
-      8'h5c:
-          sx0 = 1'h1;
-      8'h5d:
-          sx0 = 1'h1;
-      8'h5e:
-          sx0 = 1'h1;
-      8'h5f:
-          sx0 = 1'h1;
-      8'h60:
-          sx0 = 1'h1;
-      8'h61:
-          sx0 = 1'h1;
-      8'h62:
-          sx0 = 1'h1;
-      8'h63:
-          sx0 = 1'h1;
-      8'h64:
-          sx0 = 1'h1;
-      8'h65:
-          sx0 = 1'h1;
-      8'h66:
-          sx0 = 1'h1;
-      8'h67:
-          sx0 = 1'h1;
-      8'h68:
-          sx0 = 1'h1;
-      8'h69:
-          sx0 = 1'h1;
-      8'h6a:
-          sx0 = 1'h1;
-      8'h6b:
-          sx0 = 1'h1;
-      8'h6c:
-          sx0 = 1'h1;
-      8'h6d:
-          sx0 = 1'h1;
-      8'h6e:
-          sx0 = 1'h1;
-      8'h6f:
-          sx0 = 1'h1;
-      8'h70:
-          sx0 = 1'h1;
-      8'h71:
-          sx0 = 1'h1;
-      8'h72:
-          sx0 = 1'h1;
-      8'h73:
-          sx0 = 1'h1;
-      8'h74:
-          sx0 = 1'h1;
-      8'h75:
-          sx0 = 1'h1;
-      8'h76:
-          sx0 = 1'h1;
-      8'h77:
-          sx0 = 1'h1;
-      8'h78:
-          sx0 = 1'h1;
-      8'h79:
-          sx0 = 1'h1;
-      8'h7a:
-          sx0 = 1'h1;
-      8'h7b:
-          sx0 = 1'h1;
-      8'h7c:
-          sx0 = 1'h1;
-      8'h7d:
-          sx0 = 1'h1;
-      8'h7e:
-          sx0 = 1'h1;
-      8'h7f:
-          sx0 = 1'h1;
-      8'h80:
-          sx0 = 1'h1;
-      8'h81:
-          sx0 = 1'h1;
-      8'h82:
-          sx0 = 1'h1;
-      8'h83:
-          sx0 = 1'h1;
-      8'h84:
-          sx0 = 1'h1;
-      8'h85:
-          sx0 = 1'h1;
-      8'h86:
-          sx0 = 1'h1;
-      8'h87:
-          sx0 = 1'h1;
-      8'h88:
-          sx0 = 1'h1;
-      8'h89:
-          sx0 = 1'h1;
-      8'h8a:
-          sx0 = 1'h1;
-      8'h8b:
-          sx0 = 1'h1;
-      8'h8c:
-          sx0 = 1'h1;
-      8'h8d:
-          sx0 = 1'h1;
-      8'h8e:
-          sx0 = 1'h1;
-      8'h8f:
-          sx0 = 1'h1;
-      8'h90:
-          sx0 = 1'h1;
-      8'h91:
-          sx0 = 1'h1;
-      8'h92:
-          sx0 = 1'h1;
-      8'h93:
-          sx0 = 1'h1;
-      8'h94:
-          sx0 = 1'h1;
-      8'h95:
-          sx0 = 1'h1;
-      8'h96:
-          sx0 = 1'h1;
-      8'h97:
-          sx0 = 1'h1;
-      8'h98:
-          sx0 = 1'h1;
-      8'h99:
-          sx0 = 1'h1;
-      8'h9a:
-          sx0 = 1'h1;
-      8'h9b:
-          sx0 = 1'h1;
-      8'h9c:
-          sx0 = 1'h1;
-      8'h9d:
-          sx0 = 1'h1;
-      8'h9e:
-          sx0 = 1'h1;
-      8'h9f:
-          sx0 = 1'h1;
-      8'ha0:
-          sx0 = 1'h1;
-      8'ha1:
-          sx0 = 1'h1;
-      8'ha2:
-          sx0 = 1'h1;
-      8'ha3:
-          sx0 = 1'h1;
-      8'ha4:
-          sx0 = 1'h1;
-      8'ha5:
-          sx0 = 1'h1;
-      8'ha6:
-          sx0 = 1'h1;
-      8'ha7:
-          sx0 = 1'h1;
-      8'ha8:
-          sx0 = 1'h1;
-      8'ha9:
-          sx0 = 1'h1;
-      8'haa:
-          sx0 = 1'h1;
-      8'hab:
-          sx0 = 1'h1;
-      8'hac:
-          sx0 = 1'h1;
-      8'had:
-          sx0 = 1'h1;
-      8'hae:
-          sx0 = 1'h1;
-      8'haf:
-          sx0 = 1'h1;
-      8'hb0:
-          sx0 = 1'h1;
-      8'hb1:
-          sx0 = 1'h1;
-      8'hb2:
-          sx0 = 1'h1;
-      8'hb3:
-          sx0 = 1'h1;
-      8'hb4:
-          sx0 = 1'h1;
-      8'hb5:
-          sx0 = 1'h1;
-      8'hb6:
-          sx0 = 1'h1;
-      8'hb7:
-          sx0 = 1'h1;
-      8'hb8:
-          sx0 = 1'h1;
-      8'hb9:
-          sx0 = 1'h1;
-      8'hba:
-          sx0 = 1'h1;
-      8'hbb:
-          sx0 = 1'h1;
-      8'hbc:
-          sx0 = 1'h1;
-      8'hbd:
-          sx0 = 1'h1;
-      8'hbe:
-          sx0 = 1'h1;
-      8'hbf:
-          sx0 = 1'h1;
-      8'hc0:
-          sx0 = 1'h1;
-      8'hc1:
-          sx0 = 1'h1;
-      8'hc2:
-          sx0 = 1'h1;
-      8'hc3:
-          sx0 = 1'h1;
-      8'hc4:
-          sx0 = 1'h1;
-      8'hc5:
-          sx0 = 1'h1;
-      8'hc6:
-          sx0 = 1'h1;
-      8'hc7:
-          sx0 = 1'h1;
-      8'hc8:
-          sx0 = 1'h1;
-      8'hc9:
-          sx0 = 1'h1;
-      8'hca:
-          sx0 = 1'h1;
-      8'hcb:
-          sx0 = 1'h1;
-      8'hcc:
-          sx0 = 1'h1;
-      8'hcd:
-          sx0 = 1'h1;
-      8'hce:
-          sx0 = 1'h1;
-      8'hcf:
-          sx0 = 1'h1;
-      8'hd0:
-          sx0 = 1'h0;
-      8'hd1:
-          sx0 = 1'h1;
-      8'hd2:
-          sx0 = 1'h1;
-      8'hd3:
-          sx0 = 1'h1;
-      8'hd4:
-          sx0 = 1'h1;
-      8'hd5:
-          sx0 = 1'h1;
-      8'hd6:
-          sx0 = 1'h1;
-      8'hd7:
-          sx0 = 1'h1;
-      8'hd8:
-          sx0 = 1'h1;
-      8'hd9:
-          sx0 = 1'h1;
-      8'hda:
-          sx0 = 1'h1;
-      8'hdb:
-          sx0 = 1'h1;
-      8'hdc:
-          sx0 = 1'h1;
-      8'hdd:
-          sx0 = 1'h1;
-      8'hde:
-          sx0 = 1'h1;
-      8'hdf:
-          sx0 = 1'h0;
-      8'he0:
-          sx0 = 1'h0;
-      8'he1:
-          sx0 = 1'h0;
-      8'he2:
-          sx0 = 1'h1;
-      8'he3:
-          sx0 = 1'h1;
-      8'he4:
-          sx0 = 1'h1;
-      8'he5:
-          sx0 = 1'h1;
-      8'he6:
-          sx0 = 1'h1;
-      8'he7:
-          sx0 = 1'h1;
-      8'he8:
-          sx0 = 1'h1;
-      8'he9:
-          sx0 = 1'h1;
-      8'hea:
-          sx0 = 1'h1;
-      8'heb:
-          sx0 = 1'h1;
-      8'hec:
-          sx0 = 1'h1;
-      8'hed:
-          sx0 = 1'h1;
-      8'hee:
-          sx0 = 1'h0;
-      8'hef:
-          sx0 = 1'h0;
-      8'hf0:
-          sx0 = 1'h0;
-      8'hf1:
-          sx0 = 1'h0;
-      8'hf2:
-          sx0 = 1'h0;
-      8'hf3:
-          sx0 = 1'h1;
-      8'hf4:
-          sx0 = 1'h1;
-      8'hf5:
-          sx0 = 1'h1;
-      8'hf6:
-          sx0 = 1'h1;
-      8'hf7:
-          sx0 = 1'h1;
-      8'hf8:
-          sx0 = 1'h1;
-      8'hf9:
-          sx0 = 1'h1;
-      8'hfa:
-          sx0 = 1'h1;
-      8'hfb:
-          sx0 = 1'h1;
-      8'hfc:
-          sx0 = 1'h1;
-      8'hfd:
-          sx0 = 1'h0;
-      8'hfe:
-          sx0 = 1'h0;
-      8'hff:
-          sx0 = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          sx1 = 1'h0;
-      8'h01:
-          sx1 = 1'h0;
-      8'h02:
-          sx1 = 1'h0;
-      8'h03:
-          sx1 = 1'h1;
-      8'h04:
-          sx1 = 1'h1;
-      8'h05:
-          sx1 = 1'h1;
-      8'h06:
-          sx1 = 1'h1;
-      8'h07:
-          sx1 = 1'h1;
-      8'h08:
-          sx1 = 1'h1;
-      8'h09:
-          sx1 = 1'h1;
-      8'h0a:
-          sx1 = 1'h1;
-      8'h0b:
-          sx1 = 1'h1;
-      8'h0c:
-          sx1 = 1'h1;
-      8'h0d:
-          sx1 = 1'h0;
-      8'h0e:
-          sx1 = 1'h0;
-      8'h0f:
-          sx1 = 1'h0;
-      8'h10:
-          sx1 = 1'h0;
-      8'h11:
-          sx1 = 1'h0;
-      8'h12:
-          sx1 = 1'h1;
-      8'h13:
-          sx1 = 1'h1;
-      8'h14:
-          sx1 = 1'h1;
-      8'h15:
-          sx1 = 1'h1;
-      8'h16:
-          sx1 = 1'h1;
-      8'h17:
-          sx1 = 1'h1;
-      8'h18:
-          sx1 = 1'h1;
-      8'h19:
-          sx1 = 1'h1;
-      8'h1a:
-          sx1 = 1'h1;
-      8'h1b:
-          sx1 = 1'h1;
-      8'h1c:
-          sx1 = 1'h1;
-      8'h1d:
-          sx1 = 1'h1;
-      8'h1e:
-          sx1 = 1'h0;
-      8'h1f:
-          sx1 = 1'h0;
-      8'h20:
-          sx1 = 1'h0;
-      8'h21:
-          sx1 = 1'h1;
-      8'h22:
-          sx1 = 1'h1;
-      8'h23:
-          sx1 = 1'h1;
-      8'h24:
-          sx1 = 1'h1;
-      8'h25:
-          sx1 = 1'h1;
-      8'h26:
-          sx1 = 1'h1;
-      8'h27:
-          sx1 = 1'h1;
-      8'h28:
-          sx1 = 1'h1;
-      8'h29:
-          sx1 = 1'h1;
-      8'h2a:
-          sx1 = 1'h1;
-      8'h2b:
-          sx1 = 1'h1;
-      8'h2c:
-          sx1 = 1'h1;
-      8'h2d:
-          sx1 = 1'h1;
-      8'h2e:
-          sx1 = 1'h1;
-      8'h2f:
-          sx1 = 1'h0;
-      8'h30:
-          sx1 = 1'h1;
-      8'h31:
-          sx1 = 1'h1;
-      8'h32:
-          sx1 = 1'h1;
-      8'h33:
-          sx1 = 1'h1;
-      8'h34:
-          sx1 = 1'h1;
-      8'h35:
-          sx1 = 1'h1;
-      8'h36:
-          sx1 = 1'h1;
-      8'h37:
-          sx1 = 1'h1;
-      8'h38:
-          sx1 = 1'h1;
-      8'h39:
-          sx1 = 1'h1;
-      8'h3a:
-          sx1 = 1'h1;
-      8'h3b:
-          sx1 = 1'h1;
-      8'h3c:
-          sx1 = 1'h1;
-      8'h3d:
-          sx1 = 1'h1;
-      8'h3e:
-          sx1 = 1'h1;
-      8'h3f:
-          sx1 = 1'h1;
-      8'h40:
-          sx1 = 1'h1;
-      8'h41:
-          sx1 = 1'h1;
-      8'h42:
-          sx1 = 1'h1;
-      8'h43:
-          sx1 = 1'h1;
-      8'h44:
-          sx1 = 1'h1;
-      8'h45:
-          sx1 = 1'h1;
-      8'h46:
-          sx1 = 1'h1;
-      8'h47:
-          sx1 = 1'h1;
-      8'h48:
-          sx1 = 1'h1;
-      8'h49:
-          sx1 = 1'h1;
-      8'h4a:
-          sx1 = 1'h1;
-      8'h4b:
-          sx1 = 1'h1;
-      8'h4c:
-          sx1 = 1'h1;
-      8'h4d:
-          sx1 = 1'h1;
-      8'h4e:
-          sx1 = 1'h1;
-      8'h4f:
-          sx1 = 1'h1;
-      8'h50:
-          sx1 = 1'h1;
-      8'h51:
-          sx1 = 1'h1;
-      8'h52:
-          sx1 = 1'h1;
-      8'h53:
-          sx1 = 1'h1;
-      8'h54:
-          sx1 = 1'h1;
-      8'h55:
-          sx1 = 1'h1;
-      8'h56:
-          sx1 = 1'h1;
-      8'h57:
-          sx1 = 1'h1;
-      8'h58:
-          sx1 = 1'h1;
-      8'h59:
-          sx1 = 1'h1;
-      8'h5a:
-          sx1 = 1'h1;
-      8'h5b:
-          sx1 = 1'h1;
-      8'h5c:
-          sx1 = 1'h1;
-      8'h5d:
-          sx1 = 1'h1;
-      8'h5e:
-          sx1 = 1'h1;
-      8'h5f:
-          sx1 = 1'h1;
-      8'h60:
-          sx1 = 1'h1;
-      8'h61:
-          sx1 = 1'h1;
-      8'h62:
-          sx1 = 1'h1;
-      8'h63:
-          sx1 = 1'h1;
-      8'h64:
-          sx1 = 1'h1;
-      8'h65:
-          sx1 = 1'h1;
-      8'h66:
-          sx1 = 1'h1;
-      8'h67:
-          sx1 = 1'h1;
-      8'h68:
-          sx1 = 1'h1;
-      8'h69:
-          sx1 = 1'h1;
-      8'h6a:
-          sx1 = 1'h1;
-      8'h6b:
-          sx1 = 1'h1;
-      8'h6c:
-          sx1 = 1'h1;
-      8'h6d:
-          sx1 = 1'h1;
-      8'h6e:
-          sx1 = 1'h1;
-      8'h6f:
-          sx1 = 1'h1;
-      8'h70:
-          sx1 = 1'h1;
-      8'h71:
-          sx1 = 1'h1;
-      8'h72:
-          sx1 = 1'h1;
-      8'h73:
-          sx1 = 1'h1;
-      8'h74:
-          sx1 = 1'h1;
-      8'h75:
-          sx1 = 1'h1;
-      8'h76:
-          sx1 = 1'h1;
-      8'h77:
-          sx1 = 1'h1;
-      8'h78:
-          sx1 = 1'h1;
-      8'h79:
-          sx1 = 1'h1;
-      8'h7a:
-          sx1 = 1'h1;
-      8'h7b:
-          sx1 = 1'h1;
-      8'h7c:
-          sx1 = 1'h1;
-      8'h7d:
-          sx1 = 1'h1;
-      8'h7e:
-          sx1 = 1'h1;
-      8'h7f:
-          sx1 = 1'h1;
-      8'h80:
-          sx1 = 1'h1;
-      8'h81:
-          sx1 = 1'h1;
-      8'h82:
-          sx1 = 1'h1;
-      8'h83:
-          sx1 = 1'h1;
-      8'h84:
-          sx1 = 1'h1;
-      8'h85:
-          sx1 = 1'h1;
-      8'h86:
-          sx1 = 1'h1;
-      8'h87:
-          sx1 = 1'h1;
-      8'h88:
-          sx1 = 1'h1;
-      8'h89:
-          sx1 = 1'h1;
-      8'h8a:
-          sx1 = 1'h1;
-      8'h8b:
-          sx1 = 1'h1;
-      8'h8c:
-          sx1 = 1'h1;
-      8'h8d:
-          sx1 = 1'h1;
-      8'h8e:
-          sx1 = 1'h1;
-      8'h8f:
-          sx1 = 1'h1;
-      8'h90:
-          sx1 = 1'h1;
-      8'h91:
-          sx1 = 1'h1;
-      8'h92:
-          sx1 = 1'h1;
-      8'h93:
-          sx1 = 1'h1;
-      8'h94:
-          sx1 = 1'h1;
-      8'h95:
-          sx1 = 1'h1;
-      8'h96:
-          sx1 = 1'h1;
-      8'h97:
-          sx1 = 1'h1;
-      8'h98:
-          sx1 = 1'h1;
-      8'h99:
-          sx1 = 1'h1;
-      8'h9a:
-          sx1 = 1'h1;
-      8'h9b:
-          sx1 = 1'h1;
-      8'h9c:
-          sx1 = 1'h1;
-      8'h9d:
-          sx1 = 1'h1;
-      8'h9e:
-          sx1 = 1'h1;
-      8'h9f:
-          sx1 = 1'h1;
-      8'ha0:
-          sx1 = 1'h1;
-      8'ha1:
-          sx1 = 1'h1;
-      8'ha2:
-          sx1 = 1'h1;
-      8'ha3:
-          sx1 = 1'h1;
-      8'ha4:
-          sx1 = 1'h1;
-      8'ha5:
-          sx1 = 1'h1;
-      8'ha6:
-          sx1 = 1'h1;
-      8'ha7:
-          sx1 = 1'h1;
-      8'ha8:
-          sx1 = 1'h1;
-      8'ha9:
-          sx1 = 1'h1;
-      8'haa:
-          sx1 = 1'h1;
-      8'hab:
-          sx1 = 1'h1;
-      8'hac:
-          sx1 = 1'h1;
-      8'had:
-          sx1 = 1'h1;
-      8'hae:
-          sx1 = 1'h1;
-      8'haf:
-          sx1 = 1'h1;
-      8'hb0:
-          sx1 = 1'h0;
-      8'hb1:
-          sx1 = 1'h1;
-      8'hb2:
-          sx1 = 1'h1;
-      8'hb3:
-          sx1 = 1'h1;
-      8'hb4:
-          sx1 = 1'h1;
-      8'hb5:
-          sx1 = 1'h1;
-      8'hb6:
-          sx1 = 1'h1;
-      8'hb7:
-          sx1 = 1'h1;
-      8'hb8:
-          sx1 = 1'h1;
-      8'hb9:
-          sx1 = 1'h1;
-      8'hba:
-          sx1 = 1'h1;
-      8'hbb:
-          sx1 = 1'h1;
-      8'hbc:
-          sx1 = 1'h1;
-      8'hbd:
-          sx1 = 1'h1;
-      8'hbe:
-          sx1 = 1'h1;
-      8'hbf:
-          sx1 = 1'h0;
-      8'hc0:
-          sx1 = 1'h0;
-      8'hc1:
-          sx1 = 1'h0;
-      8'hc2:
-          sx1 = 1'h1;
-      8'hc3:
-          sx1 = 1'h1;
-      8'hc4:
-          sx1 = 1'h1;
-      8'hc5:
-          sx1 = 1'h1;
-      8'hc6:
-          sx1 = 1'h1;
-      8'hc7:
-          sx1 = 1'h1;
-      8'hc8:
-          sx1 = 1'h1;
-      8'hc9:
-          sx1 = 1'h1;
-      8'hca:
-          sx1 = 1'h1;
-      8'hcb:
-          sx1 = 1'h1;
-      8'hcc:
-          sx1 = 1'h1;
-      8'hcd:
-          sx1 = 1'h1;
-      8'hce:
-          sx1 = 1'h0;
-      8'hcf:
-          sx1 = 1'h0;
-      8'hd0:
-          sx1 = 1'h0;
-      8'hd1:
-          sx1 = 1'h0;
-      8'hd2:
-          sx1 = 1'h0;
-      8'hd3:
-          sx1 = 1'h1;
-      8'hd4:
-          sx1 = 1'h1;
-      8'hd5:
-          sx1 = 1'h1;
-      8'hd6:
-          sx1 = 1'h1;
-      8'hd7:
-          sx1 = 1'h1;
-      8'hd8:
-          sx1 = 1'h1;
-      8'hd9:
-          sx1 = 1'h1;
-      8'hda:
-          sx1 = 1'h1;
-      8'hdb:
-          sx1 = 1'h1;
-      8'hdc:
-          sx1 = 1'h1;
-      8'hdd:
-          sx1 = 1'h0;
-      8'hde:
-          sx1 = 1'h0;
-      8'hdf:
-          sx1 = 1'h0;
-      8'he0:
-          sx1 = 1'h0;
-      8'he1:
-          sx1 = 1'h0;
-      8'he2:
-          sx1 = 1'h0;
-      8'he3:
-          sx1 = 1'h0;
-      8'he4:
-          sx1 = 1'h1;
-      8'he5:
-          sx1 = 1'h1;
-      8'he6:
-          sx1 = 1'h1;
-      8'he7:
-          sx1 = 1'h1;
-      8'he8:
-          sx1 = 1'h1;
-      8'he9:
-          sx1 = 1'h1;
-      8'hea:
-          sx1 = 1'h1;
-      8'heb:
-          sx1 = 1'h1;
-      8'hec:
-          sx1 = 1'h0;
-      8'hed:
-          sx1 = 1'h0;
-      8'hee:
-          sx1 = 1'h0;
-      8'hef:
-          sx1 = 1'h0;
-      8'hf0:
-          sx1 = 1'h0;
-      8'hf1:
-          sx1 = 1'h0;
-      8'hf2:
-          sx1 = 1'h0;
-      8'hf3:
-          sx1 = 1'h0;
-      8'hf4:
-          sx1 = 1'h0;
-      8'hf5:
-          sx1 = 1'h0;
-      8'hf6:
-          sx1 = 1'h0;
-      8'hf7:
-          sx1 = 1'h0;
-      8'hf8:
-          sx1 = 1'h0;
-      8'hf9:
-          sx1 = 1'h0;
-      8'hfa:
-          sx1 = 1'h0;
-      8'hfb:
-          sx1 = 1'h0;
-      8'hfc:
-          sx1 = 1'h0;
-      8'hfd:
-          sx1 = 1'h0;
-      8'hfe:
-          sx1 = 1'h0;
-      8'hff:
-          sx1 = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          sy0 = 1'h0;
-      8'h01:
-          sy0 = 1'h0;
-      8'h02:
-          sy0 = 1'h0;
-      8'h03:
-          sy0 = 1'h0;
-      8'h04:
-          sy0 = 1'h0;
-      8'h05:
-          sy0 = 1'h1;
-      8'h06:
-          sy0 = 1'h1;
-      8'h07:
-          sy0 = 1'h1;
-      8'h08:
-          sy0 = 1'h1;
-      8'h09:
-          sy0 = 1'h1;
-      8'h0a:
-          sy0 = 1'h1;
-      8'h0b:
-          sy0 = 1'h1;
-      8'h0c:
-          sy0 = 1'h1;
-      8'h0d:
-          sy0 = 1'h0;
-      8'h0e:
-          sy0 = 1'h0;
-      8'h0f:
-          sy0 = 1'h0;
-      8'h10:
-          sy0 = 1'h0;
-      8'h11:
-          sy0 = 1'h0;
-      8'h12:
-          sy0 = 1'h0;
-      8'h13:
-          sy0 = 1'h0;
-      8'h14:
-          sy0 = 1'h1;
-      8'h15:
-          sy0 = 1'h1;
-      8'h16:
-          sy0 = 1'h1;
-      8'h17:
-          sy0 = 1'h1;
-      8'h18:
-          sy0 = 1'h1;
-      8'h19:
-          sy0 = 1'h1;
-      8'h1a:
-          sy0 = 1'h1;
-      8'h1b:
-          sy0 = 1'h1;
-      8'h1c:
-          sy0 = 1'h1;
-      8'h1d:
-          sy0 = 1'h1;
-      8'h1e:
-          sy0 = 1'h0;
-      8'h1f:
-          sy0 = 1'h0;
-      8'h20:
-          sy0 = 1'h0;
-      8'h21:
-          sy0 = 1'h0;
-      8'h22:
-          sy0 = 1'h0;
-      8'h23:
-          sy0 = 1'h1;
-      8'h24:
-          sy0 = 1'h1;
-      8'h25:
-          sy0 = 1'h1;
-      8'h26:
-          sy0 = 1'h1;
-      8'h27:
-          sy0 = 1'h1;
-      8'h28:
-          sy0 = 1'h1;
-      8'h29:
-          sy0 = 1'h1;
-      8'h2a:
-          sy0 = 1'h1;
-      8'h2b:
-          sy0 = 1'h1;
-      8'h2c:
-          sy0 = 1'h1;
-      8'h2d:
-          sy0 = 1'h1;
-      8'h2e:
-          sy0 = 1'h1;
-      8'h2f:
-          sy0 = 1'h0;
-      8'h30:
-          sy0 = 1'h0;
-      8'h31:
-          sy0 = 1'h0;
-      8'h32:
-          sy0 = 1'h1;
-      8'h33:
-          sy0 = 1'h1;
-      8'h34:
-          sy0 = 1'h1;
-      8'h35:
-          sy0 = 1'h1;
-      8'h36:
-          sy0 = 1'h1;
-      8'h37:
-          sy0 = 1'h1;
-      8'h38:
-          sy0 = 1'h1;
-      8'h39:
-          sy0 = 1'h1;
-      8'h3a:
-          sy0 = 1'h1;
-      8'h3b:
-          sy0 = 1'h1;
-      8'h3c:
-          sy0 = 1'h1;
-      8'h3d:
-          sy0 = 1'h1;
-      8'h3e:
-          sy0 = 1'h1;
-      8'h3f:
-          sy0 = 1'h1;
-      8'h40:
-          sy0 = 1'h0;
-      8'h41:
-          sy0 = 1'h1;
-      8'h42:
-          sy0 = 1'h1;
-      8'h43:
-          sy0 = 1'h1;
-      8'h44:
-          sy0 = 1'h1;
-      8'h45:
-          sy0 = 1'h1;
-      8'h46:
-          sy0 = 1'h1;
-      8'h47:
-          sy0 = 1'h1;
-      8'h48:
-          sy0 = 1'h1;
-      8'h49:
-          sy0 = 1'h1;
-      8'h4a:
-          sy0 = 1'h1;
-      8'h4b:
-          sy0 = 1'h1;
-      8'h4c:
-          sy0 = 1'h1;
-      8'h4d:
-          sy0 = 1'h1;
-      8'h4e:
-          sy0 = 1'h1;
-      8'h4f:
-          sy0 = 1'h1;
-      8'h50:
-          sy0 = 1'h0;
-      8'h51:
-          sy0 = 1'h1;
-      8'h52:
-          sy0 = 1'h1;
-      8'h53:
-          sy0 = 1'h1;
-      8'h54:
-          sy0 = 1'h1;
-      8'h55:
-          sy0 = 1'h1;
-      8'h56:
-          sy0 = 1'h1;
-      8'h57:
-          sy0 = 1'h1;
-      8'h58:
-          sy0 = 1'h1;
-      8'h59:
-          sy0 = 1'h1;
-      8'h5a:
-          sy0 = 1'h1;
-      8'h5b:
-          sy0 = 1'h1;
-      8'h5c:
-          sy0 = 1'h1;
-      8'h5d:
-          sy0 = 1'h1;
-      8'h5e:
-          sy0 = 1'h1;
-      8'h5f:
-          sy0 = 1'h1;
-      8'h60:
-          sy0 = 1'h0;
-      8'h61:
-          sy0 = 1'h1;
-      8'h62:
-          sy0 = 1'h1;
-      8'h63:
-          sy0 = 1'h1;
-      8'h64:
-          sy0 = 1'h1;
-      8'h65:
-          sy0 = 1'h1;
-      8'h66:
-          sy0 = 1'h1;
-      8'h67:
-          sy0 = 1'h1;
-      8'h68:
-          sy0 = 1'h1;
-      8'h69:
-          sy0 = 1'h1;
-      8'h6a:
-          sy0 = 1'h1;
-      8'h6b:
-          sy0 = 1'h1;
-      8'h6c:
-          sy0 = 1'h1;
-      8'h6d:
-          sy0 = 1'h1;
-      8'h6e:
-          sy0 = 1'h1;
-      8'h6f:
-          sy0 = 1'h1;
-      8'h70:
-          sy0 = 1'h0;
-      8'h71:
-          sy0 = 1'h1;
-      8'h72:
-          sy0 = 1'h1;
-      8'h73:
-          sy0 = 1'h1;
-      8'h74:
-          sy0 = 1'h1;
-      8'h75:
-          sy0 = 1'h1;
-      8'h76:
-          sy0 = 1'h1;
-      8'h77:
-          sy0 = 1'h1;
-      8'h78:
-          sy0 = 1'h1;
-      8'h79:
-          sy0 = 1'h1;
-      8'h7a:
-          sy0 = 1'h1;
-      8'h7b:
-          sy0 = 1'h1;
-      8'h7c:
-          sy0 = 1'h1;
-      8'h7d:
-          sy0 = 1'h1;
-      8'h7e:
-          sy0 = 1'h1;
-      8'h7f:
-          sy0 = 1'h1;
-      8'h80:
-          sy0 = 1'h0;
-      8'h81:
-          sy0 = 1'h1;
-      8'h82:
-          sy0 = 1'h1;
-      8'h83:
-          sy0 = 1'h1;
-      8'h84:
-          sy0 = 1'h1;
-      8'h85:
-          sy0 = 1'h1;
-      8'h86:
-          sy0 = 1'h1;
-      8'h87:
-          sy0 = 1'h1;
-      8'h88:
-          sy0 = 1'h1;
-      8'h89:
-          sy0 = 1'h1;
-      8'h8a:
-          sy0 = 1'h1;
-      8'h8b:
-          sy0 = 1'h1;
-      8'h8c:
-          sy0 = 1'h1;
-      8'h8d:
-          sy0 = 1'h1;
-      8'h8e:
-          sy0 = 1'h1;
-      8'h8f:
-          sy0 = 1'h1;
-      8'h90:
-          sy0 = 1'h0;
-      8'h91:
-          sy0 = 1'h1;
-      8'h92:
-          sy0 = 1'h1;
-      8'h93:
-          sy0 = 1'h1;
-      8'h94:
-          sy0 = 1'h1;
-      8'h95:
-          sy0 = 1'h1;
-      8'h96:
-          sy0 = 1'h1;
-      8'h97:
-          sy0 = 1'h1;
-      8'h98:
-          sy0 = 1'h1;
-      8'h99:
-          sy0 = 1'h1;
-      8'h9a:
-          sy0 = 1'h1;
-      8'h9b:
-          sy0 = 1'h1;
-      8'h9c:
-          sy0 = 1'h1;
-      8'h9d:
-          sy0 = 1'h1;
-      8'h9e:
-          sy0 = 1'h1;
-      8'h9f:
-          sy0 = 1'h1;
-      8'ha0:
-          sy0 = 1'h0;
-      8'ha1:
-          sy0 = 1'h1;
-      8'ha2:
-          sy0 = 1'h1;
-      8'ha3:
-          sy0 = 1'h1;
-      8'ha4:
-          sy0 = 1'h1;
-      8'ha5:
-          sy0 = 1'h1;
-      8'ha6:
-          sy0 = 1'h1;
-      8'ha7:
-          sy0 = 1'h1;
-      8'ha8:
-          sy0 = 1'h1;
-      8'ha9:
-          sy0 = 1'h1;
-      8'haa:
-          sy0 = 1'h1;
-      8'hab:
-          sy0 = 1'h1;
-      8'hac:
-          sy0 = 1'h1;
-      8'had:
-          sy0 = 1'h1;
-      8'hae:
-          sy0 = 1'h1;
-      8'haf:
-          sy0 = 1'h1;
-      8'hb0:
-          sy0 = 1'h0;
-      8'hb1:
-          sy0 = 1'h1;
-      8'hb2:
-          sy0 = 1'h1;
-      8'hb3:
-          sy0 = 1'h1;
-      8'hb4:
-          sy0 = 1'h1;
-      8'hb5:
-          sy0 = 1'h1;
-      8'hb6:
-          sy0 = 1'h1;
-      8'hb7:
-          sy0 = 1'h1;
-      8'hb8:
-          sy0 = 1'h1;
-      8'hb9:
-          sy0 = 1'h1;
-      8'hba:
-          sy0 = 1'h1;
-      8'hbb:
-          sy0 = 1'h1;
-      8'hbc:
-          sy0 = 1'h1;
-      8'hbd:
-          sy0 = 1'h1;
-      8'hbe:
-          sy0 = 1'h1;
-      8'hbf:
-          sy0 = 1'h1;
-      8'hc0:
-          sy0 = 1'h0;
-      8'hc1:
-          sy0 = 1'h0;
-      8'hc2:
-          sy0 = 1'h1;
-      8'hc3:
-          sy0 = 1'h1;
-      8'hc4:
-          sy0 = 1'h1;
-      8'hc5:
-          sy0 = 1'h1;
-      8'hc6:
-          sy0 = 1'h1;
-      8'hc7:
-          sy0 = 1'h1;
-      8'hc8:
-          sy0 = 1'h1;
-      8'hc9:
-          sy0 = 1'h1;
-      8'hca:
-          sy0 = 1'h1;
-      8'hcb:
-          sy0 = 1'h1;
-      8'hcc:
-          sy0 = 1'h1;
-      8'hcd:
-          sy0 = 1'h1;
-      8'hce:
-          sy0 = 1'h1;
-      8'hcf:
-          sy0 = 1'h1;
-      8'hd0:
-          sy0 = 1'h0;
-      8'hd1:
-          sy0 = 1'h0;
-      8'hd2:
-          sy0 = 1'h0;
-      8'hd3:
-          sy0 = 1'h1;
-      8'hd4:
-          sy0 = 1'h1;
-      8'hd5:
-          sy0 = 1'h1;
-      8'hd6:
-          sy0 = 1'h1;
-      8'hd7:
-          sy0 = 1'h1;
-      8'hd8:
-          sy0 = 1'h1;
-      8'hd9:
-          sy0 = 1'h1;
-      8'hda:
-          sy0 = 1'h1;
-      8'hdb:
-          sy0 = 1'h1;
-      8'hdc:
-          sy0 = 1'h1;
-      8'hdd:
-          sy0 = 1'h1;
-      8'hde:
-          sy0 = 1'h1;
-      8'hdf:
-          sy0 = 1'h0;
-      8'he0:
-          sy0 = 1'h0;
-      8'he1:
-          sy0 = 1'h0;
-      8'he2:
-          sy0 = 1'h0;
-      8'he3:
-          sy0 = 1'h0;
-      8'he4:
-          sy0 = 1'h1;
-      8'he5:
-          sy0 = 1'h1;
-      8'he6:
-          sy0 = 1'h1;
-      8'he7:
-          sy0 = 1'h1;
-      8'he8:
-          sy0 = 1'h1;
-      8'he9:
-          sy0 = 1'h1;
-      8'hea:
-          sy0 = 1'h1;
-      8'heb:
-          sy0 = 1'h1;
-      8'hec:
-          sy0 = 1'h1;
-      8'hed:
-          sy0 = 1'h1;
-      8'hee:
-          sy0 = 1'h0;
-      8'hef:
-          sy0 = 1'h0;
-      8'hf0:
-          sy0 = 1'h0;
-      8'hf1:
-          sy0 = 1'h0;
-      8'hf2:
-          sy0 = 1'h0;
-      8'hf3:
-          sy0 = 1'h0;
-      8'hf4:
-          sy0 = 1'h0;
-      8'hf5:
-          sy0 = 1'h1;
-      8'hf6:
-          sy0 = 1'h1;
-      8'hf7:
-          sy0 = 1'h1;
-      8'hf8:
-          sy0 = 1'h1;
-      8'hf9:
-          sy0 = 1'h1;
-      8'hfa:
-          sy0 = 1'h1;
-      8'hfb:
-          sy0 = 1'h1;
-      8'hfc:
-          sy0 = 1'h1;
-      8'hfd:
-          sy0 = 1'h0;
-      8'hfe:
-          sy0 = 1'h0;
-      8'hff:
-          sy0 = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          sy1 = 1'h0;
-      8'h01:
-          sy1 = 1'h0;
-      8'h02:
-          sy1 = 1'h0;
-      8'h03:
-          sy1 = 1'h1;
-      8'h04:
-          sy1 = 1'h1;
-      8'h05:
-          sy1 = 1'h1;
-      8'h06:
-          sy1 = 1'h1;
-      8'h07:
-          sy1 = 1'h1;
-      8'h08:
-          sy1 = 1'h1;
-      8'h09:
-          sy1 = 1'h1;
-      8'h0a:
-          sy1 = 1'h1;
-      8'h0b:
-          sy1 = 1'h0;
-      8'h0c:
-          sy1 = 1'h0;
-      8'h0d:
-          sy1 = 1'h0;
-      8'h0e:
-          sy1 = 1'h0;
-      8'h0f:
-          sy1 = 1'h0;
-      8'h10:
-          sy1 = 1'h0;
-      8'h11:
-          sy1 = 1'h0;
-      8'h12:
-          sy1 = 1'h1;
-      8'h13:
-          sy1 = 1'h1;
-      8'h14:
-          sy1 = 1'h1;
-      8'h15:
-          sy1 = 1'h1;
-      8'h16:
-          sy1 = 1'h1;
-      8'h17:
-          sy1 = 1'h1;
-      8'h18:
-          sy1 = 1'h1;
-      8'h19:
-          sy1 = 1'h1;
-      8'h1a:
-          sy1 = 1'h1;
-      8'h1b:
-          sy1 = 1'h1;
-      8'h1c:
-          sy1 = 1'h0;
-      8'h1d:
-          sy1 = 1'h0;
-      8'h1e:
-          sy1 = 1'h0;
-      8'h1f:
-          sy1 = 1'h0;
-      8'h20:
-          sy1 = 1'h0;
-      8'h21:
-          sy1 = 1'h1;
-      8'h22:
-          sy1 = 1'h1;
-      8'h23:
-          sy1 = 1'h1;
-      8'h24:
-          sy1 = 1'h1;
-      8'h25:
-          sy1 = 1'h1;
-      8'h26:
-          sy1 = 1'h1;
-      8'h27:
-          sy1 = 1'h1;
-      8'h28:
-          sy1 = 1'h1;
-      8'h29:
-          sy1 = 1'h1;
-      8'h2a:
-          sy1 = 1'h1;
-      8'h2b:
-          sy1 = 1'h1;
-      8'h2c:
-          sy1 = 1'h1;
-      8'h2d:
-          sy1 = 1'h0;
-      8'h2e:
-          sy1 = 1'h0;
-      8'h2f:
-          sy1 = 1'h0;
-      8'h30:
-          sy1 = 1'h1;
-      8'h31:
-          sy1 = 1'h1;
-      8'h32:
-          sy1 = 1'h1;
-      8'h33:
-          sy1 = 1'h1;
-      8'h34:
-          sy1 = 1'h1;
-      8'h35:
-          sy1 = 1'h1;
-      8'h36:
-          sy1 = 1'h1;
-      8'h37:
-          sy1 = 1'h1;
-      8'h38:
-          sy1 = 1'h1;
-      8'h39:
-          sy1 = 1'h1;
-      8'h3a:
-          sy1 = 1'h1;
-      8'h3b:
-          sy1 = 1'h1;
-      8'h3c:
-          sy1 = 1'h1;
-      8'h3d:
-          sy1 = 1'h1;
-      8'h3e:
-          sy1 = 1'h0;
-      8'h3f:
-          sy1 = 1'h0;
-      8'h40:
-          sy1 = 1'h1;
-      8'h41:
-          sy1 = 1'h1;
-      8'h42:
-          sy1 = 1'h1;
-      8'h43:
-          sy1 = 1'h1;
-      8'h44:
-          sy1 = 1'h1;
-      8'h45:
-          sy1 = 1'h1;
-      8'h46:
-          sy1 = 1'h1;
-      8'h47:
-          sy1 = 1'h1;
-      8'h48:
-          sy1 = 1'h1;
-      8'h49:
-          sy1 = 1'h1;
-      8'h4a:
-          sy1 = 1'h1;
-      8'h4b:
-          sy1 = 1'h1;
-      8'h4c:
-          sy1 = 1'h1;
-      8'h4d:
-          sy1 = 1'h1;
-      8'h4e:
-          sy1 = 1'h1;
-      8'h4f:
-          sy1 = 1'h0;
-      8'h50:
-          sy1 = 1'h1;
-      8'h51:
-          sy1 = 1'h1;
-      8'h52:
-          sy1 = 1'h1;
-      8'h53:
-          sy1 = 1'h1;
-      8'h54:
-          sy1 = 1'h1;
-      8'h55:
-          sy1 = 1'h1;
-      8'h56:
-          sy1 = 1'h1;
-      8'h57:
-          sy1 = 1'h1;
-      8'h58:
-          sy1 = 1'h1;
-      8'h59:
-          sy1 = 1'h1;
-      8'h5a:
-          sy1 = 1'h1;
-      8'h5b:
-          sy1 = 1'h1;
-      8'h5c:
-          sy1 = 1'h1;
-      8'h5d:
-          sy1 = 1'h1;
-      8'h5e:
-          sy1 = 1'h1;
-      8'h5f:
-          sy1 = 1'h0;
-      8'h60:
-          sy1 = 1'h1;
-      8'h61:
-          sy1 = 1'h1;
-      8'h62:
-          sy1 = 1'h1;
-      8'h63:
-          sy1 = 1'h1;
-      8'h64:
-          sy1 = 1'h1;
-      8'h65:
-          sy1 = 1'h1;
-      8'h66:
-          sy1 = 1'h1;
-      8'h67:
-          sy1 = 1'h1;
-      8'h68:
-          sy1 = 1'h1;
-      8'h69:
-          sy1 = 1'h1;
-      8'h6a:
-          sy1 = 1'h1;
-      8'h6b:
-          sy1 = 1'h1;
-      8'h6c:
-          sy1 = 1'h1;
-      8'h6d:
-          sy1 = 1'h1;
-      8'h6e:
-          sy1 = 1'h1;
-      8'h6f:
-          sy1 = 1'h0;
-      8'h70:
-          sy1 = 1'h1;
-      8'h71:
-          sy1 = 1'h1;
-      8'h72:
-          sy1 = 1'h1;
-      8'h73:
-          sy1 = 1'h1;
-      8'h74:
-          sy1 = 1'h1;
-      8'h75:
-          sy1 = 1'h1;
-      8'h76:
-          sy1 = 1'h1;
-      8'h77:
-          sy1 = 1'h1;
-      8'h78:
-          sy1 = 1'h1;
-      8'h79:
-          sy1 = 1'h1;
-      8'h7a:
-          sy1 = 1'h1;
-      8'h7b:
-          sy1 = 1'h1;
-      8'h7c:
-          sy1 = 1'h1;
-      8'h7d:
-          sy1 = 1'h1;
-      8'h7e:
-          sy1 = 1'h1;
-      8'h7f:
-          sy1 = 1'h0;
-      8'h80:
-          sy1 = 1'h1;
-      8'h81:
-          sy1 = 1'h1;
-      8'h82:
-          sy1 = 1'h1;
-      8'h83:
-          sy1 = 1'h1;
-      8'h84:
-          sy1 = 1'h1;
-      8'h85:
-          sy1 = 1'h1;
-      8'h86:
-          sy1 = 1'h1;
-      8'h87:
-          sy1 = 1'h1;
-      8'h88:
-          sy1 = 1'h1;
-      8'h89:
-          sy1 = 1'h1;
-      8'h8a:
-          sy1 = 1'h1;
-      8'h8b:
-          sy1 = 1'h1;
-      8'h8c:
-          sy1 = 1'h1;
-      8'h8d:
-          sy1 = 1'h1;
-      8'h8e:
-          sy1 = 1'h1;
-      8'h8f:
-          sy1 = 1'h0;
-      8'h90:
-          sy1 = 1'h1;
-      8'h91:
-          sy1 = 1'h1;
-      8'h92:
-          sy1 = 1'h1;
-      8'h93:
-          sy1 = 1'h1;
-      8'h94:
-          sy1 = 1'h1;
-      8'h95:
-          sy1 = 1'h1;
-      8'h96:
-          sy1 = 1'h1;
-      8'h97:
-          sy1 = 1'h1;
-      8'h98:
-          sy1 = 1'h1;
-      8'h99:
-          sy1 = 1'h1;
-      8'h9a:
-          sy1 = 1'h1;
-      8'h9b:
-          sy1 = 1'h1;
-      8'h9c:
-          sy1 = 1'h1;
-      8'h9d:
-          sy1 = 1'h1;
-      8'h9e:
-          sy1 = 1'h1;
-      8'h9f:
-          sy1 = 1'h0;
-      8'ha0:
-          sy1 = 1'h1;
-      8'ha1:
-          sy1 = 1'h1;
-      8'ha2:
-          sy1 = 1'h1;
-      8'ha3:
-          sy1 = 1'h1;
-      8'ha4:
-          sy1 = 1'h1;
-      8'ha5:
-          sy1 = 1'h1;
-      8'ha6:
-          sy1 = 1'h1;
-      8'ha7:
-          sy1 = 1'h1;
-      8'ha8:
-          sy1 = 1'h1;
-      8'ha9:
-          sy1 = 1'h1;
-      8'haa:
-          sy1 = 1'h1;
-      8'hab:
-          sy1 = 1'h1;
-      8'hac:
-          sy1 = 1'h1;
-      8'had:
-          sy1 = 1'h1;
-      8'hae:
-          sy1 = 1'h1;
-      8'haf:
-          sy1 = 1'h0;
-      8'hb0:
-          sy1 = 1'h1;
-      8'hb1:
-          sy1 = 1'h1;
-      8'hb2:
-          sy1 = 1'h1;
-      8'hb3:
-          sy1 = 1'h1;
-      8'hb4:
-          sy1 = 1'h1;
-      8'hb5:
-          sy1 = 1'h1;
-      8'hb6:
-          sy1 = 1'h1;
-      8'hb7:
-          sy1 = 1'h1;
-      8'hb8:
-          sy1 = 1'h1;
-      8'hb9:
-          sy1 = 1'h1;
-      8'hba:
-          sy1 = 1'h1;
-      8'hbb:
-          sy1 = 1'h1;
-      8'hbc:
-          sy1 = 1'h1;
-      8'hbd:
-          sy1 = 1'h1;
-      8'hbe:
-          sy1 = 1'h1;
-      8'hbf:
-          sy1 = 1'h0;
-      8'hc0:
-          sy1 = 1'h1;
-      8'hc1:
-          sy1 = 1'h1;
-      8'hc2:
-          sy1 = 1'h1;
-      8'hc3:
-          sy1 = 1'h1;
-      8'hc4:
-          sy1 = 1'h1;
-      8'hc5:
-          sy1 = 1'h1;
-      8'hc6:
-          sy1 = 1'h1;
-      8'hc7:
-          sy1 = 1'h1;
-      8'hc8:
-          sy1 = 1'h1;
-      8'hc9:
-          sy1 = 1'h1;
-      8'hca:
-          sy1 = 1'h1;
-      8'hcb:
-          sy1 = 1'h1;
-      8'hcc:
-          sy1 = 1'h1;
-      8'hcd:
-          sy1 = 1'h1;
-      8'hce:
-          sy1 = 1'h0;
-      8'hcf:
-          sy1 = 1'h0;
-      8'hd0:
-          sy1 = 1'h0;
-      8'hd1:
-          sy1 = 1'h1;
-      8'hd2:
-          sy1 = 1'h1;
-      8'hd3:
-          sy1 = 1'h1;
-      8'hd4:
-          sy1 = 1'h1;
-      8'hd5:
-          sy1 = 1'h1;
-      8'hd6:
-          sy1 = 1'h1;
-      8'hd7:
-          sy1 = 1'h1;
-      8'hd8:
-          sy1 = 1'h1;
-      8'hd9:
-          sy1 = 1'h1;
-      8'hda:
-          sy1 = 1'h1;
-      8'hdb:
-          sy1 = 1'h1;
-      8'hdc:
-          sy1 = 1'h1;
-      8'hdd:
-          sy1 = 1'h0;
-      8'hde:
-          sy1 = 1'h0;
-      8'hdf:
-          sy1 = 1'h0;
-      8'he0:
-          sy1 = 1'h0;
-      8'he1:
-          sy1 = 1'h0;
-      8'he2:
-          sy1 = 1'h1;
-      8'he3:
-          sy1 = 1'h1;
-      8'he4:
-          sy1 = 1'h1;
-      8'he5:
-          sy1 = 1'h1;
-      8'he6:
-          sy1 = 1'h1;
-      8'he7:
-          sy1 = 1'h1;
-      8'he8:
-          sy1 = 1'h1;
-      8'he9:
-          sy1 = 1'h1;
-      8'hea:
-          sy1 = 1'h1;
-      8'heb:
-          sy1 = 1'h1;
-      8'hec:
-          sy1 = 1'h0;
-      8'hed:
-          sy1 = 1'h0;
-      8'hee:
-          sy1 = 1'h0;
-      8'hef:
-          sy1 = 1'h0;
-      8'hf0:
-          sy1 = 1'h0;
-      8'hf1:
-          sy1 = 1'h0;
-      8'hf2:
-          sy1 = 1'h0;
-      8'hf3:
-          sy1 = 1'h1;
-      8'hf4:
-          sy1 = 1'h1;
-      8'hf5:
-          sy1 = 1'h1;
-      8'hf6:
-          sy1 = 1'h1;
-      8'hf7:
-          sy1 = 1'h1;
-      8'hf8:
-          sy1 = 1'h1;
-      8'hf9:
-          sy1 = 1'h1;
-      8'hfa:
-          sy1 = 1'h1;
-      8'hfb:
-          sy1 = 1'h0;
-      8'hfc:
-          sy1 = 1'h0;
-      8'hfd:
-          sy1 = 1'h0;
-      8'hfe:
-          sy1 = 1'h0;
-      8'hff:
-          sy1 = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$2  = { 1'h0, \$130  };
-      2'h1:
-          \$2  = corner_x_1;
-      2'h2:
-          \$2  = corner_x_2;
-      2'h3:
-          \$2  = { 1'h0, \$130  };
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$4  = { 1'h0, \$131  };
-      2'h1:
-          \$4  = { 1'h0, \$131  };
-      2'h2:
-          \$4  = corner_y_2;
-      2'h3:
-          \$4  = corner_y_3;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$6  = { 1'h0, \$132  };
-      2'h1:
-          \$6  = \corner_x_1$86 ;
-      2'h2:
-          \$6  = \corner_x_2$87 ;
-      2'h3:
-          \$6  = { 1'h0, \$132  };
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$8  = { 1'h0, \$132  };
-      2'h1:
-          \$8  = \corner_x_1$86 ;
-      2'h2:
-          \$8  = \corner_x_2$87 ;
-      2'h3:
-          \$8  = { 1'h0, \$132  };
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$10  = { 1'h0, \$133  };
-      2'h1:
-          \$10  = { 1'h0, \$133  };
-      2'h2:
-          \$10  = \corner_y_2$91 ;
-      2'h3:
-          \$10  = \corner_y_3$92 ;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$12  = { 1'h0, \$134  };
-      2'h1:
-          \$12  = \corner_x_1$95 ;
-      2'h2:
-          \$12  = \corner_x_2$96 ;
-      2'h3:
-          \$12  = { 1'h0, \$134  };
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$14  = { 1'h0, \$135  };
-      2'h1:
-          \$14  = { 1'h0, \$135  };
-      2'h2:
-          \$14  = \corner_y_2$100 ;
-      2'h3:
-          \$14  = \corner_y_3$101 ;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (\$15 [7:0])
-      8'h00:
-          \$42  = 1'h0;
-      8'h01:
-          \$42  = 1'h0;
-      8'h02:
-          \$42  = 1'h0;
-      8'h03:
-          \$42  = 1'h0;
-      8'h04:
-          \$42  = 1'h1;
-      8'h05:
-          \$42  = 1'h1;
-      8'h06:
-          \$42  = 1'h1;
-      8'h07:
-          \$42  = 1'h1;
-      8'h08:
-          \$42  = 1'h1;
-      8'h09:
-          \$42  = 1'h1;
-      8'h0a:
-          \$42  = 1'h1;
-      8'h0b:
-          \$42  = 1'h1;
-      8'h0c:
-          \$42  = 1'h0;
-      8'h0d:
-          \$42  = 1'h0;
-      8'h0e:
-          \$42  = 1'h0;
-      8'h0f:
-          \$42  = 1'h0;
-      8'h10:
-          \$42  = 1'h0;
-      8'h11:
-          \$42  = 1'h0;
-      8'h12:
-          \$42  = 1'h0;
-      8'h13:
-          \$42  = 1'h1;
-      8'h14:
-          \$42  = 1'h1;
-      8'h15:
-          \$42  = 1'h1;
-      8'h16:
-          \$42  = 1'h1;
-      8'h17:
-          \$42  = 1'h1;
-      8'h18:
-          \$42  = 1'h1;
-      8'h19:
-          \$42  = 1'h1;
-      8'h1a:
-          \$42  = 1'h1;
-      8'h1b:
-          \$42  = 1'h1;
-      8'h1c:
-          \$42  = 1'h1;
-      8'h1d:
-          \$42  = 1'h0;
-      8'h1e:
-          \$42  = 1'h0;
-      8'h1f:
-          \$42  = 1'h0;
-      8'h20:
-          \$42  = 1'h0;
-      8'h21:
-          \$42  = 1'h0;
-      8'h22:
-          \$42  = 1'h1;
-      8'h23:
-          \$42  = 1'h1;
-      8'h24:
-          \$42  = 1'h1;
-      8'h25:
-          \$42  = 1'h1;
-      8'h26:
-          \$42  = 1'h1;
-      8'h27:
-          \$42  = 1'h1;
-      8'h28:
-          \$42  = 1'h1;
-      8'h29:
-          \$42  = 1'h1;
-      8'h2a:
-          \$42  = 1'h1;
-      8'h2b:
-          \$42  = 1'h1;
-      8'h2c:
-          \$42  = 1'h1;
-      8'h2d:
-          \$42  = 1'h1;
-      8'h2e:
-          \$42  = 1'h0;
-      8'h2f:
-          \$42  = 1'h0;
-      8'h30:
-          \$42  = 1'h0;
-      8'h31:
-          \$42  = 1'h1;
-      8'h32:
-          \$42  = 1'h1;
-      8'h33:
-          \$42  = 1'h1;
-      8'h34:
-          \$42  = 1'h1;
-      8'h35:
-          \$42  = 1'h1;
-      8'h36:
-          \$42  = 1'h1;
-      8'h37:
-          \$42  = 1'h1;
-      8'h38:
-          \$42  = 1'h1;
-      8'h39:
-          \$42  = 1'h1;
-      8'h3a:
-          \$42  = 1'h1;
-      8'h3b:
-          \$42  = 1'h1;
-      8'h3c:
-          \$42  = 1'h1;
-      8'h3d:
-          \$42  = 1'h1;
-      8'h3e:
-          \$42  = 1'h1;
-      8'h3f:
-          \$42  = 1'h0;
-      8'h40:
-          \$42  = 1'h1;
-      8'h41:
-          \$42  = 1'h1;
-      8'h42:
-          \$42  = 1'h1;
-      8'h43:
-          \$42  = 1'h1;
-      8'h44:
-          \$42  = 1'h1;
-      8'h45:
-          \$42  = 1'h1;
-      8'h46:
-          \$42  = 1'h1;
-      8'h47:
-          \$42  = 1'h1;
-      8'h48:
-          \$42  = 1'h1;
-      8'h49:
-          \$42  = 1'h1;
-      8'h4a:
-          \$42  = 1'h1;
-      8'h4b:
-          \$42  = 1'h1;
-      8'h4c:
-          \$42  = 1'h1;
-      8'h4d:
-          \$42  = 1'h1;
-      8'h4e:
-          \$42  = 1'h1;
-      8'h4f:
-          \$42  = 1'h1;
-      8'h50:
-          \$42  = 1'h1;
-      8'h51:
-          \$42  = 1'h1;
-      8'h52:
-          \$42  = 1'h1;
-      8'h53:
-          \$42  = 1'h1;
-      8'h54:
-          \$42  = 1'h1;
-      8'h55:
-          \$42  = 1'h1;
-      8'h56:
-          \$42  = 1'h1;
-      8'h57:
-          \$42  = 1'h1;
-      8'h58:
-          \$42  = 1'h1;
-      8'h59:
-          \$42  = 1'h1;
-      8'h5a:
-          \$42  = 1'h1;
-      8'h5b:
-          \$42  = 1'h1;
-      8'h5c:
-          \$42  = 1'h1;
-      8'h5d:
-          \$42  = 1'h1;
-      8'h5e:
-          \$42  = 1'h1;
-      8'h5f:
-          \$42  = 1'h1;
-      8'h60:
-          \$42  = 1'h1;
-      8'h61:
-          \$42  = 1'h1;
-      8'h62:
-          \$42  = 1'h1;
-      8'h63:
-          \$42  = 1'h1;
-      8'h64:
-          \$42  = 1'h1;
-      8'h65:
-          \$42  = 1'h1;
-      8'h66:
-          \$42  = 1'h1;
-      8'h67:
-          \$42  = 1'h1;
-      8'h68:
-          \$42  = 1'h1;
-      8'h69:
-          \$42  = 1'h1;
-      8'h6a:
-          \$42  = 1'h1;
-      8'h6b:
-          \$42  = 1'h1;
-      8'h6c:
-          \$42  = 1'h1;
-      8'h6d:
-          \$42  = 1'h1;
-      8'h6e:
-          \$42  = 1'h1;
-      8'h6f:
-          \$42  = 1'h1;
-      8'h70:
-          \$42  = 1'h1;
-      8'h71:
-          \$42  = 1'h1;
-      8'h72:
-          \$42  = 1'h1;
-      8'h73:
-          \$42  = 1'h1;
-      8'h74:
-          \$42  = 1'h1;
-      8'h75:
-          \$42  = 1'h1;
-      8'h76:
-          \$42  = 1'h1;
-      8'h77:
-          \$42  = 1'h1;
-      8'h78:
-          \$42  = 1'h1;
-      8'h79:
-          \$42  = 1'h1;
-      8'h7a:
-          \$42  = 1'h1;
-      8'h7b:
-          \$42  = 1'h1;
-      8'h7c:
-          \$42  = 1'h1;
-      8'h7d:
-          \$42  = 1'h1;
-      8'h7e:
-          \$42  = 1'h1;
-      8'h7f:
-          \$42  = 1'h1;
-      8'h80:
-          \$42  = 1'h1;
-      8'h81:
-          \$42  = 1'h1;
-      8'h82:
-          \$42  = 1'h1;
-      8'h83:
-          \$42  = 1'h1;
-      8'h84:
-          \$42  = 1'h1;
-      8'h85:
-          \$42  = 1'h1;
-      8'h86:
-          \$42  = 1'h1;
-      8'h87:
-          \$42  = 1'h1;
-      8'h88:
-          \$42  = 1'h1;
-      8'h89:
-          \$42  = 1'h1;
-      8'h8a:
-          \$42  = 1'h1;
-      8'h8b:
-          \$42  = 1'h1;
-      8'h8c:
-          \$42  = 1'h1;
-      8'h8d:
-          \$42  = 1'h1;
-      8'h8e:
-          \$42  = 1'h1;
-      8'h8f:
-          \$42  = 1'h1;
-      8'h90:
-          \$42  = 1'h1;
-      8'h91:
-          \$42  = 1'h1;
-      8'h92:
-          \$42  = 1'h1;
-      8'h93:
-          \$42  = 1'h1;
-      8'h94:
-          \$42  = 1'h1;
-      8'h95:
-          \$42  = 1'h1;
-      8'h96:
-          \$42  = 1'h1;
-      8'h97:
-          \$42  = 1'h1;
-      8'h98:
-          \$42  = 1'h1;
-      8'h99:
-          \$42  = 1'h1;
-      8'h9a:
-          \$42  = 1'h1;
-      8'h9b:
-          \$42  = 1'h1;
-      8'h9c:
-          \$42  = 1'h1;
-      8'h9d:
-          \$42  = 1'h1;
-      8'h9e:
-          \$42  = 1'h1;
-      8'h9f:
-          \$42  = 1'h1;
-      8'ha0:
-          \$42  = 1'h1;
-      8'ha1:
-          \$42  = 1'h1;
-      8'ha2:
-          \$42  = 1'h1;
-      8'ha3:
-          \$42  = 1'h1;
-      8'ha4:
-          \$42  = 1'h1;
-      8'ha5:
-          \$42  = 1'h1;
-      8'ha6:
-          \$42  = 1'h1;
-      8'ha7:
-          \$42  = 1'h1;
-      8'ha8:
-          \$42  = 1'h1;
-      8'ha9:
-          \$42  = 1'h1;
-      8'haa:
-          \$42  = 1'h1;
-      8'hab:
-          \$42  = 1'h1;
-      8'hac:
-          \$42  = 1'h1;
-      8'had:
-          \$42  = 1'h1;
-      8'hae:
-          \$42  = 1'h1;
-      8'haf:
-          \$42  = 1'h1;
-      8'hb0:
-          \$42  = 1'h1;
-      8'hb1:
-          \$42  = 1'h1;
-      8'hb2:
-          \$42  = 1'h1;
-      8'hb3:
-          \$42  = 1'h1;
-      8'hb4:
-          \$42  = 1'h1;
-      8'hb5:
-          \$42  = 1'h1;
-      8'hb6:
-          \$42  = 1'h1;
-      8'hb7:
-          \$42  = 1'h1;
-      8'hb8:
-          \$42  = 1'h1;
-      8'hb9:
-          \$42  = 1'h1;
-      8'hba:
-          \$42  = 1'h1;
-      8'hbb:
-          \$42  = 1'h1;
-      8'hbc:
-          \$42  = 1'h1;
-      8'hbd:
-          \$42  = 1'h1;
-      8'hbe:
-          \$42  = 1'h1;
-      8'hbf:
-          \$42  = 1'h1;
-      8'hc0:
-          \$42  = 1'h0;
-      8'hc1:
-          \$42  = 1'h1;
-      8'hc2:
-          \$42  = 1'h1;
-      8'hc3:
-          \$42  = 1'h1;
-      8'hc4:
-          \$42  = 1'h1;
-      8'hc5:
-          \$42  = 1'h1;
-      8'hc6:
-          \$42  = 1'h1;
-      8'hc7:
-          \$42  = 1'h1;
-      8'hc8:
-          \$42  = 1'h1;
-      8'hc9:
-          \$42  = 1'h1;
-      8'hca:
-          \$42  = 1'h1;
-      8'hcb:
-          \$42  = 1'h1;
-      8'hcc:
-          \$42  = 1'h1;
-      8'hcd:
-          \$42  = 1'h1;
-      8'hce:
-          \$42  = 1'h1;
-      8'hcf:
-          \$42  = 1'h0;
-      8'hd0:
-          \$42  = 1'h0;
-      8'hd1:
-          \$42  = 1'h0;
-      8'hd2:
-          \$42  = 1'h1;
-      8'hd3:
-          \$42  = 1'h1;
-      8'hd4:
-          \$42  = 1'h1;
-      8'hd5:
-          \$42  = 1'h1;
-      8'hd6:
-          \$42  = 1'h1;
-      8'hd7:
-          \$42  = 1'h1;
-      8'hd8:
-          \$42  = 1'h1;
-      8'hd9:
-          \$42  = 1'h1;
-      8'hda:
-          \$42  = 1'h1;
-      8'hdb:
-          \$42  = 1'h1;
-      8'hdc:
-          \$42  = 1'h1;
-      8'hdd:
-          \$42  = 1'h1;
-      8'hde:
-          \$42  = 1'h0;
-      8'hdf:
-          \$42  = 1'h0;
-      8'he0:
-          \$42  = 1'h0;
-      8'he1:
-          \$42  = 1'h0;
-      8'he2:
-          \$42  = 1'h0;
-      8'he3:
-          \$42  = 1'h1;
-      8'he4:
-          \$42  = 1'h1;
-      8'he5:
-          \$42  = 1'h1;
-      8'he6:
-          \$42  = 1'h1;
-      8'he7:
-          \$42  = 1'h1;
-      8'he8:
-          \$42  = 1'h1;
-      8'he9:
-          \$42  = 1'h1;
-      8'hea:
-          \$42  = 1'h1;
-      8'heb:
-          \$42  = 1'h1;
-      8'hec:
-          \$42  = 1'h1;
-      8'hed:
-          \$42  = 1'h0;
-      8'hee:
-          \$42  = 1'h0;
-      8'hef:
-          \$42  = 1'h0;
-      8'hf0:
-          \$42  = 1'h0;
-      8'hf1:
-          \$42  = 1'h0;
-      8'hf2:
-          \$42  = 1'h0;
-      8'hf3:
-          \$42  = 1'h0;
-      8'hf4:
-          \$42  = 1'h1;
-      8'hf5:
-          \$42  = 1'h1;
-      8'hf6:
-          \$42  = 1'h1;
-      8'hf7:
-          \$42  = 1'h1;
-      8'hf8:
-          \$42  = 1'h1;
-      8'hf9:
-          \$42  = 1'h1;
-      8'hfa:
-          \$42  = 1'h1;
-      8'hfb:
-          \$42  = 1'h1;
-      8'hfc:
-          \$42  = 1'h0;
-      8'hfd:
-          \$42  = 1'h0;
-      8'hfe:
-          \$42  = 1'h0;
-      8'hff:
-          \$42  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$46  = 1'h0;
-    casez (\$5 [8:0])
-      9'h000:
-          \$46  = 1'h0;
-      9'h001:
-          \$46  = 1'h0;
-      9'h002:
-          \$46  = 1'h0;
-      9'h003:
-          \$46  = 1'h0;
-      9'h004:
-          \$46  = 1'h0;
-      9'h005:
-          \$46  = 1'h0;
-      9'h006:
-          \$46  = 1'h0;
-      9'h007:
-          \$46  = 1'h0;
-      9'h008:
-          \$46  = 1'h0;
-      9'h009:
-          \$46  = 1'h0;
-      9'h00a:
-          \$46  = 1'h0;
-      9'h00b:
-          \$46  = 1'h0;
-      9'h00c:
-          \$46  = 1'h0;
-      9'h00d:
-          \$46  = 1'h0;
-      9'h00e:
-          \$46  = 1'h0;
-      9'h00f:
-          \$46  = 1'h0;
-      9'h010:
-          \$46  = 1'h0;
-      9'h011:
-          \$46  = 1'h0;
-      9'h012:
-          \$46  = 1'h0;
-      9'h013:
-          \$46  = 1'h0;
-      9'h014:
-          \$46  = 1'h1;
-      9'h015:
-          \$46  = 1'h1;
-      9'h016:
-          \$46  = 1'h1;
-      9'h017:
-          \$46  = 1'h1;
-      9'h018:
-          \$46  = 1'h1;
-      9'h019:
-          \$46  = 1'h1;
-      9'h01a:
-          \$46  = 1'h1;
-      9'h01b:
-          \$46  = 1'h1;
-      9'h01c:
-          \$46  = 1'h0;
-      9'h01d:
-          \$46  = 1'h0;
-      9'h01e:
-          \$46  = 1'h0;
-      9'h01f:
-          \$46  = 1'h0;
-      9'h020:
-          \$46  = 1'h0;
-      9'h021:
-          \$46  = 1'h0;
-      9'h022:
-          \$46  = 1'h0;
-      9'h023:
-          \$46  = 1'h1;
-      9'h024:
-          \$46  = 1'h1;
-      9'h025:
-          \$46  = 1'h1;
-      9'h026:
-          \$46  = 1'h1;
-      9'h027:
-          \$46  = 1'h1;
-      9'h028:
-          \$46  = 1'h1;
-      9'h029:
-          \$46  = 1'h1;
-      9'h02a:
-          \$46  = 1'h1;
-      9'h02b:
-          \$46  = 1'h1;
-      9'h02c:
-          \$46  = 1'h1;
-      9'h02d:
-          \$46  = 1'h0;
-      9'h02e:
-          \$46  = 1'h0;
-      9'h02f:
-          \$46  = 1'h0;
-      9'h030:
-          \$46  = 1'h0;
-      9'h031:
-          \$46  = 1'h0;
-      9'h032:
-          \$46  = 1'h1;
-      9'h033:
-          \$46  = 1'h1;
-      9'h034:
-          \$46  = 1'h1;
-      9'h035:
-          \$46  = 1'h1;
-      9'h036:
-          \$46  = 1'h1;
-      9'h037:
-          \$46  = 1'h1;
-      9'h038:
-          \$46  = 1'h1;
-      9'h039:
-          \$46  = 1'h1;
-      9'h03a:
-          \$46  = 1'h1;
-      9'h03b:
-          \$46  = 1'h1;
-      9'h03c:
-          \$46  = 1'h1;
-      9'h03d:
-          \$46  = 1'h1;
-      9'h03e:
-          \$46  = 1'h0;
-      9'h03f:
-          \$46  = 1'h0;
-      9'h040:
-          \$46  = 1'h0;
-      9'h041:
-          \$46  = 1'h1;
-      9'h042:
-          \$46  = 1'h1;
-      9'h043:
-          \$46  = 1'h1;
-      9'h044:
-          \$46  = 1'h1;
-      9'h045:
-          \$46  = 1'h1;
-      9'h046:
-          \$46  = 1'h1;
-      9'h047:
-          \$46  = 1'h1;
-      9'h048:
-          \$46  = 1'h1;
-      9'h049:
-          \$46  = 1'h1;
-      9'h04a:
-          \$46  = 1'h1;
-      9'h04b:
-          \$46  = 1'h1;
-      9'h04c:
-          \$46  = 1'h1;
-      9'h04d:
-          \$46  = 1'h1;
-      9'h04e:
-          \$46  = 1'h1;
-      9'h04f:
-          \$46  = 1'h0;
-      9'h050:
-          \$46  = 1'h1;
-      9'h051:
-          \$46  = 1'h1;
-      9'h052:
-          \$46  = 1'h1;
-      9'h053:
-          \$46  = 1'h1;
-      9'h054:
-          \$46  = 1'h1;
-      9'h055:
-          \$46  = 1'h1;
-      9'h056:
-          \$46  = 1'h1;
-      9'h057:
-          \$46  = 1'h1;
-      9'h058:
-          \$46  = 1'h1;
-      9'h059:
-          \$46  = 1'h1;
-      9'h05a:
-          \$46  = 1'h1;
-      9'h05b:
-          \$46  = 1'h1;
-      9'h05c:
-          \$46  = 1'h1;
-      9'h05d:
-          \$46  = 1'h1;
-      9'h05e:
-          \$46  = 1'h1;
-      9'h05f:
-          \$46  = 1'h1;
-      9'h060:
-          \$46  = 1'h1;
-      9'h061:
-          \$46  = 1'h1;
-      9'h062:
-          \$46  = 1'h1;
-      9'h063:
-          \$46  = 1'h1;
-      9'h064:
-          \$46  = 1'h1;
-      9'h065:
-          \$46  = 1'h1;
-      9'h066:
-          \$46  = 1'h1;
-      9'h067:
-          \$46  = 1'h1;
-      9'h068:
-          \$46  = 1'h1;
-      9'h069:
-          \$46  = 1'h1;
-      9'h06a:
-          \$46  = 1'h1;
-      9'h06b:
-          \$46  = 1'h1;
-      9'h06c:
-          \$46  = 1'h1;
-      9'h06d:
-          \$46  = 1'h1;
-      9'h06e:
-          \$46  = 1'h1;
-      9'h06f:
-          \$46  = 1'h1;
-      9'h070:
-          \$46  = 1'h1;
-      9'h071:
-          \$46  = 1'h1;
-      9'h072:
-          \$46  = 1'h1;
-      9'h073:
-          \$46  = 1'h1;
-      9'h074:
-          \$46  = 1'h1;
-      9'h075:
-          \$46  = 1'h1;
-      9'h076:
-          \$46  = 1'h1;
-      9'h077:
-          \$46  = 1'h1;
-      9'h078:
-          \$46  = 1'h1;
-      9'h079:
-          \$46  = 1'h1;
-      9'h07a:
-          \$46  = 1'h1;
-      9'h07b:
-          \$46  = 1'h1;
-      9'h07c:
-          \$46  = 1'h1;
-      9'h07d:
-          \$46  = 1'h1;
-      9'h07e:
-          \$46  = 1'h1;
-      9'h07f:
-          \$46  = 1'h1;
-      9'h080:
-          \$46  = 1'h1;
-      9'h081:
-          \$46  = 1'h1;
-      9'h082:
-          \$46  = 1'h1;
-      9'h083:
-          \$46  = 1'h1;
-      9'h084:
-          \$46  = 1'h1;
-      9'h085:
-          \$46  = 1'h1;
-      9'h086:
-          \$46  = 1'h1;
-      9'h087:
-          \$46  = 1'h1;
-      9'h088:
-          \$46  = 1'h1;
-      9'h089:
-          \$46  = 1'h1;
-      9'h08a:
-          \$46  = 1'h1;
-      9'h08b:
-          \$46  = 1'h1;
-      9'h08c:
-          \$46  = 1'h1;
-      9'h08d:
-          \$46  = 1'h1;
-      9'h08e:
-          \$46  = 1'h1;
-      9'h08f:
-          \$46  = 1'h1;
-      9'h090:
-          \$46  = 1'h1;
-      9'h091:
-          \$46  = 1'h1;
-      9'h092:
-          \$46  = 1'h1;
-      9'h093:
-          \$46  = 1'h1;
-      9'h094:
-          \$46  = 1'h1;
-      9'h095:
-          \$46  = 1'h1;
-      9'h096:
-          \$46  = 1'h1;
-      9'h097:
-          \$46  = 1'h1;
-      9'h098:
-          \$46  = 1'h1;
-      9'h099:
-          \$46  = 1'h1;
-      9'h09a:
-          \$46  = 1'h1;
-      9'h09b:
-          \$46  = 1'h1;
-      9'h09c:
-          \$46  = 1'h1;
-      9'h09d:
-          \$46  = 1'h1;
-      9'h09e:
-          \$46  = 1'h1;
-      9'h09f:
-          \$46  = 1'h1;
-      9'h0a0:
-          \$46  = 1'h1;
-      9'h0a1:
-          \$46  = 1'h1;
-      9'h0a2:
-          \$46  = 1'h1;
-      9'h0a3:
-          \$46  = 1'h1;
-      9'h0a4:
-          \$46  = 1'h1;
-      9'h0a5:
-          \$46  = 1'h1;
-      9'h0a6:
-          \$46  = 1'h1;
-      9'h0a7:
-          \$46  = 1'h1;
-      9'h0a8:
-          \$46  = 1'h1;
-      9'h0a9:
-          \$46  = 1'h1;
-      9'h0aa:
-          \$46  = 1'h1;
-      9'h0ab:
-          \$46  = 1'h1;
-      9'h0ac:
-          \$46  = 1'h1;
-      9'h0ad:
-          \$46  = 1'h1;
-      9'h0ae:
-          \$46  = 1'h1;
-      9'h0af:
-          \$46  = 1'h1;
-      9'h0b0:
-          \$46  = 1'h1;
-      9'h0b1:
-          \$46  = 1'h1;
-      9'h0b2:
-          \$46  = 1'h1;
-      9'h0b3:
-          \$46  = 1'h1;
-      9'h0b4:
-          \$46  = 1'h1;
-      9'h0b5:
-          \$46  = 1'h1;
-      9'h0b6:
-          \$46  = 1'h1;
-      9'h0b7:
-          \$46  = 1'h1;
-      9'h0b8:
-          \$46  = 1'h1;
-      9'h0b9:
-          \$46  = 1'h1;
-      9'h0ba:
-          \$46  = 1'h1;
-      9'h0bb:
-          \$46  = 1'h1;
-      9'h0bc:
-          \$46  = 1'h1;
-      9'h0bd:
-          \$46  = 1'h1;
-      9'h0be:
-          \$46  = 1'h1;
-      9'h0bf:
-          \$46  = 1'h1;
-      9'h0c0:
-          \$46  = 1'h0;
-      9'h0c1:
-          \$46  = 1'h1;
-      9'h0c2:
-          \$46  = 1'h1;
-      9'h0c3:
-          \$46  = 1'h1;
-      9'h0c4:
-          \$46  = 1'h1;
-      9'h0c5:
-          \$46  = 1'h1;
-      9'h0c6:
-          \$46  = 1'h1;
-      9'h0c7:
-          \$46  = 1'h1;
-      9'h0c8:
-          \$46  = 1'h1;
-      9'h0c9:
-          \$46  = 1'h1;
-      9'h0ca:
-          \$46  = 1'h1;
-      9'h0cb:
-          \$46  = 1'h1;
-      9'h0cc:
-          \$46  = 1'h1;
-      9'h0cd:
-          \$46  = 1'h1;
-      9'h0ce:
-          \$46  = 1'h1;
-      9'h0cf:
-          \$46  = 1'h0;
-      9'h0d0:
-          \$46  = 1'h0;
-      9'h0d1:
-          \$46  = 1'h0;
-      9'h0d2:
-          \$46  = 1'h1;
-      9'h0d3:
-          \$46  = 1'h1;
-      9'h0d4:
-          \$46  = 1'h1;
-      9'h0d5:
-          \$46  = 1'h1;
-      9'h0d6:
-          \$46  = 1'h1;
-      9'h0d7:
-          \$46  = 1'h1;
-      9'h0d8:
-          \$46  = 1'h1;
-      9'h0d9:
-          \$46  = 1'h1;
-      9'h0da:
-          \$46  = 1'h1;
-      9'h0db:
-          \$46  = 1'h1;
-      9'h0dc:
-          \$46  = 1'h1;
-      9'h0dd:
-          \$46  = 1'h1;
-      9'h0de:
-          \$46  = 1'h0;
-      9'h0df:
-          \$46  = 1'h0;
-      9'h0e0:
-          \$46  = 1'h0;
-      9'h0e1:
-          \$46  = 1'h0;
-      9'h0e2:
-          \$46  = 1'h0;
-      9'h0e3:
-          \$46  = 1'h1;
-      9'h0e4:
-          \$46  = 1'h1;
-      9'h0e5:
-          \$46  = 1'h1;
-      9'h0e6:
-          \$46  = 1'h1;
-      9'h0e7:
-          \$46  = 1'h1;
-      9'h0e8:
-          \$46  = 1'h1;
-      9'h0e9:
-          \$46  = 1'h1;
-      9'h0ea:
-          \$46  = 1'h1;
-      9'h0eb:
-          \$46  = 1'h1;
-      9'h0ec:
-          \$46  = 1'h1;
-      9'h0ed:
-          \$46  = 1'h0;
-      9'h0ee:
-          \$46  = 1'h0;
-      9'h0ef:
-          \$46  = 1'h0;
-      9'h0f0:
-          \$46  = 1'h0;
-      9'h0f1:
-          \$46  = 1'h0;
-      9'h0f2:
-          \$46  = 1'h0;
-      9'h0f3:
-          \$46  = 1'h0;
-      9'h0f4:
-          \$46  = 1'h1;
-      9'h0f5:
-          \$46  = 1'h1;
-      9'h0f6:
-          \$46  = 1'h1;
-      9'h0f7:
-          \$46  = 1'h1;
-      9'h0f8:
-          \$46  = 1'h1;
-      9'h0f9:
-          \$46  = 1'h1;
-      9'h0fa:
-          \$46  = 1'h1;
-      9'h0fb:
-          \$46  = 1'h1;
-      9'h0fc:
-          \$46  = 1'h0;
-      9'h0fd:
-          \$46  = 1'h0;
-      9'h0fe:
-          \$46  = 1'h0;
-      9'h0ff:
-          \$46  = 1'h0;
-      9'h100:
-          \$46  = 1'h0;
-      9'h101:
-          \$46  = 1'h0;
-      9'h102:
-          \$46  = 1'h0;
-      9'h103:
-          \$46  = 1'h0;
-      9'h104:
-          \$46  = 1'h0;
-      9'h105:
-          \$46  = 1'h0;
-      9'h106:
-          \$46  = 1'h0;
-      9'h107:
-          \$46  = 1'h0;
-      9'h108:
-          \$46  = 1'h0;
-      9'h109:
-          \$46  = 1'h0;
-      9'h10a:
-          \$46  = 1'h0;
-      9'h10b:
-          \$46  = 1'h0;
-      9'h10c:
-          \$46  = 1'h0;
-      9'h10d:
-          \$46  = 1'h0;
-      9'h10e:
-          \$46  = 1'h0;
-      9'h10f:
-          \$46  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$50  = 1'h0;
-    casez (\$11 [8:0])
-      9'h000:
-          \$50  = 1'h0;
-      9'h001:
-          \$50  = 1'h0;
-      9'h002:
-          \$50  = 1'h0;
-      9'h003:
-          \$50  = 1'h0;
-      9'h004:
-          \$50  = 1'h0;
-      9'h005:
-          \$50  = 1'h1;
-      9'h006:
-          \$50  = 1'h1;
-      9'h007:
-          \$50  = 1'h1;
-      9'h008:
-          \$50  = 1'h1;
-      9'h009:
-          \$50  = 1'h1;
-      9'h00a:
-          \$50  = 1'h1;
-      9'h00b:
-          \$50  = 1'h1;
-      9'h00c:
-          \$50  = 1'h0;
-      9'h00d:
-          \$50  = 1'h0;
-      9'h00e:
-          \$50  = 1'h0;
-      9'h00f:
-          \$50  = 1'h0;
-      9'h010:
-          \$50  = 1'h0;
-      9'h011:
-          \$50  = 1'h0;
-      9'h012:
-          \$50  = 1'h0;
-      9'h013:
-          \$50  = 1'h0;
-      9'h014:
-          \$50  = 1'h0;
-      9'h015:
-          \$50  = 1'h1;
-      9'h016:
-          \$50  = 1'h1;
-      9'h017:
-          \$50  = 1'h1;
-      9'h018:
-          \$50  = 1'h1;
-      9'h019:
-          \$50  = 1'h1;
-      9'h01a:
-          \$50  = 1'h1;
-      9'h01b:
-          \$50  = 1'h1;
-      9'h01c:
-          \$50  = 1'h1;
-      9'h01d:
-          \$50  = 1'h1;
-      9'h01e:
-          \$50  = 1'h0;
-      9'h01f:
-          \$50  = 1'h0;
-      9'h020:
-          \$50  = 1'h0;
-      9'h021:
-          \$50  = 1'h0;
-      9'h022:
-          \$50  = 1'h0;
-      9'h023:
-          \$50  = 1'h0;
-      9'h024:
-          \$50  = 1'h0;
-      9'h025:
-          \$50  = 1'h1;
-      9'h026:
-          \$50  = 1'h1;
-      9'h027:
-          \$50  = 1'h1;
-      9'h028:
-          \$50  = 1'h1;
-      9'h029:
-          \$50  = 1'h1;
-      9'h02a:
-          \$50  = 1'h1;
-      9'h02b:
-          \$50  = 1'h1;
-      9'h02c:
-          \$50  = 1'h1;
-      9'h02d:
-          \$50  = 1'h1;
-      9'h02e:
-          \$50  = 1'h1;
-      9'h02f:
-          \$50  = 1'h1;
-      9'h030:
-          \$50  = 1'h0;
-      9'h031:
-          \$50  = 1'h0;
-      9'h032:
-          \$50  = 1'h0;
-      9'h033:
-          \$50  = 1'h0;
-      9'h034:
-          \$50  = 1'h0;
-      9'h035:
-          \$50  = 1'h1;
-      9'h036:
-          \$50  = 1'h1;
-      9'h037:
-          \$50  = 1'h1;
-      9'h038:
-          \$50  = 1'h1;
-      9'h039:
-          \$50  = 1'h1;
-      9'h03a:
-          \$50  = 1'h1;
-      9'h03b:
-          \$50  = 1'h1;
-      9'h03c:
-          \$50  = 1'h1;
-      9'h03d:
-          \$50  = 1'h1;
-      9'h03e:
-          \$50  = 1'h1;
-      9'h03f:
-          \$50  = 1'h1;
-      9'h040:
-          \$50  = 1'h1;
-      9'h041:
-          \$50  = 1'h1;
-      9'h042:
-          \$50  = 1'h0;
-      9'h043:
-          \$50  = 1'h0;
-      9'h044:
-          \$50  = 1'h0;
-      9'h045:
-          \$50  = 1'h1;
-      9'h046:
-          \$50  = 1'h1;
-      9'h047:
-          \$50  = 1'h1;
-      9'h048:
-          \$50  = 1'h1;
-      9'h049:
-          \$50  = 1'h1;
-      9'h04a:
-          \$50  = 1'h1;
-      9'h04b:
-          \$50  = 1'h1;
-      9'h04c:
-          \$50  = 1'h1;
-      9'h04d:
-          \$50  = 1'h1;
-      9'h04e:
-          \$50  = 1'h1;
-      9'h04f:
-          \$50  = 1'h1;
-      9'h050:
-          \$50  = 1'h1;
-      9'h051:
-          \$50  = 1'h1;
-      9'h052:
-          \$50  = 1'h1;
-      9'h053:
-          \$50  = 1'h1;
-      9'h054:
-          \$50  = 1'h0;
-      9'h055:
-          \$50  = 1'h0;
-      9'h056:
-          \$50  = 1'h1;
-      9'h057:
-          \$50  = 1'h1;
-      9'h058:
-          \$50  = 1'h1;
-      9'h059:
-          \$50  = 1'h1;
-      9'h05a:
-          \$50  = 1'h1;
-      9'h05b:
-          \$50  = 1'h1;
-      9'h05c:
-          \$50  = 1'h1;
-      9'h05d:
-          \$50  = 1'h1;
-      9'h05e:
-          \$50  = 1'h1;
-      9'h05f:
-          \$50  = 1'h1;
-      9'h060:
-          \$50  = 1'h1;
-      9'h061:
-          \$50  = 1'h1;
-      9'h062:
-          \$50  = 1'h1;
-      9'h063:
-          \$50  = 1'h1;
-      9'h064:
-          \$50  = 1'h1;
-      9'h065:
-          \$50  = 1'h0;
-      9'h066:
-          \$50  = 1'h0;
-      9'h067:
-          \$50  = 1'h1;
-      9'h068:
-          \$50  = 1'h1;
-      9'h069:
-          \$50  = 1'h1;
-      9'h06a:
-          \$50  = 1'h1;
-      9'h06b:
-          \$50  = 1'h1;
-      9'h06c:
-          \$50  = 1'h1;
-      9'h06d:
-          \$50  = 1'h1;
-      9'h06e:
-          \$50  = 1'h1;
-      9'h06f:
-          \$50  = 1'h1;
-      9'h070:
-          \$50  = 1'h1;
-      9'h071:
-          \$50  = 1'h1;
-      9'h072:
-          \$50  = 1'h1;
-      9'h073:
-          \$50  = 1'h1;
-      9'h074:
-          \$50  = 1'h1;
-      9'h075:
-          \$50  = 1'h1;
-      9'h076:
-          \$50  = 1'h0;
-      9'h077:
-          \$50  = 1'h0;
-      9'h078:
-          \$50  = 1'h1;
-      9'h079:
-          \$50  = 1'h1;
-      9'h07a:
-          \$50  = 1'h1;
-      9'h07b:
-          \$50  = 1'h1;
-      9'h07c:
-          \$50  = 1'h1;
-      9'h07d:
-          \$50  = 1'h1;
-      9'h07e:
-          \$50  = 1'h1;
-      9'h07f:
-          \$50  = 1'h1;
-      9'h080:
-          \$50  = 1'h1;
-      9'h081:
-          \$50  = 1'h1;
-      9'h082:
-          \$50  = 1'h1;
-      9'h083:
-          \$50  = 1'h1;
-      9'h084:
-          \$50  = 1'h1;
-      9'h085:
-          \$50  = 1'h1;
-      9'h086:
-          \$50  = 1'h1;
-      9'h087:
-          \$50  = 1'h0;
-      9'h088:
-          \$50  = 1'h0;
-      9'h089:
-          \$50  = 1'h1;
-      9'h08a:
-          \$50  = 1'h1;
-      9'h08b:
-          \$50  = 1'h1;
-      9'h08c:
-          \$50  = 1'h1;
-      9'h08d:
-          \$50  = 1'h1;
-      9'h08e:
-          \$50  = 1'h1;
-      9'h08f:
-          \$50  = 1'h1;
-      9'h090:
-          \$50  = 1'h1;
-      9'h091:
-          \$50  = 1'h1;
-      9'h092:
-          \$50  = 1'h1;
-      9'h093:
-          \$50  = 1'h1;
-      9'h094:
-          \$50  = 1'h1;
-      9'h095:
-          \$50  = 1'h1;
-      9'h096:
-          \$50  = 1'h1;
-      9'h097:
-          \$50  = 1'h1;
-      9'h098:
-          \$50  = 1'h0;
-      9'h099:
-          \$50  = 1'h0;
-      9'h09a:
-          \$50  = 1'h1;
-      9'h09b:
-          \$50  = 1'h1;
-      9'h09c:
-          \$50  = 1'h1;
-      9'h09d:
-          \$50  = 1'h1;
-      9'h09e:
-          \$50  = 1'h1;
-      9'h09f:
-          \$50  = 1'h1;
-      9'h0a0:
-          \$50  = 1'h1;
-      9'h0a1:
-          \$50  = 1'h1;
-      9'h0a2:
-          \$50  = 1'h1;
-      9'h0a3:
-          \$50  = 1'h1;
-      9'h0a4:
-          \$50  = 1'h1;
-      9'h0a5:
-          \$50  = 1'h1;
-      9'h0a6:
-          \$50  = 1'h1;
-      9'h0a7:
-          \$50  = 1'h1;
-      9'h0a8:
-          \$50  = 1'h1;
-      9'h0a9:
-          \$50  = 1'h0;
-      9'h0aa:
-          \$50  = 1'h0;
-      9'h0ab:
-          \$50  = 1'h1;
-      9'h0ac:
-          \$50  = 1'h1;
-      9'h0ad:
-          \$50  = 1'h1;
-      9'h0ae:
-          \$50  = 1'h1;
-      9'h0af:
-          \$50  = 1'h1;
-      9'h0b0:
-          \$50  = 1'h1;
-      9'h0b1:
-          \$50  = 1'h1;
-      9'h0b2:
-          \$50  = 1'h1;
-      9'h0b3:
-          \$50  = 1'h1;
-      9'h0b4:
-          \$50  = 1'h1;
-      9'h0b5:
-          \$50  = 1'h1;
-      9'h0b6:
-          \$50  = 1'h1;
-      9'h0b7:
-          \$50  = 1'h1;
-      9'h0b8:
-          \$50  = 1'h1;
-      9'h0b9:
-          \$50  = 1'h1;
-      9'h0ba:
-          \$50  = 1'h0;
-      9'h0bb:
-          \$50  = 1'h0;
-      9'h0bc:
-          \$50  = 1'h1;
-      9'h0bd:
-          \$50  = 1'h1;
-      9'h0be:
-          \$50  = 1'h1;
-      9'h0bf:
-          \$50  = 1'h1;
-      9'h0c0:
-          \$50  = 1'h1;
-      9'h0c1:
-          \$50  = 1'h1;
-      9'h0c2:
-          \$50  = 1'h1;
-      9'h0c3:
-          \$50  = 1'h1;
-      9'h0c4:
-          \$50  = 1'h1;
-      9'h0c5:
-          \$50  = 1'h1;
-      9'h0c6:
-          \$50  = 1'h1;
-      9'h0c7:
-          \$50  = 1'h1;
-      9'h0c8:
-          \$50  = 1'h1;
-      9'h0c9:
-          \$50  = 1'h1;
-      9'h0ca:
-          \$50  = 1'h1;
-      9'h0cb:
-          \$50  = 1'h0;
-      9'h0cc:
-          \$50  = 1'h0;
-      9'h0cd:
-          \$50  = 1'h0;
-      9'h0ce:
-          \$50  = 1'h1;
-      9'h0cf:
-          \$50  = 1'h1;
-      9'h0d0:
-          \$50  = 1'h1;
-      9'h0d1:
-          \$50  = 1'h1;
-      9'h0d2:
-          \$50  = 1'h1;
-      9'h0d3:
-          \$50  = 1'h1;
-      9'h0d4:
-          \$50  = 1'h1;
-      9'h0d5:
-          \$50  = 1'h1;
-      9'h0d6:
-          \$50  = 1'h1;
-      9'h0d7:
-          \$50  = 1'h1;
-      9'h0d8:
-          \$50  = 1'h1;
-      9'h0d9:
-          \$50  = 1'h1;
-      9'h0da:
-          \$50  = 1'h1;
-      9'h0db:
-          \$50  = 1'h0;
-      9'h0dc:
-          \$50  = 1'h0;
-      9'h0dd:
-          \$50  = 1'h0;
-      9'h0de:
-          \$50  = 1'h0;
-      9'h0df:
-          \$50  = 1'h0;
-      9'h0e0:
-          \$50  = 1'h1;
-      9'h0e1:
-          \$50  = 1'h1;
-      9'h0e2:
-          \$50  = 1'h1;
-      9'h0e3:
-          \$50  = 1'h1;
-      9'h0e4:
-          \$50  = 1'h1;
-      9'h0e5:
-          \$50  = 1'h1;
-      9'h0e6:
-          \$50  = 1'h1;
-      9'h0e7:
-          \$50  = 1'h1;
-      9'h0e8:
-          \$50  = 1'h1;
-      9'h0e9:
-          \$50  = 1'h1;
-      9'h0ea:
-          \$50  = 1'h1;
-      9'h0eb:
-          \$50  = 1'h0;
-      9'h0ec:
-          \$50  = 1'h0;
-      9'h0ed:
-          \$50  = 1'h0;
-      9'h0ee:
-          \$50  = 1'h0;
-      9'h0ef:
-          \$50  = 1'h0;
-      9'h0f0:
-          \$50  = 1'h0;
-      9'h0f1:
-          \$50  = 1'h0;
-      9'h0f2:
-          \$50  = 1'h1;
-      9'h0f3:
-          \$50  = 1'h1;
-      9'h0f4:
-          \$50  = 1'h1;
-      9'h0f5:
-          \$50  = 1'h1;
-      9'h0f6:
-          \$50  = 1'h1;
-      9'h0f7:
-          \$50  = 1'h1;
-      9'h0f8:
-          \$50  = 1'h1;
-      9'h0f9:
-          \$50  = 1'h1;
-      9'h0fa:
-          \$50  = 1'h1;
-      9'h0fb:
-          \$50  = 1'h0;
-      9'h0fc:
-          \$50  = 1'h0;
-      9'h0fd:
-          \$50  = 1'h0;
-      9'h0fe:
-          \$50  = 1'h0;
-      9'h0ff:
-          \$50  = 1'h0;
-      9'h100:
-          \$50  = 1'h0;
-      9'h101:
-          \$50  = 1'h0;
-      9'h102:
-          \$50  = 1'h0;
-      9'h103:
-          \$50  = 1'h0;
-      9'h104:
-          \$50  = 1'h1;
-      9'h105:
-          \$50  = 1'h1;
-      9'h106:
-          \$50  = 1'h1;
-      9'h107:
-          \$50  = 1'h1;
-      9'h108:
-          \$50  = 1'h1;
-      9'h109:
-          \$50  = 1'h1;
-      9'h10a:
-          \$50  = 1'h1;
-      9'h10b:
-          \$50  = 1'h0;
-      9'h10c:
-          \$50  = 1'h0;
-      9'h10d:
-          \$50  = 1'h0;
-      9'h10e:
-          \$50  = 1'h0;
-      9'h10f:
-          \$50  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          \$55  = 1'h0;
-      8'h01:
-          \$55  = 1'h0;
-      8'h02:
-          \$55  = 1'h0;
-      8'h03:
-          \$55  = 1'h0;
-      8'h04:
-          \$55  = 1'h1;
-      8'h05:
-          \$55  = 1'h1;
-      8'h06:
-          \$55  = 1'h1;
-      8'h07:
-          \$55  = 1'h1;
-      8'h08:
-          \$55  = 1'h1;
-      8'h09:
-          \$55  = 1'h1;
-      8'h0a:
-          \$55  = 1'h1;
-      8'h0b:
-          \$55  = 1'h1;
-      8'h0c:
-          \$55  = 1'h0;
-      8'h0d:
-          \$55  = 1'h0;
-      8'h0e:
-          \$55  = 1'h0;
-      8'h0f:
-          \$55  = 1'h0;
-      8'h10:
-          \$55  = 1'h0;
-      8'h11:
-          \$55  = 1'h0;
-      8'h12:
-          \$55  = 1'h0;
-      8'h13:
-          \$55  = 1'h1;
-      8'h14:
-          \$55  = 1'h1;
-      8'h15:
-          \$55  = 1'h1;
-      8'h16:
-          \$55  = 1'h1;
-      8'h17:
-          \$55  = 1'h1;
-      8'h18:
-          \$55  = 1'h1;
-      8'h19:
-          \$55  = 1'h1;
-      8'h1a:
-          \$55  = 1'h1;
-      8'h1b:
-          \$55  = 1'h1;
-      8'h1c:
-          \$55  = 1'h1;
-      8'h1d:
-          \$55  = 1'h0;
-      8'h1e:
-          \$55  = 1'h0;
-      8'h1f:
-          \$55  = 1'h0;
-      8'h20:
-          \$55  = 1'h0;
-      8'h21:
-          \$55  = 1'h0;
-      8'h22:
-          \$55  = 1'h1;
-      8'h23:
-          \$55  = 1'h1;
-      8'h24:
-          \$55  = 1'h1;
-      8'h25:
-          \$55  = 1'h1;
-      8'h26:
-          \$55  = 1'h1;
-      8'h27:
-          \$55  = 1'h1;
-      8'h28:
-          \$55  = 1'h1;
-      8'h29:
-          \$55  = 1'h1;
-      8'h2a:
-          \$55  = 1'h1;
-      8'h2b:
-          \$55  = 1'h1;
-      8'h2c:
-          \$55  = 1'h1;
-      8'h2d:
-          \$55  = 1'h1;
-      8'h2e:
-          \$55  = 1'h0;
-      8'h2f:
-          \$55  = 1'h0;
-      8'h30:
-          \$55  = 1'h0;
-      8'h31:
-          \$55  = 1'h1;
-      8'h32:
-          \$55  = 1'h1;
-      8'h33:
-          \$55  = 1'h1;
-      8'h34:
-          \$55  = 1'h1;
-      8'h35:
-          \$55  = 1'h1;
-      8'h36:
-          \$55  = 1'h1;
-      8'h37:
-          \$55  = 1'h1;
-      8'h38:
-          \$55  = 1'h1;
-      8'h39:
-          \$55  = 1'h1;
-      8'h3a:
-          \$55  = 1'h1;
-      8'h3b:
-          \$55  = 1'h1;
-      8'h3c:
-          \$55  = 1'h1;
-      8'h3d:
-          \$55  = 1'h1;
-      8'h3e:
-          \$55  = 1'h1;
-      8'h3f:
-          \$55  = 1'h0;
-      8'h40:
-          \$55  = 1'h1;
-      8'h41:
-          \$55  = 1'h1;
-      8'h42:
-          \$55  = 1'h1;
-      8'h43:
-          \$55  = 1'h1;
-      8'h44:
-          \$55  = 1'h1;
-      8'h45:
-          \$55  = 1'h1;
-      8'h46:
-          \$55  = 1'h1;
-      8'h47:
-          \$55  = 1'h1;
-      8'h48:
-          \$55  = 1'h1;
-      8'h49:
-          \$55  = 1'h1;
-      8'h4a:
-          \$55  = 1'h1;
-      8'h4b:
-          \$55  = 1'h1;
-      8'h4c:
-          \$55  = 1'h1;
-      8'h4d:
-          \$55  = 1'h1;
-      8'h4e:
-          \$55  = 1'h1;
-      8'h4f:
-          \$55  = 1'h1;
-      8'h50:
-          \$55  = 1'h1;
-      8'h51:
-          \$55  = 1'h1;
-      8'h52:
-          \$55  = 1'h1;
-      8'h53:
-          \$55  = 1'h1;
-      8'h54:
-          \$55  = 1'h1;
-      8'h55:
-          \$55  = 1'h1;
-      8'h56:
-          \$55  = 1'h1;
-      8'h57:
-          \$55  = 1'h1;
-      8'h58:
-          \$55  = 1'h1;
-      8'h59:
-          \$55  = 1'h1;
-      8'h5a:
-          \$55  = 1'h1;
-      8'h5b:
-          \$55  = 1'h1;
-      8'h5c:
-          \$55  = 1'h1;
-      8'h5d:
-          \$55  = 1'h1;
-      8'h5e:
-          \$55  = 1'h1;
-      8'h5f:
-          \$55  = 1'h1;
-      8'h60:
-          \$55  = 1'h1;
-      8'h61:
-          \$55  = 1'h1;
-      8'h62:
-          \$55  = 1'h1;
-      8'h63:
-          \$55  = 1'h1;
-      8'h64:
-          \$55  = 1'h1;
-      8'h65:
-          \$55  = 1'h1;
-      8'h66:
-          \$55  = 1'h1;
-      8'h67:
-          \$55  = 1'h1;
-      8'h68:
-          \$55  = 1'h1;
-      8'h69:
-          \$55  = 1'h1;
-      8'h6a:
-          \$55  = 1'h1;
-      8'h6b:
-          \$55  = 1'h1;
-      8'h6c:
-          \$55  = 1'h1;
-      8'h6d:
-          \$55  = 1'h1;
-      8'h6e:
-          \$55  = 1'h1;
-      8'h6f:
-          \$55  = 1'h1;
-      8'h70:
-          \$55  = 1'h1;
-      8'h71:
-          \$55  = 1'h1;
-      8'h72:
-          \$55  = 1'h1;
-      8'h73:
-          \$55  = 1'h1;
-      8'h74:
-          \$55  = 1'h1;
-      8'h75:
-          \$55  = 1'h1;
-      8'h76:
-          \$55  = 1'h1;
-      8'h77:
-          \$55  = 1'h1;
-      8'h78:
-          \$55  = 1'h1;
-      8'h79:
-          \$55  = 1'h1;
-      8'h7a:
-          \$55  = 1'h1;
-      8'h7b:
-          \$55  = 1'h1;
-      8'h7c:
-          \$55  = 1'h1;
-      8'h7d:
-          \$55  = 1'h1;
-      8'h7e:
-          \$55  = 1'h1;
-      8'h7f:
-          \$55  = 1'h1;
-      8'h80:
-          \$55  = 1'h1;
-      8'h81:
-          \$55  = 1'h1;
-      8'h82:
-          \$55  = 1'h1;
-      8'h83:
-          \$55  = 1'h1;
-      8'h84:
-          \$55  = 1'h1;
-      8'h85:
-          \$55  = 1'h1;
-      8'h86:
-          \$55  = 1'h1;
-      8'h87:
-          \$55  = 1'h1;
-      8'h88:
-          \$55  = 1'h1;
-      8'h89:
-          \$55  = 1'h1;
-      8'h8a:
-          \$55  = 1'h1;
-      8'h8b:
-          \$55  = 1'h1;
-      8'h8c:
-          \$55  = 1'h1;
-      8'h8d:
-          \$55  = 1'h1;
-      8'h8e:
-          \$55  = 1'h1;
-      8'h8f:
-          \$55  = 1'h1;
-      8'h90:
-          \$55  = 1'h1;
-      8'h91:
-          \$55  = 1'h1;
-      8'h92:
-          \$55  = 1'h1;
-      8'h93:
-          \$55  = 1'h1;
-      8'h94:
-          \$55  = 1'h1;
-      8'h95:
-          \$55  = 1'h1;
-      8'h96:
-          \$55  = 1'h1;
-      8'h97:
-          \$55  = 1'h1;
-      8'h98:
-          \$55  = 1'h1;
-      8'h99:
-          \$55  = 1'h1;
-      8'h9a:
-          \$55  = 1'h1;
-      8'h9b:
-          \$55  = 1'h1;
-      8'h9c:
-          \$55  = 1'h1;
-      8'h9d:
-          \$55  = 1'h1;
-      8'h9e:
-          \$55  = 1'h1;
-      8'h9f:
-          \$55  = 1'h1;
-      8'ha0:
-          \$55  = 1'h1;
-      8'ha1:
-          \$55  = 1'h1;
-      8'ha2:
-          \$55  = 1'h1;
-      8'ha3:
-          \$55  = 1'h1;
-      8'ha4:
-          \$55  = 1'h1;
-      8'ha5:
-          \$55  = 1'h1;
-      8'ha6:
-          \$55  = 1'h1;
-      8'ha7:
-          \$55  = 1'h1;
-      8'ha8:
-          \$55  = 1'h1;
-      8'ha9:
-          \$55  = 1'h1;
-      8'haa:
-          \$55  = 1'h1;
-      8'hab:
-          \$55  = 1'h1;
-      8'hac:
-          \$55  = 1'h1;
-      8'had:
-          \$55  = 1'h1;
-      8'hae:
-          \$55  = 1'h1;
-      8'haf:
-          \$55  = 1'h1;
-      8'hb0:
-          \$55  = 1'h1;
-      8'hb1:
-          \$55  = 1'h1;
-      8'hb2:
-          \$55  = 1'h1;
-      8'hb3:
-          \$55  = 1'h1;
-      8'hb4:
-          \$55  = 1'h1;
-      8'hb5:
-          \$55  = 1'h1;
-      8'hb6:
-          \$55  = 1'h1;
-      8'hb7:
-          \$55  = 1'h1;
-      8'hb8:
-          \$55  = 1'h1;
-      8'hb9:
-          \$55  = 1'h1;
-      8'hba:
-          \$55  = 1'h1;
-      8'hbb:
-          \$55  = 1'h1;
-      8'hbc:
-          \$55  = 1'h1;
-      8'hbd:
-          \$55  = 1'h1;
-      8'hbe:
-          \$55  = 1'h1;
-      8'hbf:
-          \$55  = 1'h1;
-      8'hc0:
-          \$55  = 1'h0;
-      8'hc1:
-          \$55  = 1'h1;
-      8'hc2:
-          \$55  = 1'h1;
-      8'hc3:
-          \$55  = 1'h1;
-      8'hc4:
-          \$55  = 1'h1;
-      8'hc5:
-          \$55  = 1'h1;
-      8'hc6:
-          \$55  = 1'h1;
-      8'hc7:
-          \$55  = 1'h1;
-      8'hc8:
-          \$55  = 1'h1;
-      8'hc9:
-          \$55  = 1'h1;
-      8'hca:
-          \$55  = 1'h1;
-      8'hcb:
-          \$55  = 1'h1;
-      8'hcc:
-          \$55  = 1'h1;
-      8'hcd:
-          \$55  = 1'h1;
-      8'hce:
-          \$55  = 1'h1;
-      8'hcf:
-          \$55  = 1'h0;
-      8'hd0:
-          \$55  = 1'h0;
-      8'hd1:
-          \$55  = 1'h0;
-      8'hd2:
-          \$55  = 1'h1;
-      8'hd3:
-          \$55  = 1'h1;
-      8'hd4:
-          \$55  = 1'h1;
-      8'hd5:
-          \$55  = 1'h1;
-      8'hd6:
-          \$55  = 1'h1;
-      8'hd7:
-          \$55  = 1'h1;
-      8'hd8:
-          \$55  = 1'h1;
-      8'hd9:
-          \$55  = 1'h1;
-      8'hda:
-          \$55  = 1'h1;
-      8'hdb:
-          \$55  = 1'h1;
-      8'hdc:
-          \$55  = 1'h1;
-      8'hdd:
-          \$55  = 1'h1;
-      8'hde:
-          \$55  = 1'h0;
-      8'hdf:
-          \$55  = 1'h0;
-      8'he0:
-          \$55  = 1'h0;
-      8'he1:
-          \$55  = 1'h0;
-      8'he2:
-          \$55  = 1'h0;
-      8'he3:
-          \$55  = 1'h1;
-      8'he4:
-          \$55  = 1'h1;
-      8'he5:
-          \$55  = 1'h1;
-      8'he6:
-          \$55  = 1'h1;
-      8'he7:
-          \$55  = 1'h1;
-      8'he8:
-          \$55  = 1'h1;
-      8'he9:
-          \$55  = 1'h1;
-      8'hea:
-          \$55  = 1'h1;
-      8'heb:
-          \$55  = 1'h1;
-      8'hec:
-          \$55  = 1'h1;
-      8'hed:
-          \$55  = 1'h0;
-      8'hee:
-          \$55  = 1'h0;
-      8'hef:
-          \$55  = 1'h0;
-      8'hf0:
-          \$55  = 1'h0;
-      8'hf1:
-          \$55  = 1'h0;
-      8'hf2:
-          \$55  = 1'h0;
-      8'hf3:
-          \$55  = 1'h0;
-      8'hf4:
-          \$55  = 1'h1;
-      8'hf5:
-          \$55  = 1'h1;
-      8'hf6:
-          \$55  = 1'h1;
-      8'hf7:
-          \$55  = 1'h1;
-      8'hf8:
-          \$55  = 1'h1;
-      8'hf9:
-          \$55  = 1'h1;
-      8'hfa:
-          \$55  = 1'h1;
-      8'hfb:
-          \$55  = 1'h1;
-      8'hfc:
-          \$55  = 1'h0;
-      8'hfd:
-          \$55  = 1'h0;
-      8'hfe:
-          \$55  = 1'h0;
-      8'hff:
-          \$55  = 1'h0;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$85  = weight_0;
-      2'h1:
-          \$85  = weight_1;
-      2'h2:
-          \$85  = weight_2;
-      2'h3:
-          \$85  = weight_3;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$87  = \weight_0$132 ;
-      2'h1:
-          \$87  = \weight_1$133 ;
-      2'h2:
-          \$87  = \weight_2$134 ;
-      2'h3:
-          \$87  = \weight_3$135 ;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (corner)
-      2'h0:
-          \$91  = \weight_0$136 ;
-      2'h1:
-          \$91  = \weight_1$137 ;
-      2'h2:
-          \$91  = \weight_2$138 ;
-      2'h3:
-          \$91  = \weight_3$139 ;
-    endcase
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    (* full_case = 32'd1 *)
-    casez (idx[7:0])
-      8'h00:
-          \$102  = 1'h0;
-      8'h01:
-          \$102  = 1'h0;
-      8'h02:
-          \$102  = 1'h0;
-      8'h03:
-          \$102  = 1'h0;
-      8'h04:
-          \$102  = 1'h1;
-      8'h05:
-          \$102  = 1'h1;
-      8'h06:
-          \$102  = 1'h1;
-      8'h07:
-          \$102  = 1'h1;
-      8'h08:
-          \$102  = 1'h1;
-      8'h09:
-          \$102  = 1'h1;
-      8'h0a:
-          \$102  = 1'h1;
-      8'h0b:
-          \$102  = 1'h1;
-      8'h0c:
-          \$102  = 1'h0;
-      8'h0d:
-          \$102  = 1'h0;
-      8'h0e:
-          \$102  = 1'h0;
-      8'h0f:
-          \$102  = 1'h0;
-      8'h10:
-          \$102  = 1'h0;
-      8'h11:
-          \$102  = 1'h0;
-      8'h12:
-          \$102  = 1'h0;
-      8'h13:
-          \$102  = 1'h1;
-      8'h14:
-          \$102  = 1'h1;
-      8'h15:
-          \$102  = 1'h1;
-      8'h16:
-          \$102  = 1'h1;
-      8'h17:
-          \$102  = 1'h1;
-      8'h18:
-          \$102  = 1'h1;
-      8'h19:
-          \$102  = 1'h1;
-      8'h1a:
-          \$102  = 1'h1;
-      8'h1b:
-          \$102  = 1'h1;
-      8'h1c:
-          \$102  = 1'h1;
-      8'h1d:
-          \$102  = 1'h0;
-      8'h1e:
-          \$102  = 1'h0;
-      8'h1f:
-          \$102  = 1'h0;
-      8'h20:
-          \$102  = 1'h0;
-      8'h21:
-          \$102  = 1'h0;
-      8'h22:
-          \$102  = 1'h1;
-      8'h23:
-          \$102  = 1'h1;
-      8'h24:
-          \$102  = 1'h1;
-      8'h25:
-          \$102  = 1'h1;
-      8'h26:
-          \$102  = 1'h1;
-      8'h27:
-          \$102  = 1'h1;
-      8'h28:
-          \$102  = 1'h1;
-      8'h29:
-          \$102  = 1'h1;
-      8'h2a:
-          \$102  = 1'h1;
-      8'h2b:
-          \$102  = 1'h1;
-      8'h2c:
-          \$102  = 1'h1;
-      8'h2d:
-          \$102  = 1'h1;
-      8'h2e:
-          \$102  = 1'h0;
-      8'h2f:
-          \$102  = 1'h0;
-      8'h30:
-          \$102  = 1'h0;
-      8'h31:
-          \$102  = 1'h1;
-      8'h32:
-          \$102  = 1'h1;
-      8'h33:
-          \$102  = 1'h1;
-      8'h34:
-          \$102  = 1'h1;
-      8'h35:
-          \$102  = 1'h1;
-      8'h36:
-          \$102  = 1'h1;
-      8'h37:
-          \$102  = 1'h1;
-      8'h38:
-          \$102  = 1'h1;
-      8'h39:
-          \$102  = 1'h1;
-      8'h3a:
-          \$102  = 1'h1;
-      8'h3b:
-          \$102  = 1'h1;
-      8'h3c:
-          \$102  = 1'h1;
-      8'h3d:
-          \$102  = 1'h1;
-      8'h3e:
-          \$102  = 1'h1;
-      8'h3f:
-          \$102  = 1'h0;
-      8'h40:
-          \$102  = 1'h1;
-      8'h41:
-          \$102  = 1'h1;
-      8'h42:
-          \$102  = 1'h1;
-      8'h43:
-          \$102  = 1'h1;
-      8'h44:
-          \$102  = 1'h1;
-      8'h45:
-          \$102  = 1'h1;
-      8'h46:
-          \$102  = 1'h1;
-      8'h47:
-          \$102  = 1'h1;
-      8'h48:
-          \$102  = 1'h1;
-      8'h49:
-          \$102  = 1'h1;
-      8'h4a:
-          \$102  = 1'h1;
-      8'h4b:
-          \$102  = 1'h1;
-      8'h4c:
-          \$102  = 1'h1;
-      8'h4d:
-          \$102  = 1'h1;
-      8'h4e:
-          \$102  = 1'h1;
-      8'h4f:
-          \$102  = 1'h1;
-      8'h50:
-          \$102  = 1'h1;
-      8'h51:
-          \$102  = 1'h1;
-      8'h52:
-          \$102  = 1'h1;
-      8'h53:
-          \$102  = 1'h1;
-      8'h54:
-          \$102  = 1'h1;
-      8'h55:
-          \$102  = 1'h1;
-      8'h56:
-          \$102  = 1'h1;
-      8'h57:
-          \$102  = 1'h1;
-      8'h58:
-          \$102  = 1'h1;
-      8'h59:
-          \$102  = 1'h1;
-      8'h5a:
-          \$102  = 1'h1;
-      8'h5b:
-          \$102  = 1'h1;
-      8'h5c:
-          \$102  = 1'h1;
-      8'h5d:
-          \$102  = 1'h1;
-      8'h5e:
-          \$102  = 1'h1;
-      8'h5f:
-          \$102  = 1'h1;
-      8'h60:
-          \$102  = 1'h1;
-      8'h61:
-          \$102  = 1'h1;
-      8'h62:
-          \$102  = 1'h1;
-      8'h63:
-          \$102  = 1'h1;
-      8'h64:
-          \$102  = 1'h1;
-      8'h65:
-          \$102  = 1'h1;
-      8'h66:
-          \$102  = 1'h1;
-      8'h67:
-          \$102  = 1'h1;
-      8'h68:
-          \$102  = 1'h1;
-      8'h69:
-          \$102  = 1'h1;
-      8'h6a:
-          \$102  = 1'h1;
-      8'h6b:
-          \$102  = 1'h1;
-      8'h6c:
-          \$102  = 1'h1;
-      8'h6d:
-          \$102  = 1'h1;
-      8'h6e:
-          \$102  = 1'h1;
-      8'h6f:
-          \$102  = 1'h1;
-      8'h70:
-          \$102  = 1'h1;
-      8'h71:
-          \$102  = 1'h1;
-      8'h72:
-          \$102  = 1'h1;
-      8'h73:
-          \$102  = 1'h1;
-      8'h74:
-          \$102  = 1'h1;
-      8'h75:
-          \$102  = 1'h1;
-      8'h76:
-          \$102  = 1'h1;
-      8'h77:
-          \$102  = 1'h1;
-      8'h78:
-          \$102  = 1'h1;
-      8'h79:
-          \$102  = 1'h1;
-      8'h7a:
-          \$102  = 1'h1;
-      8'h7b:
-          \$102  = 1'h1;
-      8'h7c:
-          \$102  = 1'h1;
-      8'h7d:
-          \$102  = 1'h1;
-      8'h7e:
-          \$102  = 1'h1;
-      8'h7f:
-          \$102  = 1'h1;
-      8'h80:
-          \$102  = 1'h1;
-      8'h81:
-          \$102  = 1'h1;
-      8'h82:
-          \$102  = 1'h1;
-      8'h83:
-          \$102  = 1'h1;
-      8'h84:
-          \$102  = 1'h1;
-      8'h85:
-          \$102  = 1'h1;
-      8'h86:
-          \$102  = 1'h1;
-      8'h87:
-          \$102  = 1'h1;
-      8'h88:
-          \$102  = 1'h1;
-      8'h89:
-          \$102  = 1'h1;
-      8'h8a:
-          \$102  = 1'h1;
-      8'h8b:
-          \$102  = 1'h1;
-      8'h8c:
-          \$102  = 1'h1;
-      8'h8d:
-          \$102  = 1'h1;
-      8'h8e:
-          \$102  = 1'h1;
-      8'h8f:
-          \$102  = 1'h1;
-      8'h90:
-          \$102  = 1'h1;
-      8'h91:
-          \$102  = 1'h1;
-      8'h92:
-          \$102  = 1'h1;
-      8'h93:
-          \$102  = 1'h1;
-      8'h94:
-          \$102  = 1'h1;
-      8'h95:
-          \$102  = 1'h1;
-      8'h96:
-          \$102  = 1'h1;
-      8'h97:
-          \$102  = 1'h1;
-      8'h98:
-          \$102  = 1'h1;
-      8'h99:
-          \$102  = 1'h1;
-      8'h9a:
-          \$102  = 1'h1;
-      8'h9b:
-          \$102  = 1'h1;
-      8'h9c:
-          \$102  = 1'h1;
-      8'h9d:
-          \$102  = 1'h1;
-      8'h9e:
-          \$102  = 1'h1;
-      8'h9f:
-          \$102  = 1'h1;
-      8'ha0:
-          \$102  = 1'h1;
-      8'ha1:
-          \$102  = 1'h1;
-      8'ha2:
-          \$102  = 1'h1;
-      8'ha3:
-          \$102  = 1'h1;
-      8'ha4:
-          \$102  = 1'h1;
-      8'ha5:
-          \$102  = 1'h1;
-      8'ha6:
-          \$102  = 1'h1;
-      8'ha7:
-          \$102  = 1'h1;
-      8'ha8:
-          \$102  = 1'h1;
-      8'ha9:
-          \$102  = 1'h1;
-      8'haa:
-          \$102  = 1'h1;
-      8'hab:
-          \$102  = 1'h1;
-      8'hac:
-          \$102  = 1'h1;
-      8'had:
-          \$102  = 1'h1;
-      8'hae:
-          \$102  = 1'h1;
-      8'haf:
-          \$102  = 1'h1;
-      8'hb0:
-          \$102  = 1'h1;
-      8'hb1:
-          \$102  = 1'h1;
-      8'hb2:
-          \$102  = 1'h1;
-      8'hb3:
-          \$102  = 1'h1;
-      8'hb4:
-          \$102  = 1'h1;
-      8'hb5:
-          \$102  = 1'h1;
-      8'hb6:
-          \$102  = 1'h1;
-      8'hb7:
-          \$102  = 1'h1;
-      8'hb8:
-          \$102  = 1'h1;
-      8'hb9:
-          \$102  = 1'h1;
-      8'hba:
-          \$102  = 1'h1;
-      8'hbb:
-          \$102  = 1'h1;
-      8'hbc:
-          \$102  = 1'h1;
-      8'hbd:
-          \$102  = 1'h1;
-      8'hbe:
-          \$102  = 1'h1;
-      8'hbf:
-          \$102  = 1'h1;
-      8'hc0:
-          \$102  = 1'h0;
-      8'hc1:
-          \$102  = 1'h1;
-      8'hc2:
-          \$102  = 1'h1;
-      8'hc3:
-          \$102  = 1'h1;
-      8'hc4:
-          \$102  = 1'h1;
-      8'hc5:
-          \$102  = 1'h1;
-      8'hc6:
-          \$102  = 1'h1;
-      8'hc7:
-          \$102  = 1'h1;
-      8'hc8:
-          \$102  = 1'h1;
-      8'hc9:
-          \$102  = 1'h1;
-      8'hca:
-          \$102  = 1'h1;
-      8'hcb:
-          \$102  = 1'h1;
-      8'hcc:
-          \$102  = 1'h1;
-      8'hcd:
-          \$102  = 1'h1;
-      8'hce:
-          \$102  = 1'h1;
-      8'hcf:
-          \$102  = 1'h0;
-      8'hd0:
-          \$102  = 1'h0;
-      8'hd1:
-          \$102  = 1'h0;
-      8'hd2:
-          \$102  = 1'h1;
-      8'hd3:
-          \$102  = 1'h1;
-      8'hd4:
-          \$102  = 1'h1;
-      8'hd5:
-          \$102  = 1'h1;
-      8'hd6:
-          \$102  = 1'h1;
-      8'hd7:
-          \$102  = 1'h1;
-      8'hd8:
-          \$102  = 1'h1;
-      8'hd9:
-          \$102  = 1'h1;
-      8'hda:
-          \$102  = 1'h1;
-      8'hdb:
-          \$102  = 1'h1;
-      8'hdc:
-          \$102  = 1'h1;
-      8'hdd:
-          \$102  = 1'h1;
-      8'hde:
-          \$102  = 1'h0;
-      8'hdf:
-          \$102  = 1'h0;
-      8'he0:
-          \$102  = 1'h0;
-      8'he1:
-          \$102  = 1'h0;
-      8'he2:
-          \$102  = 1'h0;
-      8'he3:
-          \$102  = 1'h1;
-      8'he4:
-          \$102  = 1'h1;
-      8'he5:
-          \$102  = 1'h1;
-      8'he6:
-          \$102  = 1'h1;
-      8'he7:
-          \$102  = 1'h1;
-      8'he8:
-          \$102  = 1'h1;
-      8'he9:
-          \$102  = 1'h1;
-      8'hea:
-          \$102  = 1'h1;
-      8'heb:
-          \$102  = 1'h1;
-      8'hec:
-          \$102  = 1'h1;
-      8'hed:
-          \$102  = 1'h0;
-      8'hee:
-          \$102  = 1'h0;
-      8'hef:
-          \$102  = 1'h0;
-      8'hf0:
-          \$102  = 1'h0;
-      8'hf1:
-          \$102  = 1'h0;
-      8'hf2:
-          \$102  = 1'h0;
-      8'hf3:
-          \$102  = 1'h0;
-      8'hf4:
-          \$102  = 1'h1;
-      8'hf5:
-          \$102  = 1'h1;
-      8'hf6:
-          \$102  = 1'h1;
-      8'hf7:
-          \$102  = 1'h1;
-      8'hf8:
-          \$102  = 1'h1;
-      8'hf9:
-          \$102  = 1'h1;
-      8'hfa:
-          \$102  = 1'h1;
-      8'hfb:
-          \$102  = 1'h1;
-      8'hfc:
-          \$102  = 1'h0;
-      8'hfd:
-          \$102  = 1'h0;
-      8'hfe:
-          \$102  = 1'h0;
-      8'hff:
-          \$102  = 1'h0;
-    endcase
-  end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
     req = 1'h0;
     casez (state)
       5'h00:
-          if (\$16 ) begin
-          end else if (\$17 ) begin
+          if (\$120 ) begin
+          end else if (\$121 ) begin
             req = 1'h1;
           end
       5'h01:
@@ -7493,13 +2301,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 end
           endcase
       5'h02:
-          if (\$33 ) begin
+          if (\$137 ) begin
             if (ready) begin
               req = 1'h1;
             end
           end
       5'h03:
-          if (\$36 ) begin
+          if (\$140 ) begin
             if (ready) begin
               req = 1'h1;
             end
@@ -7550,14 +2358,14 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
       5'h05:
           casez (sub)
             4'h0:
-                if (\$57 ) begin
+                if (\$221 ) begin
                 end else if (ready) begin
                   req = 1'h1;
                 end
             4'h1:
                 /* empty */;
             4'h2:
-                if (\$59 ) begin
+                if (\$223 ) begin
                 end else if (ready) begin
                   req = 1'h1;
                 end
@@ -7593,8 +2401,8 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
     we = 1'h0;
     casez (state)
       5'h00:
-          if (\$16 ) begin
-          end else if (\$17 ) begin
+          if (\$120 ) begin
+          end else if (\$121 ) begin
             we = 1'h0;
           end
       5'h01:
@@ -7645,13 +2453,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 end
           endcase
       5'h02:
-          if (\$33 ) begin
+          if (\$137 ) begin
             if (ready) begin
               we = 1'h1;
             end
           end
       5'h03:
-          if (\$36 ) begin
+          if (\$140 ) begin
             if (ready) begin
               we = 1'h1;
             end
@@ -7702,14 +2510,14 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
       5'h05:
           casez (sub)
             4'h0:
-                if (\$57 ) begin
+                if (\$221 ) begin
                 end else if (ready) begin
                   we = 1'h0;
                 end
             4'h1:
                 /* empty */;
             4'h2:
-                if (\$59 ) begin
+                if (\$223 ) begin
                 end else if (ready) begin
                   we = 1'h0;
                 end
@@ -7745,33 +2553,33 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
     addr = 21'h000000;
     casez (state)
       5'h00:
-          if (\$16 ) begin
-          end else if (\$17 ) begin
-            addr = { 8'h00, \$18  };
+          if (\$120 ) begin
+          end else if (\$121 ) begin
+            addr = { 8'h00, \$122  };
           end
       5'h01:
           casez (sub)
             4'h0:
                 if (ready) begin
-                  addr = { 9'h000, \$20  };
+                  addr = { 9'h000, \$124  };
                 end
             4'h1:
                 /* empty */;
             4'h2:
                 if (ready) begin
-                  addr = { 9'h000, \$22  };
+                  addr = { 9'h000, \$126  };
                 end
             4'h3:
                 /* empty */;
             4'h4:
                 if (ready) begin
-                  addr = { 9'h000, \$24  };
+                  addr = { 9'h000, \$128  };
                 end
             4'h5:
                 /* empty */;
             4'h6:
                 if (ready) begin
-                  addr = { 9'h000, \$26  };
+                  addr = { 9'h000, \$130  };
                 end
             4'h7:
                 /* empty */;
@@ -7781,113 +2589,113 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'ha:
                 if (ready) begin
-                  addr = { 9'h000, \$28  };
+                  addr = { 9'h000, \$132  };
                 end
             4'hb:
                 /* empty */;
             4'hc:
                 if (ready) begin
-                  addr = { 9'h000, \$30  };
+                  addr = { 9'h000, \$134  };
                 end
             4'hd:
                 /* empty */;
             4'he:
                 if (ready) begin
-                  addr = { 9'h000, \$32  };
+                  addr = { 9'h000, \$136  };
                 end
           endcase
       5'h02:
-          if (\$33 ) begin
+          if (\$137 ) begin
             if (ready) begin
-              addr = { 9'h000, \$35  };
+              addr = { 9'h000, \$139  };
             end
           end
       5'h03:
-          if (\$36 ) begin
+          if (\$140 ) begin
             if (ready) begin
-              addr = { 9'h000, \$37  };
+              addr = { 9'h000, \$141  };
             end
           end
       5'h04:
           casez (sub)
             4'h0:
                 if (ready) begin
-                  addr = { 9'h000, \$39  };
+                  addr = { 9'h000, \$143  };
                 end
             4'h1:
                 /* empty */;
             4'h2:
                 if (ready) begin
-                  addr = { 8'h00, \$40  };
+                  addr = { 8'h00, \$144  };
                 end
             4'h3:
                 /* empty */;
             4'h4:
                 if (ready) begin
-                  addr = { 8'h00, \$41  };
+                  addr = { 8'h00, \$145  };
                 end
             4'h5:
                 /* empty */;
             4'h6:
                 if (ready) begin
-                  addr = { 9'h000, \$44  };
+                  addr = { 9'h000, \$155  };
                 end
             4'h7:
                 /* empty */;
             4'h8:
                 if (ready) begin
-                  addr = { 8'h00, \$45  };
+                  addr = { 8'h00, \$156  };
                 end
             4'h9:
                 /* empty */;
             4'ha:
                 if (ready) begin
-                  addr = { 8'h00, \$48  };
+                  addr = { 8'h00, \$182  };
                 end
             4'hb:
                 /* empty */;
             4'hc:
                 if (ready) begin
-                  addr = { 8'h00, \$49  };
+                  addr = { 8'h00, \$183  };
                 end
           endcase
       5'h05:
           casez (sub)
             4'h0:
-                if (\$57 ) begin
+                if (\$221 ) begin
                 end else if (ready) begin
-                  addr = { 8'h00, \$58  };
+                  addr = { 8'h00, \$222  };
                 end
             4'h1:
                 /* empty */;
             4'h2:
-                if (\$59 ) begin
+                if (\$223 ) begin
                 end else if (ready) begin
-                  addr = { 8'h00, \$60  };
+                  addr = { 8'h00, \$224  };
                 end
             4'h3:
                 /* empty */;
             4'h4:
                 if (ready) begin
-                  addr = { 8'h00, \$62  };
+                  addr = { 8'h00, \$226  };
                 end
             4'h5:
                 /* empty */;
             4'h6:
                 if (ready) begin
-                  addr = { 8'h00, \$65  };
+                  addr = { 8'h00, \$229  };
                 end
             4'h7:
                 /* empty */;
             4'h8:
                 if (ready) begin
-                  addr = { 8'h00, \$69  };
+                  addr = { 8'h00, \$233  };
                 end
             4'h9:
                 /* empty */;
             4'ha:
                 if (ready) begin
-                  addr = { 8'h00, \$70  };
+                  addr = { 8'h00, \$234  };
                 end
           endcase
     endcase
@@ -7922,13 +2730,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'ha:
                 if (ready) begin
-                  wdata = { 12'h000, pos_x };
+                  wdata = { 12'h000, px };
                 end
             4'hb:
                 /* empty */;
             4'hc:
                 if (ready) begin
-                  wdata = { 12'h000, pos_y };
+                  wdata = { 12'h000, py };
                 end
             4'hd:
                 /* empty */;
@@ -7938,13 +2746,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 end
           endcase
       5'h02:
-          if (\$33 ) begin
+          if (\$137 ) begin
             if (ready) begin
               wdata = { 12'h000, vy };
             end
           end
       5'h03:
-          if (\$36 ) begin
+          if (\$140 ) begin
             if (ready) begin
               wdata = 32'd0;
             end
@@ -7961,7 +2769,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h4:
                 if (ready) begin
-                  wdata = \$43 ;
+                  wdata = { 8'h00, \$154  };
                 end
             4'h5:
                 /* empty */;
@@ -7971,7 +2779,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h8:
                 if (ready) begin
-                  wdata = \$47 ;
+                  wdata = \$181 ;
                 end
             4'h9:
                 /* empty */;
@@ -7981,7 +2789,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'hc:
                 if (ready) begin
-                  wdata = \$51 ;
+                  wdata = \$208 ;
                 end
           endcase
       5'h05:
@@ -8008,14 +2816,14 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'ha:
                 if (ready) begin
-                  wdata = u_left_next;
+                  wdata = { \$119 [23], \$119 [23], \$119 [23], \$119 [23], \$119 [23], \$119 [23], \$119 [23], \$119 [23], \$119 [23:0] };
                 end
           endcase
     endcase
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$111  = 1'h0;
+    \$307  = 1'h0;
     casez (state)
       5'h00:
           /* empty */;
@@ -8054,54 +2862,54 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hb:
                 /* empty */;
             4'hc:
-                if (\$106 ) begin
+                if (\$302 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$107 ) begin
+                  if (\$303 ) begin
                   end else begin
-                    if (\$108 ) begin
-                      \$111  = 1'h1;
+                    if (\$304 ) begin
+                      \$307  = 1'h1;
                     end
                   end
                 end
           endcase
     endcase
     if (rst) begin
-      \$111  = 1'h0;
+      \$307  = 1'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$112  = idx;
+    \$308  = idx;
     casez (state)
       5'h00:
-          if (\$71 ) begin
-            \$112  = 10'h000;
+          if (\$235 ) begin
+            \$308  = 10'h000;
           end
       5'h01:
           /* empty */;
       5'h02:
           (* full_case = 32'd1 *)
-          if (\$77 ) begin
+          if (\$273 ) begin
           end else begin
-            if (\done$127 ) begin
+            if (\done$103 ) begin
               (* full_case = 32'd1 *)
-              if (\$78 ) begin
-                \$112  = 10'h000;
+              if (\$274 ) begin
+                \$308  = 10'h000;
               end else begin
-                \$112  = \$79 [9:0];
+                \$308  = \$275 [9:0];
               end
             end
           end
       5'h03:
           (* full_case = 32'd1 *)
-          if (\$80 ) begin
+          if (\$276 ) begin
           end else begin
-            if (\done$127 ) begin
+            if (\done$103 ) begin
               (* full_case = 32'd1 *)
-              if (\$81 ) begin
-                \$112  = 10'h000;
+              if (\$277 ) begin
+                \$308  = 10'h000;
               end else begin
-                \$112  = \$82 [9:0];
+                \$308  = \$278 [9:0];
               end
             end
           end
@@ -8134,13 +2942,13 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hc:
                 /* empty */;
             4'hd:
-                if (\done$127 ) begin
-                  if (\$95 ) begin
+                if (\done$103 ) begin
+                  if (\$284 ) begin
                     (* full_case = 32'd1 *)
-                    if (\$96 ) begin
-                      \$112  = 10'h000;
+                    if (\$285 ) begin
+                      \$308  = 10'h000;
                     end else begin
-                      \$112  = \$97 [9:0];
+                      \$308  = \$286 [9:0];
                     end
                   end
                 end
@@ -8173,267 +2981,267 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'hc:
                 (* full_case = 32'd1 *)
-                if (\$106 ) begin
-                  \$112  = 10'h000;
+                if (\$302 ) begin
+                  \$308  = 10'h000;
                 end else begin
-                  \$112  = \$110 [9:0];
+                  \$308  = \$306 [9:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$112  = 10'h000;
+      \$308  = 10'h000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$113  = sub;
+    \$309  = sub;
     casez (state)
       5'h00:
-          if (\$71 ) begin
-            \$113  = 4'h0;
+          if (\$235 ) begin
+            \$309  = 4'h0;
           end
       5'h01:
           (* full_case = 32'd1 *)
           casez (sub)
             4'h0:
                 if (ready) begin
-                  \$113  = 4'h1;
+                  \$309  = 4'h1;
                 end
             4'h1:
                 if (rvalid) begin
-                  \$113  = 4'h2;
+                  \$309  = 4'h2;
                 end
             4'h2:
                 if (ready) begin
-                  \$113  = 4'h3;
+                  \$309  = 4'h3;
                 end
             4'h3:
                 if (rvalid) begin
-                  \$113  = 4'h4;
+                  \$309  = 4'h4;
                 end
             4'h4:
                 if (ready) begin
-                  \$113  = 4'h5;
+                  \$309  = 4'h5;
                 end
             4'h5:
                 if (rvalid) begin
-                  \$113  = 4'h6;
+                  \$309  = 4'h6;
                 end
             4'h6:
                 if (ready) begin
-                  \$113  = 4'h7;
+                  \$309  = 4'h7;
                 end
             4'h7:
                 if (rvalid) begin
-                  \$113  = 4'h8;
+                  \$309  = 4'h8;
                 end
             4'h8:
-                \$113  = 4'h9;
+                \$309  = 4'h9;
             4'h9:
-                \$113  = 4'ha;
+                \$309  = 4'ha;
             4'ha:
                 if (ready) begin
-                  \$113  = 4'hb;
+                  \$309  = 4'hb;
                 end
             4'hb:
-                if (\done$127 ) begin
-                  \$113  = 4'hc;
+                if (\done$103 ) begin
+                  \$309  = 4'hc;
                 end
             4'hc:
                 if (ready) begin
-                  \$113  = 4'hd;
+                  \$309  = 4'hd;
                 end
             4'hd:
-                if (\done$127 ) begin
-                  \$113  = 4'he;
+                if (\done$103 ) begin
+                  \$309  = 4'he;
                 end
             4'he:
                 if (ready) begin
-                  \$113  = 4'hf;
+                  \$309  = 4'hf;
                 end
             4'hf:
-                if (\done$127 ) begin
-                  \$113  = 4'h0;
+                if (\done$103 ) begin
+                  \$309  = 4'h0;
                 end
           endcase
       5'h02:
           (* full_case = 32'd1 *)
-          if (\$77 ) begin
+          if (\$273 ) begin
             if (ready) begin
-              \$113  = 4'h1;
+              \$309  = 4'h1;
             end
           end else begin
-            if (\done$127 ) begin
-              \$113  = 4'h0;
+            if (\done$103 ) begin
+              \$309  = 4'h0;
             end
           end
       5'h03:
           (* full_case = 32'd1 *)
-          if (\$80 ) begin
+          if (\$276 ) begin
             if (ready) begin
-              \$113  = 4'h1;
+              \$309  = 4'h1;
             end
           end else begin
-            if (\done$127 ) begin
-              \$113  = 4'h0;
+            if (\done$103 ) begin
+              \$309  = 4'h0;
             end
           end
       5'h04:
           casez (sub)
             4'h0:
                 if (ready) begin
-                  \$113  = 4'h1;
+                  \$309  = 4'h1;
                 end
             4'h1:
                 if (rvalid) begin
                   (* full_case = 32'd1 *)
-                  if (\$83 ) begin
-                    \$113  = 4'h2;
+                  if (\$279 ) begin
+                    \$309  = 4'h2;
                   end else begin
-                    \$113  = 4'h0;
+                    \$309  = 4'h0;
                   end
                 end
             4'h2:
                 if (ready) begin
-                  \$113  = 4'h3;
+                  \$309  = 4'h3;
                 end
             4'h3:
                 if (rvalid) begin
-                  \$113  = 4'h4;
+                  \$309  = 4'h4;
                 end
             4'h4:
                 if (ready) begin
-                  \$113  = 4'h5;
+                  \$309  = 4'h5;
                 end
             4'h5:
-                if (\done$127 ) begin
-                  \$113  = 4'h6;
+                if (\done$103 ) begin
+                  \$309  = 4'h6;
                 end
             4'h6:
                 if (ready) begin
-                  \$113  = 4'h7;
+                  \$309  = 4'h7;
                 end
             4'h7:
                 if (rvalid) begin
-                  \$113  = 4'h8;
+                  \$309  = 4'h8;
                 end
             4'h8:
                 if (ready) begin
-                  \$113  = 4'h9;
+                  \$309  = 4'h9;
                 end
             4'h9:
-                if (\done$127 ) begin
-                  \$113  = 4'ha;
+                if (\done$103 ) begin
+                  \$309  = 4'ha;
                 end
             4'ha:
                 if (ready) begin
-                  \$113  = 4'hb;
+                  \$309  = 4'hb;
                 end
             4'hb:
                 if (rvalid) begin
-                  \$113  = 4'hc;
+                  \$309  = 4'hc;
                 end
             4'hc:
                 if (ready) begin
-                  \$113  = 4'hd;
+                  \$309  = 4'hd;
                 end
             4'hd:
-                if (\done$127 ) begin
+                if (\done$103 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$95 ) begin
+                  if (\$284 ) begin
                     (* full_case = 32'd1 *)
-                    if (\$96 ) begin
-                      \$113  = 4'h0;
+                    if (\$285 ) begin
+                      \$309  = 4'h0;
                     end else begin
-                      \$113  = 4'h0;
+                      \$309  = 4'h0;
                     end
                   end else begin
-                    \$113  = 4'h2;
+                    \$309  = 4'h2;
                   end
                 end
           endcase
       5'h05:
           casez (sub)
             4'h0:
-                if (\$104 ) begin
-                  \$113  = 4'hc;
+                if (\$300 ) begin
+                  \$309  = 4'hc;
                 end else if (ready) begin
-                  \$113  = 4'h1;
+                  \$309  = 4'h1;
                 end
             4'h1:
                 if (rvalid) begin
-                  \$113  = 4'h2;
+                  \$309  = 4'h2;
                 end
             4'h2:
-                if (\$105 ) begin
-                  \$113  = 4'hc;
+                if (\$301 ) begin
+                  \$309  = 4'hc;
                 end else if (ready) begin
-                  \$113  = 4'h3;
+                  \$309  = 4'h3;
                 end
             4'h3:
                 if (rvalid) begin
-                  \$113  = 4'h4;
+                  \$309  = 4'h4;
                 end
             4'h4:
                 if (ready) begin
-                  \$113  = 4'h5;
+                  \$309  = 4'h5;
                 end
             4'h5:
                 if (rvalid) begin
-                  \$113  = 4'h6;
+                  \$309  = 4'h6;
                 end
             4'h6:
                 if (ready) begin
-                  \$113  = 4'h7;
+                  \$309  = 4'h7;
                 end
             4'h7:
                 if (rvalid) begin
-                  \$113  = 4'h8;
+                  \$309  = 4'h8;
                 end
             4'h8:
                 if (ready) begin
-                  \$113  = 4'h9;
+                  \$309  = 4'h9;
                 end
             4'h9:
                 if (rvalid) begin
-                  \$113  = 4'ha;
+                  \$309  = 4'ha;
                 end
             4'ha:
                 if (ready) begin
-                  \$113  = 4'hb;
+                  \$309  = 4'hb;
                 end
             4'hb:
-                if (\done$127 ) begin
-                  \$113  = 4'hc;
+                if (\done$103 ) begin
+                  \$309  = 4'hc;
                 end
             4'hc:
-                \$113  = 4'h0;
+                \$309  = 4'h0;
           endcase
     endcase
     if (rst) begin
-      \$113  = 4'h0;
+      \$309  = 4'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$114  = velocity_overflow;
+    \$310  = velocity_overflow;
     casez (state)
       5'h00:
-          if (\$71 ) begin
-            \$114  = 1'h0;
+          if (\$235 ) begin
+            \$310  = 1'h0;
           end
     endcase
     if (rst) begin
-      \$114  = 1'h0;
+      \$310  = 1'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$115  = state;
+    \$311  = state;
     casez (state)
       5'h00:
-          if (\$71 ) begin
-            \$115  = 5'h01;
+          if (\$235 ) begin
+            \$311  = 5'h01;
           end
       5'h01:
           (* full_case = 32'd1 *)
@@ -8469,30 +3277,30 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'he:
                 /* empty */;
             4'hf:
-                if (\done$127 ) begin
-                  \$115  = 5'h02;
+                if (\done$103 ) begin
+                  \$311  = 5'h02;
                 end
           endcase
       5'h02:
           (* full_case = 32'd1 *)
-          if (\$77 ) begin
+          if (\$273 ) begin
           end else begin
-            if (\done$127 ) begin
+            if (\done$103 ) begin
               (* full_case = 32'd1 *)
-              if (\$78 ) begin
-                \$115  = 5'h03;
+              if (\$274 ) begin
+                \$311  = 5'h03;
               end else begin
-                \$115  = 5'h01;
+                \$311  = 5'h01;
               end
             end
           end
       5'h03:
           (* full_case = 32'd1 *)
-          if (\$80 ) begin
+          if (\$276 ) begin
           end else begin
-            if (\done$127 ) begin
-              if (\$81 ) begin
-                \$115  = 5'h04;
+            if (\done$103 ) begin
+              if (\$277 ) begin
+                \$311  = 5'h04;
               end
             end
           end
@@ -8525,10 +3333,10 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hc:
                 /* empty */;
             4'hd:
-                if (\done$127 ) begin
-                  if (\$95 ) begin
-                    if (\$96 ) begin
-                      \$115  = 5'h05;
+                if (\done$103 ) begin
+                  if (\$284 ) begin
+                    if (\$285 ) begin
+                      \$311  = 5'h05;
                     end
                   end
                 end
@@ -8560,24 +3368,24 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hb:
                 /* empty */;
             4'hc:
-                if (\$106 ) begin
+                if (\$302 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$107 ) begin
+                  if (\$303 ) begin
                   end else begin
-                    if (\$108 ) begin
-                      \$115  = 5'h00;
+                    if (\$304 ) begin
+                      \$311  = 5'h00;
                     end
                   end
                 end
           endcase
     endcase
     if (rst) begin
-      \$115  = 5'h00;
+      \$311  = 5'h00;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$116  = pos_x;
+    \$312  = px;
     casez (state)
       5'h00:
           /* empty */;
@@ -8587,7 +3395,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h1:
                 if (rvalid) begin
-                  \$116  = dens_rd_data[19:0];
+                  \$312  = dens_rd_data[19:0];
                 end
             4'h2:
                 /* empty */;
@@ -8602,9 +3410,9 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'h7:
                 /* empty */;
             4'h8:
-                \$116  = next_pos_x;
+                \$312  = \$16 [19:0];
             4'h9:
-                \$116  = \$74 ;
+                \$312  = \$247 [19:0];
           endcase
       5'h02:
           /* empty */;
@@ -8618,18 +3426,18 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 if (rvalid) begin
                   casez (corner)
                     2'h0:
-                        \$116  = dens_rd_data[19:0];
+                        \$312  = dens_rd_data[19:0];
                   endcase
                 end
           endcase
     endcase
     if (rst) begin
-      \$116  = 20'h00000;
+      \$312  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$117  = pos_y;
+    \$313  = py;
     casez (state)
       5'h00:
           /* empty */;
@@ -8643,7 +3451,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h3:
                 if (rvalid) begin
-                  \$117  = dens_rd_data[19:0];
+                  \$313  = dens_rd_data[19:0];
                 end
             4'h4:
                 /* empty */;
@@ -8654,9 +3462,9 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'h7:
                 /* empty */;
             4'h8:
-                \$117  = next_pos_y;
+                \$313  = \$21 [19:0];
             4'h9:
-                \$117  = \$76 ;
+                \$313  = \$258 [19:0];
           endcase
       5'h02:
           /* empty */;
@@ -8672,18 +3480,18 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                     2'h0:
                         /* empty */;
                     2'h1:
-                        \$117  = dens_rd_data[19:0];
+                        \$313  = dens_rd_data[19:0];
                   endcase
                 end
           endcase
     endcase
     if (rst) begin
-      \$117  = 20'h00000;
+      \$313  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$118  = vx;
+    \$314  = vx;
     casez (state)
       5'h00:
           /* empty */;
@@ -8701,16 +3509,16 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h5:
                 if (rvalid) begin
-                  \$118  = dens_rd_data[19:0];
+                  \$314  = dens_rd_data[19:0];
                 end
             4'h6:
                 /* empty */;
             4'h7:
                 /* empty */;
             4'h8:
-                \$118  = { next_vel_x[18], next_vel_x };
+                \$314  = vx_adv;
             4'h9:
-                \$118  = \next_vel_x$125 ;
+                \$314  = \$261 [19:0];
           endcase
       5'h02:
           /* empty */;
@@ -8728,18 +3536,18 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                     2'h1:
                         /* empty */;
                     2'h2:
-                        \$118  = dens_rd_data[19:0];
+                        \$314  = dens_rd_data[19:0];
                   endcase
                 end
           endcase
     endcase
     if (rst) begin
-      \$118  = 20'h00000;
+      \$314  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$119  = vy;
+    \$315  = vy;
     casez (state)
       5'h00:
           /* empty */;
@@ -8761,12 +3569,12 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h7:
                 if (rvalid) begin
-                  \$119  = dens_rd_data[19:0];
+                  \$315  = dens_rd_data[19:0];
                 end
             4'h8:
-                \$119  = { next_vel_y[18], next_vel_y };
+                \$315  = vy_adv;
             4'h9:
-                \$119  = \next_vel_y$126 ;
+                \$315  = \$264 [19:0];
           endcase
       5'h02:
           /* empty */;
@@ -8787,18 +3595,18 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                     2'h2:
                         /* empty */;
                     2'h3:
-                        \$119  = dens_rd_data[19:0];
+                        \$315  = dens_rd_data[19:0];
                   endcase
                 end
           endcase
     endcase
     if (rst) begin
-      \$119  = 20'h00000;
+      \$315  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$120  = pos_j_x;
+    \$316  = jx;
     casez (state)
       5'h00:
           /* empty */;
@@ -8823,16 +3631,16 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'h8:
                 /* empty */;
             4'h9:
-                \$120  = \next_pos_x$121 ;
+                \$316  = \$268 [19:0];
           endcase
     endcase
     if (rst) begin
-      \$120  = 20'h00000;
+      \$316  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$121  = pos_j_y;
+    \$317  = jy;
     casez (state)
       5'h00:
           /* empty */;
@@ -8857,16 +3665,16 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'h8:
                 /* empty */;
             4'h9:
-                \$121  = \next_pos_y$123 ;
+                \$317  = \$272 [19:0];
           endcase
     endcase
     if (rst) begin
-      \$121  = 20'h00000;
+      \$317  = 20'h00000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$122  = corner;
+    \$318  = corner;
     casez (state)
       5'h00:
           /* empty */;
@@ -8876,11 +3684,11 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
           /* empty */;
       5'h03:
           (* full_case = 32'd1 *)
-          if (\$80 ) begin
+          if (\$276 ) begin
           end else begin
-            if (\done$127 ) begin
-              if (\$81 ) begin
-                \$122  = 2'h0;
+            if (\done$103 ) begin
+              if (\$277 ) begin
+                \$318  = 2'h0;
               end
             end
           end
@@ -8891,10 +3699,10 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'h1:
                 if (rvalid) begin
                   (* full_case = 32'd1 *)
-                  if (\$83 ) begin
-                    \$122  = 2'h0;
+                  if (\$279 ) begin
+                    \$318  = 2'h0;
                   end else begin
-                    \$122  = \$84 [1:0];
+                    \$318  = \$280 [1:0];
                   end
                 end
             4'h2:
@@ -8920,23 +3728,23 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hc:
                 /* empty */;
             4'hd:
-                if (\done$127 ) begin
+                if (\done$103 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$95 ) begin
-                    \$122  = 2'h0;
+                  if (\$284 ) begin
+                    \$318  = 2'h0;
                   end else begin
-                    \$122  = \$98 [1:0];
+                    \$318  = \$287 [1:0];
                   end
                 end
           endcase
     endcase
     if (rst) begin
-      \$122  = 2'h0;
+      \$318  = 2'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$123  = u_left;
+    \$319  = tmp0;
     casez (state)
       5'h00:
           /* empty */;
@@ -8956,7 +3764,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h3:
                 if (rvalid) begin
-                  \$123  = \$86 [31:0];
+                  \$319  = \$281 [23:0];
                 end
             4'h4:
                 /* empty */;
@@ -8966,7 +3774,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h7:
                 if (rvalid) begin
-                  \$123  = \$90 [31:0];
+                  \$319  = \$282 [23:0];
                 end
           endcase
       5'h05:
@@ -8979,17 +3787,17 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h3:
                 if (rvalid) begin
-                  \$123  = dens_rd_data;
+                  \$319  = dens_rd_data[23:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$123  = 32'd0;
+      \$319  = 24'h000000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$124  = u_right;
+    \$320  = tmp1;
     casez (state)
       5'h00:
           /* empty */;
@@ -9025,7 +3833,7 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'hb:
                 if (rvalid) begin
-                  \$124  = \$94 [31:0];
+                  \$320  = \$283 [23:0];
                 end
           endcase
       5'h05:
@@ -9042,17 +3850,17 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h5:
                 if (rvalid) begin
-                  \$124  = dens_rd_data;
+                  \$320  = dens_rd_data[23:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$124  = 32'd0;
+      \$320  = 24'h000000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$125  = iter_idx;
+    \$321  = iter_idx;
     casez (state)
       5'h00:
           /* empty */;
@@ -9091,10 +3899,10 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hc:
                 /* empty */;
             4'hd:
-                if (\done$127 ) begin
-                  if (\$95 ) begin
-                    if (\$96 ) begin
-                      \$125  = 6'h00;
+                if (\done$103 ) begin
+                  if (\$284 ) begin
+                    if (\$285 ) begin
+                      \$321  = 6'h00;
                     end
                   end
                 end
@@ -9126,26 +3934,26 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hb:
                 /* empty */;
             4'hc:
-                if (\$106 ) begin
+                if (\$302 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$107 ) begin
+                  if (\$303 ) begin
                   end else begin
                     (* full_case = 32'd1 *)
-                    if (\$108 ) begin
+                    if (\$304 ) begin
                     end else begin
-                      \$125  = \$109 [5:0];
+                      \$321  = \$305 [5:0];
                     end
                   end
                 end
           endcase
     endcase
     if (rst) begin
-      \$125  = 6'h00;
+      \$321  = 6'h00;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$126  = colour;
+    \$322  = colour;
     casez (state)
       5'h00:
           /* empty */;
@@ -9184,10 +3992,10 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hc:
                 /* empty */;
             4'hd:
-                if (\done$127 ) begin
-                  if (\$95 ) begin
-                    if (\$96 ) begin
-                      \$126  = 1'h0;
+                if (\done$103 ) begin
+                  if (\$284 ) begin
+                    if (\$285 ) begin
+                      \$322  = 1'h0;
                     end
                   end
                 end
@@ -9219,23 +4027,23 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
             4'hb:
                 /* empty */;
             4'hc:
-                if (\$106 ) begin
+                if (\$302 ) begin
                   (* full_case = 32'd1 *)
-                  if (\$107 ) begin
-                    \$126  = 1'h1;
+                  if (\$303 ) begin
+                    \$322  = 1'h1;
                   end else begin
-                    \$126  = 1'h0;
+                    \$322  = 1'h0;
                   end
                 end
           endcase
     endcase
     if (rst) begin
-      \$126  = 1'h0;
+      \$322  = 1'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$127  = density;
+    \$323  = tmp5;
     casez (state)
       5'h00:
           /* empty */;
@@ -9253,17 +4061,17 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h1:
                 if (rvalid) begin
-                  \$127  = dens_rd_data;
+                  \$323  = dens_rd_data[23:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$127  = 32'd0;
+      \$323  = 24'h000000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$128  = v_bottom;
+    \$324  = tmp2;
     casez (state)
       5'h00:
           /* empty */;
@@ -9293,17 +4101,17 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h7:
                 if (rvalid) begin
-                  \$128  = dens_rd_data;
+                  \$324  = dens_rd_data[23:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$128  = 32'd0;
+      \$324  = 24'h000000;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$3 ) begin end
-    \$129  = v_top;
+    \$325  = tmp3;
     casez (state)
       5'h00:
           /* empty */;
@@ -9337,12 +4145,12 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
                 /* empty */;
             4'h9:
                 if (rvalid) begin
-                  \$129  = dens_rd_data;
+                  \$325  = dens_rd_data[23:0];
                 end
           endcase
     endcase
     if (rst) begin
-      \$129  = 32'd0;
+      \$325  = 24'h000000;
     end
   end
   assign sclk = psram_sclk;
@@ -9355,64 +4163,93 @@ module \PendantSystemTop.sys.core (rst, dq_i, start, \busy$20 , dens_rd_valid, p
   assign init_done = psram_init_done;
   assign busy = psram_busy;
   assign error = psram_error;
-  assign stage = state;
-  assign px = pos_x;
-  assign py = pos_y;
-  assign vel_x = vx[18:0];
-  assign vel_y = vy[18:0];
-  assign \gx$32  = gx;
-  assign \gy$34  = gy;
-  assign pos_i_x = pos_x;
-  assign pos_i_y = pos_y;
-  assign jx = pos_j_x;
-  assign jy = pos_j_y;
-  assign \pos_x$41  = pos_x;
-  assign \pos_y$42  = pos_y;
-  assign \vel_x$43  = vx;
-  assign \vel_y$44  = vy;
-  assign gx_q12 = { pos_x[19], pos_x };
-  assign \gy_q12$48  = { pos_y[19], pos_y };
-  assign tmp0 = u_left;
-  assign tmp1 = u_right;
-  assign tmp2 = v_bottom;
-  assign tmp3 = v_top;
-  assign pressure = 32'd0;
-  assign tmp4 = 32'd0;
-  assign tmp5 = density;
   assign rready = 1'h1;
+  assign stage = state;
   assign rdata = dens_rd_data;
-  assign u_node = \$5 [8:0];
-  assign corner_x_0 = { 1'h0, \$130  };
-  assign corner_x_3 = { 1'h0, \$130  };
-  assign corner_y_0 = { 1'h0, \$131  };
-  assign corner_y_1 = { 1'h0, \$131  };
-  assign v_node = \$11 [8:0];
-  assign \corner_x_0$85  = { 1'h0, \$132  };
-  assign \corner_x_3$88  = { 1'h0, \$132  };
-  assign \corner_y_0$89  = { 1'h0, \$133  };
-  assign \corner_y_1$90  = { 1'h0, \$133  };
-  assign d_node = \$15 [7:0];
-  assign \corner_x_0$94  = { 1'h0, \$134  };
-  assign \corner_x_3$97  = { 1'h0, \$134  };
-  assign \corner_y_0$98  = { 1'h0, \$135  };
-  assign \corner_y_1$99  = { 1'h0, \$135  };
-  assign \$3  = { 3'h0, \$2 , 4'h0 };
-  assign \$7  = { 3'h0, \$6 , 4'h0 };
-  assign \$13  = { 3'h0, \$12 , 4'h0 };
-  assign \$19  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$21  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$23  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$25  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$27  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$29  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$31  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$34  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$38  = { 1'h0, idx[7:0], 2'h0 };
-  assign \$63  = { 4'h0, idx[7:4] };
-  assign \$66  = { 4'h0, idx[7:4] };
-  assign \$81  = 1'h0;
-  assign \$89  = { \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32], \$88 [32:12] };
-  assign \$93  = { \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32], \$92 [32:12] };
+  assign px_adv = \$16 [19:0];
+  assign py_adv = \$21 [19:0];
+  assign rx = \$22 [19:0];
+  assign ry = \$23 [19:0];
+  assign abs_rx = \$26 [19:0];
+  assign abs_ry = \$29 [19:0];
+  assign dx_pair = \$35 [19:0];
+  assign dy_pair = \$36 [19:0];
+  assign i0 = { 1'h0, gx_clip[15:12] };
+  assign j0 = { 1'h0, gy_clip[15:12] };
+  assign frac_x = gx_clip[11:0];
+  assign frac_y = gy_clip[11:0];
+  assign cx_out = \$64 [4:0];
+  assign cy_out = \$69 [4:0];
+  assign wx_term = \$74 [12:0];
+  assign wy_term = \$79 [12:0];
+  assign corner_w = \$80 [12:0];
+  assign d_node = \$82 [7:0];
+  assign u_node = \$84 [8:0];
+  assign v_node = \$87 [8:0];
+  assign mul_q12 = \$92 [22:0];
+  assign div_raw = \$95 [23:0];
+  assign comp_approx = \$99 [23:0];
+  assign div_corr = \$102 [23:0];
+  assign p_delta = \$104 [23:0];
+  assign u_left_next = \$119 [23:0];
+  assign \$2  = { gx[7], gx, 6'h00 };
+  assign \$3  = { gx[7], gx, 2'h0 };
+  assign \$4  = { gy[7], gy, 6'h00 };
+  assign \$5  = { gy[7], gy, 2'h0 };
+  assign \$12  = { vx_adv[19], vx_adv, 6'h00 };
+  assign \$13  = { vx_adv[19], vx_adv, 2'h0 };
+  assign \$15  = { \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27], \$14 [27:12] };
+  assign \$17  = { vy_adv[19], vy_adv, 6'h00 };
+  assign \$18  = { vy_adv[19], vy_adv, 2'h0 };
+  assign \$20  = { \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27], \$19 [27:12] };
+  assign \$31  = { 1'h0, \$29 [19:1] };
+  assign \$33  = { 1'h0, \$26 [19:1] };
+  assign \$80  = { 12'h000, w_prod[25:12] };
+  assign \$81  = { 3'h0, \$64 [3:0], 4'h0 };
+  assign \$83  = { 3'h0, \$64 [4:0], 4'h0 };
+  assign \$85  = { 3'h0, \$64 [4:0], 4'h0 };
+  assign \$92  = { mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34], mul_p[34:12] };
+  assign \$98  = { \$97 [24], \$97 [24:1] };
+  assign \$100  = { \$99 [23:0], 1'h0 };
+  assign \$104  = { \$103 [24], \$103 [24:1] };
+  assign \$109  = \$108 ;
+  assign \$113  = \$112 ;
+  assign \$123  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$125  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$127  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$129  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$131  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$133  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$135  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$138  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$142  = { 1'h0, idx[7:0], 2'h0 };
+  assign \$147  = \$146 ;
+  assign \$150  = \$149 ;
+  assign \$163  = \$162 ;
+  assign \$167  = \$166 ;
+  assign \$173  = \$172 ;
+  assign \$176  = \$175 ;
+  assign \$188  = \$187 ;
+  assign \$193  = \$192 ;
+  assign \$200  = \$199 ;
+  assign \$203  = \$202 ;
+  assign \$213  = \$212 ;
+  assign \$216  = \$215 ;
+  assign \$227  = { 4'h0, idx[7:4] };
+  assign \$230  = { 4'h0, idx[7:4] };
+  assign \$237  = { \$22 [19], \$22 [19], \$22 [19], \$22 [19:3] };
+  assign \$241  = { \$35 [19], \$35 [19], \$35 [19:2] };
+  assign \$243  = { \$22 [19], \$22 [19], \$22 [19], \$22 [19:3] };
+  assign \$248  = { \$23 [19], \$23 [19], \$23 [19], \$23 [19:3] };
+  assign \$252  = { \$36 [19], \$36 [19], \$36 [19:2] };
+  assign \$254  = { \$23 [19], \$23 [19], \$23 [19], \$23 [19:3] };
+  assign \$259  = { vx[19], vx[19:1] };
+  assign \$262  = { vy[19], vy[19:1] };
+  assign \$265  = { \$22 [19], \$22 [19], \$22 [19], \$22 [19:3] };
+  assign \$269  = { \$23 [19], \$23 [19], \$23 [19], \$23 [19:3] };
+  assign \$277  = 1'h0;
+  assign \$292  = \$291 ;
+  assign \$295  = \$294 ;
 endmodule
 
 (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:437" *)
@@ -9585,7 +4422,6 @@ module \PendantSystemTop.sys.core.bank (rst, dq_i, \ready$45 , busy, ce_n, dq_o,
   reg [31:0] write_latched_data = 32'd0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:184" *)
   wire wvalid;
-  assign \$1  = address_latched * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:474" *) 3'h4;
   assign \ready$45  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:476" *) state;
   assign busy = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:477" *) state;
   assign \$2  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:478" *) 1'h1;
@@ -9949,6 +4785,7 @@ module \PendantSystemTop.sys.core.bank (rst, dq_i, \ready$45 , busy, ce_n, dq_o,
   assign \init_done$44  = qpi_init_done;
   assign write_latched = write;
   assign \rready$62  = 1'h1;
+  assign \$1  = { 1'h0, address_latched, 2'h0 };
 endmodule
 
 (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:200" *)
@@ -11143,1448 +5980,10 @@ module \PendantSystemTop.sys.core.bank.psram.level_shifter (dq_oe, translator_di
   assign \$4  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:124" *) dq_oe : \$3 ;
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4831" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.divider (rst, clk);
-  reg \$auto$verilog_backend.cc:2524:dump_module$6  = 0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
-  input rst;
-  wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
-  input clk;
-  wire clk;
-  wire \$1 ;
-  wire [48:0] \$10 ;
-  wire [48:0] \$11 ;
-  wire \$12 ;
-  wire [6:0] \$13 ;
-  wire \$14 ;
-  wire \$15 ;
-  wire \$16 ;
-  wire [48:0] \$17 ;
-  wire [48:0] \$18 ;
-  wire \$19 ;
-  wire \$2 ;
-  wire [48:0] \$20 ;
-  wire [32:0] \$21 ;
-  wire \$22 ;
-  wire [32:0] \$23 ;
-  reg \$24 ;
-  reg \$25 ;
-  reg [47:0] \$26 ;
-  reg [47:0] \$27 ;
-  reg [31:0] \$28 ;
-  reg [5:0] \$29 ;
-  wire \$3 ;
-  reg \$30 ;
-  reg [31:0] \$31 ;
-  wire \$4 ;
-  wire [48:0] \$5 ;
-  wire [48:0] \$6 ;
-  wire \$7 ;
-  wire [31:0] \$8 ;
-  wire \$9 ;
-  (* init = 1'h0 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4837" *)
-  wire active;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4827" *)
-  reg busy = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4832" *)
-  reg [5:0] count = 6'h00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4836" *)
-  reg [31:0] denom = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4825" *)
-  wire [31:0] denominator;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4828" *)
-  reg done = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4833" *)
-  reg neg = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4824" *)
-  wire signed [47:0] numerator;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4835" *)
-  reg [47:0] quot = 48'h000000000000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4826" *)
-  reg signed [31:0] quotient = 32'd0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4834" *)
-  reg [47:0] rem = 48'h000000000000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4823" *)
-  wire start;
-  assign \$1  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4842" *) busy;
-  assign \$9  = { rem[46:0], quot[47] } >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4856" *) denom;
-  assign \$10  = { rem[46:0], quot[47] } - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4857" *) denom;
-  assign \$11  = \$9  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4857" *) \$10  : { 1'h0, rem[46:0], quot[47] };
-  assign \$12  = { rem[46:0], quot[47] } >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4856" *) denom;
-  assign \$13  = count - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4862" *) 1'h1;
-  assign \$14  = count == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4864" *) 1'h1;
-  assign \$15  = { rem[46:0], quot[47] } >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4856" *) denom;
-  assign \$16  = { rem[46:0], quot[47] } >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4856" *) denom;
-  assign \$17  = { rem[46:0], quot[47] } - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4857" *) denom;
-  assign \$18  = \$16  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4857" *) \$17  : { 1'h0, rem[46:0], quot[47] };
-  assign \$19  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4865" *) \$18 ;
-  assign \$20  = { quot[46:0], \$15  } + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4865" *) \$19 ;
-  assign \$21  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4867" *) $signed(\$20 [31:0]);
-  assign \$22  = { rem[46:0], quot[47] } >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4856" *) denom;
-  assign \$23  = neg ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4867" *) \$21  : { quot[30], quot[30:0], \$22  };
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4828" *)
-  always @(posedge clk)
-    done <= \$24 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4833" *)
-  always @(posedge clk)
-    neg <= \$25 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4835" *)
-  always @(posedge clk)
-    quot <= \$26 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4834" *)
-  always @(posedge clk)
-    rem <= \$27 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4836" *)
-  always @(posedge clk)
-    denom <= \$28 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4832" *)
-  always @(posedge clk)
-    count <= \$29 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4837" *)
-  always @(posedge clk)
-    busy <= \$30 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4826" *)
-  always @(posedge clk)
-    quotient <= \$31 ;
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$24  = 1'h0;
-    if (\$2 ) begin
-    end else if (busy) begin
-      if (\$14 ) begin
-        \$24  = 1'h1;
-      end
-    end
-    if (rst) begin
-      \$24  = 1'h0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$25  = neg;
-    if (\$2 ) begin
-      \$25  = \$3 ;
-    end
-    if (rst) begin
-      \$25  = 1'h0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$26  = quot;
-    if (\$2 ) begin
-      \$26  = \$6 [47:0];
-    end else if (busy) begin
-      \$26  = { quot[46:0], \$12  };
-    end
-    if (rst) begin
-      \$26  = 48'h000000000000;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$27  = rem;
-    if (\$2 ) begin
-      \$27  = 48'h000000000000;
-    end else if (busy) begin
-      \$27  = \$11 [47:0];
-    end
-    if (rst) begin
-      \$27  = 48'h000000000000;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$28  = denom;
-    if (\$2 ) begin
-      \$28  = \$8 ;
-    end
-    if (rst) begin
-      \$28  = 32'd0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$29  = count;
-    if (\$2 ) begin
-      \$29  = 6'h30;
-    end else if (busy) begin
-      \$29  = \$13 [5:0];
-    end
-    if (rst) begin
-      \$29  = 6'h00;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$30  = busy;
-    if (\$2 ) begin
-      \$30  = 1'h1;
-    end else if (busy) begin
-      if (\$14 ) begin
-        \$30  = 1'h0;
-      end
-    end
-    if (rst) begin
-      \$30  = 1'h0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
-    \$31  = quotient;
-    if (\$2 ) begin
-    end else if (busy) begin
-      if (\$14 ) begin
-        \$31  = \$23 [31:0];
-      end
-    end
-    if (rst) begin
-      \$31  = 32'd0;
-    end
-  end
-  assign active = busy;
-  assign start = 1'h0;
-  assign numerator = 48'h000000000000;
-  assign denominator = 32'd0;
-  assign \$2  = 1'h0;
-  assign \$3  = 1'h0;
-  assign \$4  = 1'h0;
-  assign \$5  = 49'h0000000000000;
-  assign \$6  = 49'h0000000000000;
-  assign \$7  = 1'h1;
-  assign \$8  = 32'd1;
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1516" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.gravity_dp (next_vel_y, next_pos_x, next_pos_y, pos_x, pos_y, vel_x, vel_y, gx, gy, next_vel_x);
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1513" *)
-  output signed [18:0] next_vel_y;
-  wire signed [18:0] next_vel_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1510" *)
-  output signed [19:0] next_pos_x;
-  wire signed [19:0] next_pos_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1511" *)
-  output signed [19:0] next_pos_y;
-  wire signed [19:0] next_pos_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1503" *)
-  input signed [19:0] pos_x;
-  wire signed [19:0] pos_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1504" *)
-  input signed [19:0] pos_y;
-  wire signed [19:0] pos_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1505" *)
-  input signed [18:0] vel_x;
-  wire signed [18:0] vel_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1506" *)
-  input signed [18:0] vel_y;
-  wire signed [18:0] vel_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1507" *)
-  input signed [7:0] gx;
-  wire signed [7:0] gx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1508" *)
-  input signed [7:0] gy;
-  wire signed [7:0] gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1512" *)
-  output signed [18:0] next_vel_x;
-  wire signed [18:0] next_vel_x;
-  wire [14:0] \$1 ;
-  wire [26:0] \$10 ;
-  wire [20:0] \$11 ;
-  wire [20:0] \$12 ;
-  wire [14:0] \$2 ;
-  wire \$3 ;
-  wire \$4 ;
-  wire [19:0] \$5 ;
-  wire \$6 ;
-  wire \$7 ;
-  wire [19:0] \$8 ;
-  wire [26:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1545" *)
-  wire signed [15:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1543" *)
-  wire signed [26:0] dx_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1546" *)
-  wire signed [15:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1544" *)
-  wire signed [26:0] dy_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1522" *)
-  wire signed [15:0] gx_delta;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1523" *)
-  wire signed [15:0] gy_delta;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1526" *)
-  wire signed [19:0] vx_clip_wide;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1524" *)
-  wire signed [19:0] vx_sum;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1527" *)
-  wire signed [19:0] vy_clip_wide;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1525" *)
-  wire signed [19:0] vy_sum;
-  assign \$1  = $signed(gx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1530" *) $signed(8'h44);
-  assign \$2  = $signed(gy) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1531" *) $signed(8'h44);
-  assign vx_sum = $signed(vel_x) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1532" *) $signed(\$1 );
-  assign vy_sum = $signed(vel_y) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1533" *) $signed(\$2 );
-  assign \$3  = $signed(vx_sum) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1535" *) $signed(19'h28000);
-  assign \$4  = $signed(vx_sum) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1536" *) $signed(19'h58000);
-  assign \$5  = \$4  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1536" *) 20'hd8000 : vx_sum;
-  assign vx_clip_wide = \$3  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1535" *) 20'h28000 : \$5 ;
-  assign \$6  = $signed(vy_sum) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1537" *) $signed(19'h28000);
-  assign \$7  = $signed(vy_sum) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1538" *) $signed(19'h58000);
-  assign \$8  = \$7  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1538" *) 20'hd8000 : vy_sum;
-  assign vy_clip_wide = \$6  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1537" *) 20'h28000 : \$8 ;
-  assign dx_product = $signed(vx_clip_wide[18:0]) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1549" *) $signed(8'h44);
-  assign dy_product = $signed(vy_clip_wide[18:0]) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1550" *) $signed(8'h44);
-  assign \$11  = $signed(pos_x) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1553" *) $signed(\$9 [15:0]);
-  assign \$12  = $signed(pos_y) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1554" *) $signed(\$10 [15:0]);
-  assign gx_delta = { \$1 [14], \$1  };
-  assign gy_delta = { \$2 [14], \$2  };
-  assign dx = \$9 [15:0];
-  assign dy = \$10 [15:0];
-  assign next_vel_x = vx_clip_wide[18:0];
-  assign next_vel_y = vy_clip_wide[18:0];
-  assign next_pos_x = \$11 [19:0];
-  assign next_pos_y = \$12 [19:0];
-  assign \$9  = { dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26], dx_product[26:12] };
-  assign \$10  = { dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26], dy_product[26:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1958" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.pair_dp (next_i_y, pos_i_x, pos_i_y, pos_j_x, pos_j_y, next_i_x);
-  reg \$auto$verilog_backend.cc:2524:dump_module$7  = 0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1949" *)
-  output signed [20:0] next_i_y;
-  wire signed [20:0] next_i_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1943" *)
-  input signed [19:0] pos_i_x;
-  wire signed [19:0] pos_i_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1944" *)
-  input signed [19:0] pos_i_y;
-  wire signed [19:0] pos_i_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1945" *)
-  input signed [19:0] pos_j_x;
-  wire signed [19:0] pos_j_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1946" *)
-  input signed [19:0] pos_j_y;
-  wire signed [19:0] pos_j_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1948" *)
-  output signed [20:0] next_i_x;
-  wire signed [20:0] next_i_x;
-  wire \$1 ;
-  wire [30:0] \$10 ;
-  wire [30:0] \$11 ;
-  wire [35:0] \$12 ;
-  wire [35:0] \$13 ;
-  wire [35:0] \$14 ;
-  wire [35:0] \$15 ;
-  wire [24:0] \$16 ;
-  wire [24:0] \$17 ;
-  wire [24:0] \$18 ;
-  wire [24:0] \$19 ;
-  wire \$2 ;
-  wire \$3 ;
-  wire \$4 ;
-  wire [42:0] \$5 ;
-  wire \$6 ;
-  wire \$7 ;
-  wire [30:0] \$8 ;
-  wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1968" *)
-  wire close_distance;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1966" *)
-  wire close_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1967" *)
-  wire close_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1973" *)
-  wire signed [23:0] corr_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1971" *)
-  wire signed [35:0] corr_x_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1974" *)
-  wire signed [23:0] corr_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1972" *)
-  wire signed [35:0] corr_y_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1965" *)
-  wire [30:0] d2_q12;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1964" *)
-  wire [42:0] d2_sum;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1953" *)
-  wire did_correct;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1960" *)
-  wire signed [20:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1962" *)
-  wire [41:0] dx_sq;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1961" *)
-  wire signed [20:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1963" *)
-  wire [41:0] dy_sq;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1955" *)
-  reg [13:0] factor;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1970" *)
-  wire signed [14:0] factor_signed;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1954" *)
-  wire [5:0] lut_index;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1950" *)
-  wire signed [20:0] next_j_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1951" *)
-  wire signed [20:0] next_j_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1952" *)
-  wire pair_is_close;
-  assign dx = $signed(pos_i_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1977" *) $signed(pos_j_x);
-  assign dy = $signed(pos_i_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1978" *) $signed(pos_j_y);
-  assign \$1  = $signed(dx) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1980" *) $signed(13'h1666);
-  assign \$2  = $signed(dx) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1980" *) $signed(13'h099a);
-  assign close_x = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1980" *) \$2 ;
-  assign \$3  = $signed(dy) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1981" *) $signed(13'h1666);
-  assign \$4  = $signed(dy) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1981" *) $signed(13'h099a);
-  assign close_y = \$3  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1981" *) \$4 ;
-  assign pair_is_close = close_x & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1982" *) close_y;
-  assign dx_sq = $signed(dx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1984" *) $signed(dx);
-  assign dy_sq = $signed(dy) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1985" *) $signed(dy);
-  assign d2_sum = dx_sq + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1986" *) dy_sq;
-  assign \$6  = \$5 [30:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1988" *) 1'h0;
-  assign \$7  = \$5 [30:0] < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1988" *) 11'h5c3;
-  assign close_distance = \$6  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1988" *) \$7 ;
-  assign did_correct = pair_is_close & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1989" *) close_distance;
-  assign \$9  = \$8  > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1991" *) 6'h3f;
-  assign \$11  = \$9  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1991" *) 31'h0000003f : \$10 ;
-  assign corr_x_product = $signed(dx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1995" *) $signed({ 1'h0, factor });
-  assign corr_y_product = $signed(dy) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1996" *) $signed({ 1'h0, factor });
-  assign \$13  = did_correct ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1997" *) \$12  : 36'h000000000;
-  assign \$15  = did_correct ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1998" *) \$14  : 36'h000000000;
-  assign \$16  = $signed(pos_i_x) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2000" *) $signed(\$13 [23:0]);
-  assign \$17  = $signed(pos_i_y) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2001" *) $signed(\$15 [23:0]);
-  assign \$18  = $signed(pos_j_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2002" *) $signed(\$13 [23:0]);
-  assign \$19  = $signed(pos_j_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2003" *) $signed(\$15 [23:0]);
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    (* full_case = 32'd1 *)
-    casez (\$11 [5:0])
-      6'h00:
-          factor = 14'h2948;
-      6'h01:
-          factor = 14'h15ce;
-      6'h02:
-          factor = 14'h0fcf;
-      6'h03:
-          factor = 14'h0c9e;
-      6'h04:
-          factor = 14'h0a8f;
-      6'h05:
-          factor = 14'h0918;
-      6'h06:
-          factor = 14'h07fb;
-      6'h07:
-          factor = 14'h0719;
-      6'h08:
-          factor = 14'h0660;
-      6'h09:
-          factor = 14'h05c5;
-      6'h0a:
-          factor = 14'h0541;
-      6'h0b:
-          factor = 14'h04cf;
-      6'h0c:
-          factor = 14'h046a;
-      6'h0d:
-          factor = 14'h0411;
-      6'h0e:
-          factor = 14'h03c2;
-      6'h0f:
-          factor = 14'h037a;
-      6'h10:
-          factor = 14'h0339;
-      6'h11:
-          factor = 14'h02fd;
-      6'h12:
-          factor = 14'h02c7;
-      6'h13:
-          factor = 14'h0294;
-      6'h14:
-          factor = 14'h0266;
-      6'h15:
-          factor = 14'h023a;
-      6'h16:
-          factor = 14'h0212;
-      6'h17:
-          factor = 14'h01ec;
-      6'h18:
-          factor = 14'h01c8;
-      6'h19:
-          factor = 14'h01a7;
-      6'h1a:
-          factor = 14'h0188;
-      6'h1b:
-          factor = 14'h016a;
-      6'h1c:
-          factor = 14'h014e;
-      6'h1d:
-          factor = 14'h0133;
-      6'h1e:
-          factor = 14'h011a;
-      6'h1f:
-          factor = 14'h0101;
-      6'h20:
-          factor = 14'h00ea;
-      6'h21:
-          factor = 14'h00d4;
-      6'h22:
-          factor = 14'h00bf;
-      6'h23:
-          factor = 14'h00ab;
-      6'h24:
-          factor = 14'h0098;
-      6'h25:
-          factor = 14'h0085;
-      6'h26:
-          factor = 14'h0074;
-      6'h27:
-          factor = 14'h0062;
-      6'h28:
-          factor = 14'h0052;
-      6'h29:
-          factor = 14'h0042;
-      6'h2a:
-          factor = 14'h0033;
-      6'h2b:
-          factor = 14'h0024;
-      6'h2c:
-          factor = 14'h0016;
-      6'h2d:
-          factor = 14'h0008;
-      6'h2e:
-          factor = 14'h0000;
-      6'h2f:
-          factor = 14'h0000;
-      6'h30:
-          factor = 14'h0000;
-      6'h31:
-          factor = 14'h0000;
-      6'h32:
-          factor = 14'h0000;
-      6'h33:
-          factor = 14'h0000;
-      6'h34:
-          factor = 14'h0000;
-      6'h35:
-          factor = 14'h0000;
-      6'h36:
-          factor = 14'h0000;
-      6'h37:
-          factor = 14'h0000;
-      6'h38:
-          factor = 14'h0000;
-      6'h39:
-          factor = 14'h0000;
-      6'h3a:
-          factor = 14'h0000;
-      6'h3b:
-          factor = 14'h0000;
-      6'h3c:
-          factor = 14'h0000;
-      6'h3d:
-          factor = 14'h0000;
-      6'h3e:
-          factor = 14'h0000;
-      6'h3f:
-          factor = 14'h0000;
-    endcase
-  end
-  assign d2_q12 = \$5 [30:0];
-  assign lut_index = \$11 [5:0];
-  assign factor_signed = { 1'h0, factor };
-  assign corr_x = \$13 [23:0];
-  assign corr_y = \$15 [23:0];
-  assign next_j_x = \$18 [20:0];
-  assign next_j_y = \$19 [20:0];
-  assign next_i_x = \$16 [20:0];
-  assign next_i_y = \$17 [20:0];
-  assign \$5  = { 12'h000, d2_sum[42:12] };
-  assign \$8  = { 5'h00, \$5 [30:5] };
-  assign \$10  = { 5'h00, \$5 [30:5] };
-  assign \$12  = { corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35], corr_x_product[35:12] };
-  assign \$14  = { corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35], corr_y_product[35:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3034" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.press_dp (sx0, sx1, sy0, sy1, u_left_next, u_left, u_right, density, v_bottom, v_top, s_count);
-  reg \$auto$verilog_backend.cc:2524:dump_module$8  = 0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3020" *)
-  input sx0;
-  wire sx0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3021" *)
-  input sx1;
-  wire sx1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3022" *)
-  input sy0;
-  wire sy0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3023" *)
-  input sy1;
-  wire sy1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3028" *)
-  output signed [31:0] u_left_next;
-  wire signed [31:0] u_left_next;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3013" *)
-  input signed [31:0] u_left;
-  wire signed [31:0] u_left;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3014" *)
-  input signed [31:0] u_right;
-  wire signed [31:0] u_right;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3018" *)
-  input [31:0] density;
-  wire [31:0] density;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3015" *)
-  input signed [31:0] v_bottom;
-  wire signed [31:0] v_bottom;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3016" *)
-  input signed [31:0] v_top;
-  wire signed [31:0] v_top;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3019" *)
-  input [2:0] s_count;
-  wire [2:0] s_count;
-  wire [32:0] \$1 ;
-  reg [15:0] \$10 ;
-  wire [80:0] \$11 ;
-  wire [32:0] \$12 ;
-  wire [31:0] \$13 ;
-  wire [32:0] \$14 ;
-  wire [31:0] \$15 ;
-  wire [32:0] \$16 ;
-  wire [31:0] \$17 ;
-  wire [32:0] \$18 ;
-  wire [31:0] \$19 ;
-  wire [32:0] \$2 ;
-  wire [32:0] \$20 ;
-  wire [33:0] \$3 ;
-  wire [43:0] \$4 ;
-  wire [64:0] \$5 ;
-  wire \$6 ;
-  wire [65:0] \$7 ;
-  wire [64:0] \$8 ;
-  wire [64:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3041" *)
-  wire signed [63:0] compression;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3040" *)
-  wire signed [63:0] compression_raw;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3038" *)
-  wire [63:0] density_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3039" *)
-  wire signed [63:0] density_scaled;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3043" *)
-  wire signed [63:0] div_corrected;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3037" *)
-  wire signed [63:0] div_raw;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3025" *)
-  wire signed [63:0] divergence_after_drift;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3042" *)
-  wire signed [63:0] drift;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3017" *)
-  wire signed [31:0] pressure;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3026" *)
-  wire signed [31:0] pressure_delta;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3045" *)
-  wire signed [79:0] pressure_delta_wide;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3027" *)
-  wire signed [31:0] pressure_next;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3044" *)
-  wire signed [79:0] pressure_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3029" *)
-  wire signed [31:0] u_right_next;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3030" *)
-  wire signed [31:0] v_bottom_next;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3031" *)
-  wire signed [31:0] v_top_next;
-  assign \$1  = $signed(u_right) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3048" *) $signed(u_left);
-  assign \$2  = $signed(v_top) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3049" *) $signed(v_bottom);
-  assign \$3  = $signed(\$1 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3048" *) $signed(\$2 );
-  assign \$4  = density * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3050" *) 11'h6c3;
-  assign \$5  = $signed(density_scaled) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3052" *) $signed(14'h1000);
-  assign \$6  = $signed(\$5 [63:0]) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3053" *) $signed(1'h0);
-  assign compression = \$6  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3053" *) \$5 [63:0] : 64'h0000000000000000;
-  assign \$7  = $signed(compression) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3054" *) $signed(3'h3);
-  assign \$8  = $signed(\$3 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3055" *) $signed(\$7 [63:0]);
-  assign \$9  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3057" *) $signed(\$8 [63:0]);
-  assign \$11  = $signed(\$9 ) * (* src = "/home/ttuser/Pendent/src/Amaranth/venv/lib/python3.10/site-packages/amaranth/hdl/_ast.py:2425" *) $signed(\$10 );
-  assign \$12  = $signed(1'h0) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3060" *) $signed(pressure_delta_wide[31:0]);
-  assign \$13  = sx0 ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3061" *) pressure_delta_wide[31:0] : 32'd0;
-  assign \$14  = $signed(u_left) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3061" *) $signed(\$13 );
-  assign \$15  = sx1 ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3062" *) pressure_delta_wide[31:0] : 32'd0;
-  assign \$16  = $signed(u_right) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3062" *) $signed(\$15 );
-  assign \$17  = sy0 ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3063" *) pressure_delta_wide[31:0] : 32'd0;
-  assign \$18  = $signed(v_bottom) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3063" *) $signed(\$17 );
-  assign \$19  = sy1 ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3064" *) pressure_delta_wide[31:0] : 32'd0;
-  assign \$20  = $signed(v_top) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:3064" *) $signed(\$19 );
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$8 ) begin end
-    \$10  = 16'h0000;
-    casez (s_count)
-      3'h0:
-          \$10  = 16'h0000;
-      3'h1:
-          \$10  = 16'h199a;
-      3'h2:
-          \$10  = 16'h0ccd;
-      3'h3:
-          \$10  = 16'h0889;
-      3'h4:
-          \$10  = 16'h0666;
-    endcase
-  end
-  assign div_raw = { \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3 [33], \$3  };
-  assign density_product = { 20'h00000, \$4  };
-  assign compression_raw = \$5 [63:0];
-  assign drift = \$7 [63:0];
-  assign div_corrected = \$8 [63:0];
-  assign divergence_after_drift = \$8 [63:0];
-  assign pressure_product = \$11 [79:0];
-  assign pressure_delta = pressure_delta_wide[31:0];
-  assign pressure_next = \$12 [31:0];
-  assign pressure = 32'd0;
-  assign u_right_next = \$16 [31:0];
-  assign v_bottom_next = \$18 [31:0];
-  assign v_top_next = \$20 [31:0];
-  assign u_left_next = \$14 [31:0];
-  assign density_scaled = { 32'h00000000, \$4 [43:12] };
-  assign pressure_delta_wide = { \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79], \$11 [79:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2249" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.wall_dp (next_pos_y, next_vel_x, next_vel_y, pos_x, pos_y, vel_x, vel_y, next_pos_x);
-  reg \$auto$verilog_backend.cc:2524:dump_module$9  = 0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2243" *)
-  output signed [19:0] next_pos_y;
-  wire signed [19:0] next_pos_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2244" *)
-  output signed [19:0] next_vel_x;
-  wire signed [19:0] next_vel_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2245" *)
-  output signed [19:0] next_vel_y;
-  wire signed [19:0] next_vel_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2237" *)
-  input signed [19:0] pos_x;
-  wire signed [19:0] pos_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2238" *)
-  input signed [19:0] pos_y;
-  wire signed [19:0] pos_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2239" *)
-  input signed [19:0] vel_x;
-  wire signed [19:0] vel_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2240" *)
-  input signed [19:0] vel_y;
-  wire signed [19:0] vel_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2242" *)
-  output signed [19:0] next_pos_x;
-  wire signed [19:0] next_pos_x;
-  wire [42:0] \$1 ;
-  wire [34:0] \$10 ;
-  wire [34:0] \$11 ;
-  wire [35:0] \$12 ;
-  wire [35:0] \$13 ;
-  wire [40:0] \$14 ;
-  wire \$15 ;
-  wire [48:0] \$16 ;
-  wire [48:0] \$17 ;
-  wire [24:0] \$18 ;
-  wire [24:0] \$19 ;
-  wire \$2 ;
-  wire [24:0] \$20 ;
-  wire [24:0] \$21 ;
-  wire [37:0] \$22 ;
-  wire [37:0] \$23 ;
-  wire [27:0] \$3 ;
-  wire [27:0] \$4 ;
-  wire \$5 ;
-  wire [26:0] \$6 ;
-  wire [26:0] \$7 ;
-  wire [31:0] \$8 ;
-  wire [31:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2281" *)
-  wire signed [37:0] corrected_vx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2282" *)
-  wire signed [37:0] corrected_vy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2259" *)
-  reg [9:0] inv_r;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2260" *)
-  wire signed [10:0] inv_r_signed;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2257" *)
-  wire [26:0] lut_delta;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2258" *)
-  wire [5:0] lut_index;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2264" *)
-  wire signed [19:0] nx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2262" *)
-  wire signed [31:0] nx_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2265" *)
-  wire signed [19:0] ny;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2263" *)
-  wire signed [31:0] ny_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2246" *)
-  wire outside;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2269" *)
-  wire signed [23:0] projected_x;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2267" *)
-  wire signed [35:0] projected_x_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2270" *)
-  wire signed [23:0] projected_y;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2268" *)
-  wire signed [35:0] projected_y_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2256" *)
-  wire [26:0] r2_q8;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2255" *)
-  wire [42:0] r2_sum;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2251" *)
-  wire signed [20:0] rx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2253" *)
-  wire [41:0] rx_sq;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2252" *)
-  wire signed [20:0] ry;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2254" *)
-  wire [41:0] ry_sq;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2276" *)
-  wire signed [28:0] vn;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2275" *)
-  wire signed [28:0] vn_shifted;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2274" *)
-  wire signed [40:0] vn_sum;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2279" *)
-  wire signed [36:0] vx_correction;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2277" *)
-  wire signed [48:0] vx_correction_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2272" *)
-  wire signed [39:0] vx_n_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2280" *)
-  wire signed [36:0] vy_correction;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2278" *)
-  wire signed [48:0] vy_correction_product;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2273" *)
-  wire signed [39:0] vy_n_product;
-  assign rx = $signed(pos_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2287" *) $signed(17'h08000);
-  assign ry = $signed(pos_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2288" *) $signed(17'h08000);
-  assign rx_sq = $signed(rx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2289" *) $signed(rx);
-  assign ry_sq = $signed(ry) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2290" *) $signed(ry);
-  assign r2_sum = rx_sq + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2291" *) ry_sq;
-  assign outside = \$1 [26:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2293" *) 14'h3c10;
-  assign \$2  = \$1 [26:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2294" *) 14'h3c10;
-  assign \$3  = \$1 [26:0] - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2295" *) 14'h3c10;
-  assign \$4  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2294" *) \$3  : 28'h0000000;
-  assign \$5  = \$4 [26:0] > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2296" *) 12'hfc0;
-  assign \$7  = \$5  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2296" *) 27'h000003f : \$6 ;
-  assign nx_product = $signed(rx) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2300" *) $signed({ 1'h0, inv_r });
-  assign ny_product = $signed(ry) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2301" *) $signed({ 1'h0, inv_r });
-  assign \$10  = $signed(\$8 [19:0]) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2305" *) $signed(16'h7c00);
-  assign \$11  = $signed(\$9 [19:0]) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2306" *) $signed(16'h7c00);
-  assign vx_n_product = $signed(vel_x) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2310" *) $signed(\$8 [19:0]);
-  assign vy_n_product = $signed(vel_y) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2311" *) $signed(\$9 [19:0]);
-  assign vn_sum = $signed(vx_n_product) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2312" *) $signed(vy_n_product);
-  assign \$15  = $signed(\$14 [28:0]) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2314" *) $signed(1'h0);
-  assign vn = \$15  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2314" *) \$14 [28:0] : 29'h00000000;
-  assign vx_correction_product = $signed(vn) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2316" *) $signed(\$8 [19:0]);
-  assign vy_correction_product = $signed(vn) * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2317" *) $signed(\$9 [19:0]);
-  assign corrected_vx = $signed(vel_x) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2320" *) $signed(\$16 [36:0]);
-  assign corrected_vy = $signed(vel_y) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2321" *) $signed(\$17 [36:0]);
-  assign \$18  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2323" *) $signed(\$12 [23:0]);
-  assign \$19  = outside ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2323" *) \$18  : { pos_x[19], pos_x[19], pos_x[19], pos_x[19], pos_x[19], pos_x };
-  assign \$20  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2324" *) $signed(\$13 [23:0]);
-  assign \$21  = outside ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2324" *) \$20  : { pos_y[19], pos_y[19], pos_y[19], pos_y[19], pos_y[19], pos_y };
-  assign \$22  = outside ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2325" *) corrected_vx : { vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x[19], vel_x };
-  assign \$23  = outside ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2326" *) corrected_vy : { vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y[19], vel_y };
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$9 ) begin end
-    (* full_case = 32'd1 *)
-    casez (\$7 [5:0])
-      6'h00:
-          inv_r = 10'h210;
-      6'h01:
-          inv_r = 10'h20f;
-      6'h02:
-          inv_r = 10'h20e;
-      6'h03:
-          inv_r = 10'h20d;
-      6'h04:
-          inv_r = 10'h20c;
-      6'h05:
-          inv_r = 10'h20b;
-      6'h06:
-          inv_r = 10'h20a;
-      6'h07:
-          inv_r = 10'h208;
-      6'h08:
-          inv_r = 10'h207;
-      6'h09:
-          inv_r = 10'h206;
-      6'h0a:
-          inv_r = 10'h205;
-      6'h0b:
-          inv_r = 10'h204;
-      6'h0c:
-          inv_r = 10'h203;
-      6'h0d:
-          inv_r = 10'h202;
-      6'h0e:
-          inv_r = 10'h201;
-      6'h0f:
-          inv_r = 10'h200;
-      6'h10:
-          inv_r = 10'h1ff;
-      6'h11:
-          inv_r = 10'h1fe;
-      6'h12:
-          inv_r = 10'h1fd;
-      6'h13:
-          inv_r = 10'h1fc;
-      6'h14:
-          inv_r = 10'h1fb;
-      6'h15:
-          inv_r = 10'h1fa;
-      6'h16:
-          inv_r = 10'h1f9;
-      6'h17:
-          inv_r = 10'h1f8;
-      6'h18:
-          inv_r = 10'h1f7;
-      6'h19:
-          inv_r = 10'h1f7;
-      6'h1a:
-          inv_r = 10'h1f6;
-      6'h1b:
-          inv_r = 10'h1f5;
-      6'h1c:
-          inv_r = 10'h1f4;
-      6'h1d:
-          inv_r = 10'h1f3;
-      6'h1e:
-          inv_r = 10'h1f2;
-      6'h1f:
-          inv_r = 10'h1f1;
-      6'h20:
-          inv_r = 10'h1f0;
-      6'h21:
-          inv_r = 10'h1ef;
-      6'h22:
-          inv_r = 10'h1ee;
-      6'h23:
-          inv_r = 10'h1ed;
-      6'h24:
-          inv_r = 10'h1ec;
-      6'h25:
-          inv_r = 10'h1ec;
-      6'h26:
-          inv_r = 10'h1eb;
-      6'h27:
-          inv_r = 10'h1ea;
-      6'h28:
-          inv_r = 10'h1e9;
-      6'h29:
-          inv_r = 10'h1e8;
-      6'h2a:
-          inv_r = 10'h1e7;
-      6'h2b:
-          inv_r = 10'h1e6;
-      6'h2c:
-          inv_r = 10'h1e5;
-      6'h2d:
-          inv_r = 10'h1e5;
-      6'h2e:
-          inv_r = 10'h1e4;
-      6'h2f:
-          inv_r = 10'h1e3;
-      6'h30:
-          inv_r = 10'h1e2;
-      6'h31:
-          inv_r = 10'h1e1;
-      6'h32:
-          inv_r = 10'h1e0;
-      6'h33:
-          inv_r = 10'h1e0;
-      6'h34:
-          inv_r = 10'h1df;
-      6'h35:
-          inv_r = 10'h1de;
-      6'h36:
-          inv_r = 10'h1dd;
-      6'h37:
-          inv_r = 10'h1dc;
-      6'h38:
-          inv_r = 10'h1dc;
-      6'h39:
-          inv_r = 10'h1db;
-      6'h3a:
-          inv_r = 10'h1da;
-      6'h3b:
-          inv_r = 10'h1d9;
-      6'h3c:
-          inv_r = 10'h1d8;
-      6'h3d:
-          inv_r = 10'h1d8;
-      6'h3e:
-          inv_r = 10'h1d7;
-      6'h3f:
-          inv_r = 10'h1d6;
-    endcase
-  end
-  assign r2_q8 = \$1 [26:0];
-  assign lut_delta = \$4 [26:0];
-  assign lut_index = \$7 [5:0];
-  assign inv_r_signed = { 1'h0, inv_r };
-  assign nx = \$8 [19:0];
-  assign ny = \$9 [19:0];
-  assign projected_x_product = { \$10 [34], \$10  };
-  assign projected_y_product = { \$11 [34], \$11  };
-  assign projected_x = \$12 [23:0];
-  assign projected_y = \$13 [23:0];
-  assign vn_shifted = \$14 [28:0];
-  assign vx_correction = \$16 [36:0];
-  assign vy_correction = \$17 [36:0];
-  assign next_pos_x = \$19 [19:0];
-  assign next_pos_y = \$21 [19:0];
-  assign next_vel_x = \$22 [19:0];
-  assign next_vel_y = \$23 [19:0];
-  assign \$1  = { 16'h0000, r2_sum[42:16] };
-  assign \$6  = { 6'h00, \$4 [26:6] };
-  assign \$8  = { nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31], nx_product[31:12] };
-  assign \$9  = { ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31], ny_product[31:12] };
-  assign \$12  = { \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34], \$10 [34:12] };
-  assign \$13  = { \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34], \$11 [34:12] };
-  assign \$14  = { vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40], vn_sum[40:12] };
-  assign \$16  = { vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48], vx_correction_product[48:12] };
-  assign \$17  = { vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48], vy_correction_product[48:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2452" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.wd (gy_q12, \port$3312$12 , \port$3316$12 , corner_x_1, corner_x_2, corner_y_2, corner_y_3, weight_0, weight_1, weight_2, weight_3, gx_q12);
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  input signed [20:0] gy_q12;
-  wire signed [20:0] gy_q12;
-  output [3:0] \port$3312$12 ;
-  wire [3:0] \port$3312$12 ;
-  output [3:0] \port$3316$12 ;
-  wire [3:0] \port$3316$12 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_1;
-  wire [4:0] corner_x_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_2;
-  wire [4:0] corner_x_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_2;
-  wire [4:0] corner_y_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_3;
-  wire [4:0] corner_y_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_0;
-  wire [12:0] weight_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_1;
-  wire [12:0] weight_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_2;
-  wire [12:0] weight_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_3;
-  wire [12:0] weight_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  input signed [20:0] gx_q12;
-  wire signed [20:0] gx_q12;
-  wire \$1 ;
-  wire [5:0] \$10 ;
-  wire [5:0] \$11 ;
-  wire [5:0] \$12 ;
-  wire [24:0] \$13 ;
-  wire [23:0] \$14 ;
-  wire [24:0] \$15 ;
-  wire [25:0] \$16 ;
-  wire [25:0] \$17 ;
-  wire [25:0] \$18 ;
-  wire [25:0] \$19 ;
-  wire \$2 ;
-  wire [15:0] \$3 ;
-  wire \$4 ;
-  wire \$5 ;
-  wire [15:0] \$6 ;
-  wire [13:0] \$7 ;
-  wire [13:0] \$8 ;
-  wire [5:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2448" *)
-  wire [15:0] clipped_gx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2449" *)
-  wire [15:0] clipped_gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2461" *)
-  wire [11:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2462" *)
-  wire [11:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2457" *)
-  wire [15:0] gx_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2458" *)
-  wire [15:0] gy_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2459" *)
-  wire [4:0] i0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2460" *)
-  wire [4:0] j0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2463" *)
-  wire [12:0] om_dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2464" *)
-  wire [12:0] om_dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2466" *)
-  wire [25:0] p00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2469" *)
-  wire [25:0] p01;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2467" *)
-  wire [25:0] p10;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2468" *)
-  wire [25:0] p11;
-  assign \$1  = $signed(gx_q12) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) $signed(1'h0);
-  assign \$2  = $signed(gx_q12) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) $signed(17'h0efff);
-  assign \$3  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) 16'hefff : gx_q12[15:0];
-  assign gx_clip = \$1  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) 16'h0000 : \$3 ;
-  assign \$4  = $signed(gy_q12) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) $signed(1'h0);
-  assign \$5  = $signed(gy_q12) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) $signed(17'h0efff);
-  assign \$6  = \$5  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) 16'hefff : gy_q12[15:0];
-  assign gy_clip = \$4  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) 16'h0000 : \$6 ;
-  assign \$7  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2483" *) gx_clip[11:0];
-  assign \$8  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2484" *) gy_clip[11:0];
-  assign \$9  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2488" *) 1'h1;
-  assign \$10  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2490" *) 1'h1;
-  assign \$11  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2491" *) 1'h1;
-  assign \$12  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2493" *) 1'h1;
-  assign p00 = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2495" *) \$8 [12:0];
-  assign \$13  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2496" *) \$8 [12:0];
-  assign \$14  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2497" *) gy_clip[11:0];
-  assign \$15  = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2498" *) gy_clip[11:0];
-  assign clipped_gx = gx_clip;
-  assign clipped_gy = gy_clip;
-  assign i0 = { 1'h0, gx_clip[15:12] };
-  assign j0 = { 1'h0, gy_clip[15:12] };
-  assign dx = gx_clip[11:0];
-  assign dy = gy_clip[11:0];
-  assign om_dx = \$7 [12:0];
-  assign om_dy = \$8 [12:0];
-  assign corner_x_0 = { 1'h0, gx_clip[15:12] };
-  assign corner_y_0 = { 1'h0, gy_clip[15:12] };
-  assign corner_y_1 = { 1'h0, gy_clip[15:12] };
-  assign corner_x_3 = { 1'h0, gx_clip[15:12] };
-  assign p10 = { 1'h0, \$13  };
-  assign p11 = { 2'h0, \$14  };
-  assign p01 = { 1'h0, \$15  };
-  assign \port$3312$12  = gx_clip[15:12];
-  assign \port$3316$12  = gy_clip[15:12];
-  assign corner_x_1 = \$9 [4:0];
-  assign corner_x_2 = \$10 [4:0];
-  assign corner_y_2 = \$11 [4:0];
-  assign corner_y_3 = \$12 [4:0];
-  assign weight_0 = \$16 [12:0];
-  assign weight_1 = \$17 [12:0];
-  assign weight_2 = \$18 [12:0];
-  assign weight_3 = \$19 [12:0];
-  assign \$16  = { 12'h000, p00[25:12] };
-  assign \$17  = { 13'h0000, \$13 [24:12] };
-  assign \$18  = { 14'h0000, \$14 [23:12] };
-  assign \$19  = { 13'h0000, \$15 [24:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2452" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.wu (\port$3268$12 , \port$3272$12 , corner_x_1, corner_x_2, corner_y_2, corner_y_3, weight_0, weight_1, weight_2, weight_3, \port$3853$0 , gy_q12);
-  output [3:0] \port$3268$12 ;
-  wire [3:0] \port$3268$12 ;
-  output [3:0] \port$3272$12 ;
-  wire [3:0] \port$3272$12 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_1;
-  wire [4:0] corner_x_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_2;
-  wire [4:0] corner_x_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_2;
-  wire [4:0] corner_y_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_3;
-  wire [4:0] corner_y_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_0;
-  wire [12:0] weight_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_1;
-  wire [12:0] weight_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_2;
-  wire [12:0] weight_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_3;
-  wire [12:0] weight_3;
-  input [19:0] \port$3853$0 ;
-  wire [19:0] \port$3853$0 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  input signed [20:0] gy_q12;
-  wire signed [20:0] gy_q12;
-  wire \$1 ;
-  wire [5:0] \$10 ;
-  wire [5:0] \$11 ;
-  wire [5:0] \$12 ;
-  wire [24:0] \$13 ;
-  wire [23:0] \$14 ;
-  wire [24:0] \$15 ;
-  wire [25:0] \$16 ;
-  wire [25:0] \$17 ;
-  wire [25:0] \$18 ;
-  wire [25:0] \$19 ;
-  wire \$2 ;
-  wire [15:0] \$3 ;
-  wire \$4 ;
-  wire \$5 ;
-  wire [15:0] \$6 ;
-  wire [13:0] \$7 ;
-  wire [13:0] \$8 ;
-  wire [5:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2448" *)
-  wire [15:0] clipped_gx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2449" *)
-  wire [15:0] clipped_gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2461" *)
-  wire [11:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2462" *)
-  wire [11:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2457" *)
-  wire [15:0] gx_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  wire signed [20:0] gx_q12;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2458" *)
-  wire [15:0] gy_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2459" *)
-  wire [4:0] i0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2460" *)
-  wire [4:0] j0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2463" *)
-  wire [12:0] om_dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2464" *)
-  wire [12:0] om_dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2466" *)
-  wire [25:0] p00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2469" *)
-  wire [25:0] p01;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2467" *)
-  wire [25:0] p10;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2468" *)
-  wire [25:0] p11;
-  assign \$1  = $signed(\port$3853$0 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) $signed(1'h0);
-  assign \$2  = $signed(\port$3853$0 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) $signed(17'h0ffff);
-  assign \$3  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) 16'hffff : \port$3853$0 [15:0];
-  assign gx_clip = \$1  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) 16'h0000 : \$3 ;
-  assign \$4  = $signed(gy_q12) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) $signed(1'h0);
-  assign \$5  = $signed(gy_q12) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) $signed(17'h0efff);
-  assign \$6  = \$5  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) 16'hefff : gy_q12[15:0];
-  assign gy_clip = \$4  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) 16'h0000 : \$6 ;
-  assign \$7  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2483" *) gx_clip[11:0];
-  assign \$8  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2484" *) gy_clip[11:0];
-  assign \$9  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2488" *) 1'h1;
-  assign \$10  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2490" *) 1'h1;
-  assign \$11  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2491" *) 1'h1;
-  assign \$12  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2493" *) 1'h1;
-  assign p00 = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2495" *) \$8 [12:0];
-  assign \$13  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2496" *) \$8 [12:0];
-  assign \$14  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2497" *) gy_clip[11:0];
-  assign \$15  = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2498" *) gy_clip[11:0];
-  assign gx_q12 = { \port$3853$0 [19], \port$3853$0  };
-  assign clipped_gx = gx_clip;
-  assign clipped_gy = gy_clip;
-  assign i0 = { 1'h0, gx_clip[15:12] };
-  assign j0 = { 1'h0, gy_clip[15:12] };
-  assign dx = gx_clip[11:0];
-  assign dy = gy_clip[11:0];
-  assign om_dx = \$7 [12:0];
-  assign om_dy = \$8 [12:0];
-  assign corner_x_0 = { 1'h0, gx_clip[15:12] };
-  assign corner_y_0 = { 1'h0, gy_clip[15:12] };
-  assign corner_y_1 = { 1'h0, gy_clip[15:12] };
-  assign corner_x_3 = { 1'h0, gx_clip[15:12] };
-  assign p10 = { 1'h0, \$13  };
-  assign p11 = { 2'h0, \$14  };
-  assign p01 = { 1'h0, \$15  };
-  assign \port$3268$12  = gx_clip[15:12];
-  assign \port$3272$12  = gy_clip[15:12];
-  assign corner_x_1 = \$9 [4:0];
-  assign corner_x_2 = \$10 [4:0];
-  assign corner_y_2 = \$11 [4:0];
-  assign corner_y_3 = \$12 [4:0];
-  assign weight_0 = \$16 [12:0];
-  assign weight_1 = \$17 [12:0];
-  assign weight_2 = \$18 [12:0];
-  assign weight_3 = \$19 [12:0];
-  assign \$16  = { 12'h000, p00[25:12] };
-  assign \$17  = { 13'h0000, \$13 [24:12] };
-  assign \$18  = { 14'h0000, \$14 [23:12] };
-  assign \$19  = { 13'h0000, \$15 [24:12] };
-endmodule
-
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2452" *)
-(* generator = "Amaranth" *)
-module \PendantSystemTop.sys.core.wv (\port$3290$12 , \port$3294$12 , corner_x_1, corner_x_2, corner_y_2, corner_y_3, weight_0, weight_1, weight_2, weight_3, \port$3855$0 , gx_q12);
-  output [3:0] \port$3290$12 ;
-  wire [3:0] \port$3290$12 ;
-  output [3:0] \port$3294$12 ;
-  wire [3:0] \port$3294$12 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_1;
-  wire [4:0] corner_x_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  output [4:0] corner_x_2;
-  wire [4:0] corner_x_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_2;
-  wire [4:0] corner_y_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  output [4:0] corner_y_3;
-  wire [4:0] corner_y_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_0;
-  wire [12:0] weight_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_1;
-  wire [12:0] weight_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_2;
-  wire [12:0] weight_2;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2447" *)
-  output [12:0] weight_3;
-  wire [12:0] weight_3;
-  input [19:0] \port$3855$0 ;
-  wire [19:0] \port$3855$0 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2442" *)
-  input signed [20:0] gx_q12;
-  wire signed [20:0] gx_q12;
-  wire \$1 ;
-  wire [5:0] \$10 ;
-  wire [5:0] \$11 ;
-  wire [5:0] \$12 ;
-  wire [24:0] \$13 ;
-  wire [23:0] \$14 ;
-  wire [24:0] \$15 ;
-  wire [25:0] \$16 ;
-  wire [25:0] \$17 ;
-  wire [25:0] \$18 ;
-  wire [25:0] \$19 ;
-  wire \$2 ;
-  wire [15:0] \$3 ;
-  wire \$4 ;
-  wire \$5 ;
-  wire [15:0] \$6 ;
-  wire [13:0] \$7 ;
-  wire [13:0] \$8 ;
-  wire [5:0] \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2448" *)
-  wire [15:0] clipped_gx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2449" *)
-  wire [15:0] clipped_gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2445" *)
-  wire [4:0] corner_x_3;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2446" *)
-  wire [4:0] corner_y_1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2461" *)
-  wire [11:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2462" *)
-  wire [11:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2457" *)
-  wire [15:0] gx_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2458" *)
-  wire [15:0] gy_clip;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2443" *)
-  wire signed [20:0] gy_q12;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2459" *)
-  wire [4:0] i0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2460" *)
-  wire [4:0] j0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2463" *)
-  wire [12:0] om_dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2464" *)
-  wire [12:0] om_dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2466" *)
-  wire [25:0] p00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2469" *)
-  wire [25:0] p01;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2467" *)
-  wire [25:0] p10;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2468" *)
-  wire [25:0] p11;
-  assign \$1  = $signed(gx_q12) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) $signed(1'h0);
-  assign \$2  = $signed(gx_q12) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) $signed(17'h0efff);
-  assign \$3  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2473" *) 16'hefff : gx_q12[15:0];
-  assign gx_clip = \$1  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2472" *) 16'h0000 : \$3 ;
-  assign \$4  = $signed(\port$3855$0 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) $signed(1'h0);
-  assign \$5  = $signed(\port$3855$0 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) $signed(17'h0ffff);
-  assign \$6  = \$5  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2475" *) 16'hffff : \port$3855$0 [15:0];
-  assign gy_clip = \$4  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2474" *) 16'h0000 : \$6 ;
-  assign \$7  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2483" *) gx_clip[11:0];
-  assign \$8  = 13'h1000 - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2484" *) gy_clip[11:0];
-  assign \$9  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2488" *) 1'h1;
-  assign \$10  = gx_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2490" *) 1'h1;
-  assign \$11  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2491" *) 1'h1;
-  assign \$12  = gy_clip[15:12] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2493" *) 1'h1;
-  assign p00 = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2495" *) \$8 [12:0];
-  assign \$13  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2496" *) \$8 [12:0];
-  assign \$14  = gx_clip[11:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2497" *) gy_clip[11:0];
-  assign \$15  = \$7 [12:0] * (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:2498" *) gy_clip[11:0];
-  assign gy_q12 = { \port$3855$0 [19], \port$3855$0  };
-  assign clipped_gx = gx_clip;
-  assign clipped_gy = gy_clip;
-  assign i0 = { 1'h0, gx_clip[15:12] };
-  assign j0 = { 1'h0, gy_clip[15:12] };
-  assign dx = gx_clip[11:0];
-  assign dy = gy_clip[11:0];
-  assign om_dx = \$7 [12:0];
-  assign om_dy = \$8 [12:0];
-  assign corner_x_0 = { 1'h0, gx_clip[15:12] };
-  assign corner_y_0 = { 1'h0, gy_clip[15:12] };
-  assign corner_y_1 = { 1'h0, gy_clip[15:12] };
-  assign corner_x_3 = { 1'h0, gx_clip[15:12] };
-  assign p10 = { 1'h0, \$13  };
-  assign p11 = { 2'h0, \$14  };
-  assign p01 = { 1'h0, \$15  };
-  assign \port$3290$12  = gx_clip[15:12];
-  assign \port$3294$12  = gy_clip[15:12];
-  assign corner_x_1 = \$9 [4:0];
-  assign corner_x_2 = \$10 [4:0];
-  assign corner_y_2 = \$11 [4:0];
-  assign corner_y_3 = \$12 [4:0];
-  assign weight_0 = \$16 [12:0];
-  assign weight_1 = \$17 [12:0];
-  assign weight_2 = \$18 [12:0];
-  assign weight_3 = \$19 [12:0];
-  assign \$16  = { 12'h000, p00[25:12] };
-  assign \$17  = { 13'h0000, \$13 [24:12] };
-  assign \$18  = { 14'h0000, \$14 [23:12] };
-  assign \$19  = { 13'h0000, \$15 [24:12] };
-endmodule
-
 (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4297" *)
 (* generator = "Amaranth" *)
 module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cmd_read, cmd_valid, tx_data, tx_ack, scl_oe, sda_oe, cmd_ready, rx_valid, rx_data, clk);
-  reg \$auto$verilog_backend.cc:2524:dump_module$10  = 0;
+  reg \$auto$verilog_backend.cc:2524:dump_module$6  = 0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input rst;
   wire rst;
@@ -12749,7 +6148,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
   always @(posedge clk)
     rx_data <= \$34 ;
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$24  = 1'h0;
     casez (state)
       4'h0, 4'h7:
@@ -12774,7 +6173,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$25  = timer;
     casez (state)
       4'h0, 4'h7:
@@ -12843,7 +6242,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$26  = sda_high;
     casez (state)
       4'h0, 4'h7:
@@ -12901,7 +6300,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$27  = scl_high;
     casez (state)
       4'h0, 4'h7:
@@ -12948,7 +6347,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$28  = ack_error;
     casez (state)
       4'h0, 4'h7:
@@ -12979,7 +6378,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$29  = state;
     casez (state)
       4'h0, 4'h7:
@@ -13037,7 +6436,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$30  = shifter;
     casez (state)
       4'h0, 4'h7:
@@ -13075,7 +6474,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$31  = bit_idx;
     casez (state)
       4'h0, 4'h7:
@@ -13108,7 +6507,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$32  = is_read;
     casez (state)
       4'h0, 4'h7:
@@ -13127,7 +6526,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$33  = send_ack;
     casez (state)
       4'h0, 4'h7:
@@ -13145,7 +6544,7 @@ module \PendantSystemTop.sys.i2c (rst, sda_i, cmd_start, cmd_stop, cmd_write, cm
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$10 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$6 ) begin end
     \$34  = rx_data;
     casez (state)
       4'h0, 4'h7:
@@ -13176,7 +6575,7 @@ endmodule
 (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:4620" *)
 (* generator = "Amaranth" *)
 module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens_rd_valid, cell_addr, dens_rd_data, i2c_cmd_valid, i2c_cmd_start, i2c_cmd_write, i2c_tx_data, i2c_cmd_stop, dens_rd_req, done, clk);
-  reg \$auto$verilog_backend.cc:2524:dump_module$11  = 0;
+  reg \$auto$verilog_backend.cc:2524:dump_module$7  = 0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:970" *)
   input rst;
   wire rst;
@@ -13318,7 +6717,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
   always @(posedge clk)
     init_done <= \$25 ;
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     cell_addr = 8'h00;
     casez (led_idx)
       8'h00:
@@ -13756,7 +7155,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_cmd_valid = 1'h0;
     casez (state)
       4'h0:
@@ -13781,7 +7180,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_cmd_start = 1'h0;
     casez (state)
       4'h0:
@@ -13818,7 +7217,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_cmd_write = 1'h0;
     casez (state)
       4'h0:
@@ -13881,7 +7280,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_tx_data = 8'h00;
     casez (state)
       4'h0:
@@ -13944,7 +7343,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_cmd_stop = 1'h0;
     casez (state)
       4'h0:
@@ -14015,7 +7414,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     dens_rd_req = 1'h0;
     casez (state)
       4'h0:
@@ -14033,7 +7432,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     endcase
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$17  = 1'h0;
     casez (state)
       4'h0:
@@ -14073,7 +7472,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$18  = target_page;
     casez (state)
       4'h0:
@@ -14130,7 +7529,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$19  = step;
     casez (state)
       4'h0:
@@ -14216,7 +7615,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$20  = state;
     casez (state)
       4'h0:
@@ -14308,7 +7707,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$21  = burst_limit;
     casez (state)
       4'h0:
@@ -14364,7 +7763,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$22  = led_idx;
     casez (state)
       4'h0:
@@ -14424,7 +7823,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$23  = is_scaling;
     casez (state)
       4'h0:
@@ -14459,7 +7858,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$24  = raw_dens;
     casez (state)
       4'h0:
@@ -14482,7 +7881,7 @@ module \PendantSystemTop.sys.leds (rst, i2c_cmd_ready, init_req, frame_req, dens
     end
   end
   always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$11 ) begin end
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     \$25  = init_done;
     casez (state)
       4'h0:
