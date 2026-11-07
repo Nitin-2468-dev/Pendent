@@ -12,3 +12,9 @@ test/__pycache__/
 test/results.xml
 test/gate_level_netlist.v
 src/Amaranth/venv
+src/Amaranth/__pycache__/
+src/Amaranth/asic_amaranth_port/
+pendent.zip
+run.sh
+src/Amaranth/build
+
