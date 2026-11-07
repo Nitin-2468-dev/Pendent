@@ -1,0 +1,5070 @@
+from math import ceil, log2
+import sys as _sys
+
+from amaranth import (
+    Array,
+    Cat,
+    Const,
+    Elaboratable,
+    Module,
+    Mux,
+    Signal,
+    signed,
+    unsigned,
+)
+from amaranth.lib.memory import Memory
+
+SHIFT = 12
+SCALE = 1 << SHIFT
+HALF_CELL_Q12 = 1 << (SHIFT - 1)
+
+NX = 16
+NY = 16
+NP = 256
+PARTICLE_COUNT = NP
+INDEX_WIDTH = 8
+
+U_X, U_Y = NX + 1, NY
+V_X, V_Y = NX, NY + 1
+CELL_COUNT = NX * NY                  # 256 cells
+DENSITY_CELLS = NX * NY               # 256 cells
+U_CELLS = U_X * U_Y                   # 272 U-face nodes (17 x 16)
+V_CELLS = V_X * V_Y                   # 272 V-face nodes (16 x 17)
+U_COUNT = U_CELLS
+V_COUNT = V_CELLS
+CLASS_U_CELLS = U_CELLS
+CLASS_V_CELLS = V_CELLS
+PRESSURE_CELL_COUNT = CELL_COUNT
+PRESSURE_U_COUNT = U_COUNT
+PRESSURE_V_COUNT = V_COUNT
+
+AIR = 0
+WATER = 1
+SOLID = 2
+
+POS_WIDTH = 20
+GRAVITY_VEL_WIDTH = 19
+WALL_VEL_WIDTH = 20
+VEL_WIDTH = WALL_VEL_WIDTH
+STORAGE_WIDTH = 20
+
+# 1. MEMORY PRIMITIVES, PSRAM SUBSYSTEM & PARTICLE MEMORY ARBITER
+
+class SyncMemory1R1W(Elaboratable):
+    def __init__(self, *, width, depth, init=None, name="mem"):
+        if not isinstance(width, int) or width <= 0:
+            raise ValueError("width must be a positive integer")
+        if not isinstance(depth, int) or depth <= 0:
+            raise ValueError("depth must be a positive integer")
+
+        self.width = width
+        self.depth = depth
+        self.name = name
+        if init is None:
+            init = [0] * depth
+        if len(init) != depth:
+            raise ValueError("init length must equal depth")
+        self.init = list(init)
+
+        self.rd_req = Signal(name=f"{name}_rd_req")
+        self.rd_addr = Signal(range(depth), name=f"{name}_rd_addr")
+        self.rd_valid = Signal(name=f"{name}_rd_valid")
+        self.rd_data = Signal(unsigned(width), name=f"{name}_rd_data")
+
+        self.wr_req = Signal(name=f"{name}_wr_req")
+        self.wr_addr = Signal(range(depth), name=f"{name}_wr_addr")
+        self.wr_data = Signal(unsigned(width), name=f"{name}_wr_data")
+        self.wr_ready = Signal(name=f"{name}_wr_ready")
+
+    def elaborate(self, platform):
+        m = Module()
+
+        memory = Memory(
+            shape=unsigned(self.width),
+            depth=self.depth,
+            init=self.init,
+        )
+        m.submodules.memory = memory
+
+        read_port = memory.read_port(domain="sync", transparent_for=[])
+        write_port = memory.write_port(domain="sync")
+
+        m.d.comb += [
+            read_port.en.eq(self.rd_req),
+            read_port.addr.eq(self.rd_addr),
+            self.rd_data.eq(read_port.data),
+
+            write_port.en.eq(self.wr_req),
+            write_port.addr.eq(self.wr_addr),
+            write_port.data.eq(self.wr_data),
+
+            self.wr_ready.eq(1),
+        ]
+
+        m.d.sync += self.rd_valid.eq(self.rd_req)
+
+        return m
+
+class PsramLevelShifterControl(Elaboratable):
+    A_TO_B = 1  # ASIC (5 V) -> PSRAM (3.3 V)
+    B_TO_A = 0  # PSRAM (3.3 V) -> ASIC (5 V)
+
+    def __init__(self):
+        self.dq_oe = Signal(4)
+        self.read_active = Signal()
+
+        self.translator_dir = Signal()
+        self.translator_oe_n = Signal(4, init=0b1111)
+
+    def elaborate(self, platform):
+        m = Module()
+
+        asic_driving = self.dq_oe != 0
+
+        enabled_lanes = Mux(
+            asic_driving,
+            self.dq_oe,
+            Mux(self.read_active, 0b1111, 0b0000),
+        )
+
+        m.d.comb += [
+            self.translator_dir.eq(
+                Mux(asic_driving, self.A_TO_B, self.B_TO_A)
+            ),
+            self.translator_oe_n.eq(~enabled_lanes),
+        ]
+
+        return m
+
+class PsramQpiBurstController(Elaboratable):
+    ST_POWER_WAIT = 0
+    ST_SPI_SEND = 1
+    ST_INIT_GAP = 2
+    ST_IDLE = 3
+    ST_QPI_CMD = 4
+    ST_QPI_ADDR = 5
+    ST_QPI_DUMMY = 6
+    ST_WRITE_WAIT = 7
+    ST_WRITE_SHIFT = 8
+    ST_READ_SHIFT = 9
+    ST_READ_END = 10
+    ST_READ_HOLD = 11
+    ST_FINISH_HOLD = 12
+    
+    
+
+    def __init__(self, *, sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000,
+                 powerup_us=150):
+        if sys_clk_hz <= 0 or qpi_clk_hz <= 0:
+            raise ValueError("clock frequencies must be positive")
+        if qpi_clk_hz > sys_clk_hz / 2:
+            raise ValueError("qpi_clk_hz must not exceed half the system clock")
+        hp = sys_clk_hz / (2 * qpi_clk_hz)
+        self.half_period_cycles = int(round(hp))
+        if self.half_period_cycles < 1 or abs(hp - self.half_period_cycles) > 1e-9:
+            raise ValueError("sys_clk_hz / (2*qpi_clk_hz) must be an integer")
+        self.sys_clk_hz = int(sys_clk_hz)
+        self.qpi_clk_hz = int(qpi_clk_hz)
+        self.powerup_cycles = max(1, ceil(sys_clk_hz * powerup_us / 1_000_000))
+        self.finish_hold_cycles = (2 * self.half_period_cycles +
+                                   max(1, ceil(sys_clk_hz * 6 / 1_000_000_000)))
+        self.ce_high_gap_cycles = max(1, ceil(sys_clk_hz * 50 / 1_000_000_000))
+
+        self.req = Signal()
+        self.write = Signal()
+        self.addr = Signal(23)
+        self.length = Signal(11)
+        self.ready = Signal()
+        self.busy = Signal(init=1)
+        self.done = Signal()
+        self.error = Signal()
+        self.init_done = Signal()
+
+        self.wdata = Signal(8)
+        self.wvalid = Signal()
+        self.wready = Signal()
+
+        self.rdata = Signal(8)
+        self.rvalid = Signal()
+        self.rready = Signal()
+
+        self.sclk = Signal()
+        self.ce_n = Signal(init=1)
+        self.dq_i = Signal(4)
+        self.dq_o = Signal(4)
+        self.dq_oe = Signal(4)
+        self.translator_dir = Signal()
+        self.translator_oe_n = Signal(4, init=0b1111)
+
+    def elaborate(self, platform):
+        m = Module()
+        
+        state = Signal(4, init=self.ST_POWER_WAIT)
+        qpi_clk = Signal(init=0)
+        div_count = Signal(range(self.half_period_cycles))
+        power_count = Signal(range(self.powerup_cycles + 1))
+        gap_count = Signal(range(self.ce_high_gap_cycles + 1))
+        hold_count = Signal(range(self.finish_hold_cycles + 1))
+
+        spi_shift = Signal(8)
+        spi_bit_count = Signal(4)
+        init_step = Signal(2)
+        cmd_shift = Signal(8)
+        addr_shift = Signal(24)
+        nibble_count = Signal(4)
+        dummy_count = Signal(3)
+        byte_count = Signal(11)
+        length_latched = Signal(11)
+        data_shift = Signal(8)
+        read_nibble_count = Signal(1)
+        read_last = Signal()
+
+        clock_active = Signal()
+        
+        m.submodules.level_shifter = level_shifter = PsramLevelShifterControl()
+        
+        m.d.comb += [
+            level_shifter.dq_oe.eq(self.dq_oe),
+            level_shifter.read_active.eq(state == self.ST_READ_SHIFT),
+            self.translator_dir.eq(level_shifter.translator_dir),
+            self.translator_oe_n.eq(level_shifter.translator_oe_n),
+        ]
+        m.d.comb += [
+            clock_active.eq(
+                (state == self.ST_SPI_SEND) | (state == self.ST_QPI_CMD) |
+                (state == self.ST_QPI_ADDR) | (state == self.ST_QPI_DUMMY) |
+                (state == self.ST_WRITE_SHIFT) | (state == self.ST_READ_SHIFT) |
+                (state == self.ST_READ_END)),
+            self.sclk.eq(qpi_clk),
+            self.ready.eq((state == self.ST_IDLE) & self.init_done),
+            self.busy.eq(state != self.ST_IDLE),
+            self.wready.eq((state == self.ST_WRITE_WAIT) & self.write),
+            self.ce_n.eq(~(
+                (state == self.ST_SPI_SEND) | (state == self.ST_QPI_CMD) |
+                (state == self.ST_QPI_ADDR) | (state == self.ST_QPI_DUMMY) |
+                (state == self.ST_WRITE_WAIT) | (state == self.ST_WRITE_SHIFT) |
+                (state == self.ST_READ_SHIFT) | (state == self.ST_READ_END) |
+                (state == self.ST_READ_HOLD) | (state == self.ST_FINISH_HOLD))),
+            self.dq_o.eq(0), self.dq_oe.eq(0),
+        ]
+        with m.Switch(state):
+            with m.Case(self.ST_POWER_WAIT):
+                m.d.comb += self.dq_oe.eq(0b1111)
+            with m.Case(self.ST_SPI_SEND):
+                m.d.comb += [self.dq_o.eq(Cat(spi_shift[7], Const(0, 3))),
+                             self.dq_oe.eq(0b0001)]
+            with m.Case(self.ST_QPI_CMD):
+                m.d.comb += [self.dq_o.eq(cmd_shift[4:8]), self.dq_oe.eq(0b1111)]
+            with m.Case(self.ST_QPI_ADDR):
+                m.d.comb += [self.dq_o.eq(addr_shift[20:24]), self.dq_oe.eq(0b1111)]
+            with m.Case(self.ST_WRITE_SHIFT):
+                m.d.comb += [self.dq_o.eq(data_shift[4:8]), self.dq_oe.eq(0b1111)]
+            with m.Case(self.ST_READ_SHIFT, self.ST_READ_END, self.ST_QPI_DUMMY):
+                m.d.comb += self.dq_oe.eq(0)
+
+        tick = div_count == self.half_period_cycles - 1
+        m.d.sync += [self.done.eq(0), self.error.eq(0)]
+        with m.If(clock_active):
+            with m.If(tick):
+                m.d.sync += div_count.eq(0)
+                with m.If(~qpi_clk):
+                    m.d.sync += qpi_clk.eq(1)
+                    with m.If(state == self.ST_READ_SHIFT):
+                        with m.If(read_nibble_count == 0):
+                            m.d.sync += self.rdata[4:8].eq(self.dq_i)
+                        with m.Else():
+                            m.d.sync += self.rdata[0:4].eq(self.dq_i)
+                            m.d.sync += read_last.eq(byte_count == (length_latched - 1))
+                            m.d.sync += state.eq(self.ST_READ_END)
+                with m.Else():
+                    m.d.sync += qpi_clk.eq(0)
+                    with m.Switch(state):
+                        with m.Case(self.ST_SPI_SEND):
+                            with m.If(spi_bit_count == 7):
+                                with m.If(init_step == 0):
+                                    m.d.sync += [spi_shift.eq(0x99), spi_bit_count.eq(0), init_step.eq(1)]
+                                with m.Else():
+                                    m.d.sync += [state.eq(self.ST_INIT_GAP), gap_count.eq(0)]
+                            with m.Else():
+                                m.d.sync += [spi_shift.eq(spi_shift << 1), spi_bit_count.eq(spi_bit_count + 1)]
+                        with m.Case(self.ST_QPI_CMD):
+                            with m.If(nibble_count == 1):
+                                m.d.sync += [state.eq(self.ST_QPI_ADDR), nibble_count.eq(0)]
+                            with m.Else():
+                                m.d.sync += [cmd_shift.eq(cmd_shift << 4), nibble_count.eq(nibble_count + 1)]
+                        with m.Case(self.ST_QPI_ADDR):
+                            with m.If(nibble_count == 5):
+                                m.d.sync += [nibble_count.eq(0)]
+                                with m.If(self.write):
+                                    m.d.sync += state.eq(self.ST_WRITE_WAIT)
+                                with m.Else():
+                                    m.d.sync += [state.eq(self.ST_QPI_DUMMY), dummy_count.eq(0)]
+                            with m.Else():
+                                m.d.sync += [addr_shift.eq(addr_shift << 4), nibble_count.eq(nibble_count + 1)]
+                        with m.Case(self.ST_QPI_DUMMY):
+                            with m.If(dummy_count == 5):
+                                m.d.sync += [state.eq(self.ST_READ_SHIFT), read_nibble_count.eq(0)]
+                            with m.Else():
+                                m.d.sync += dummy_count.eq(dummy_count + 1)
+                        with m.Case(self.ST_WRITE_SHIFT):
+                            with m.If(nibble_count == 1):
+                                with m.If(byte_count == (length_latched - 1)):
+                                    m.d.sync += [state.eq(self.ST_FINISH_HOLD), hold_count.eq(0)]
+                                with m.Else():
+                                    m.d.sync += [byte_count.eq(byte_count + 1), state.eq(self.ST_WRITE_WAIT)]
+                                m.d.sync += nibble_count.eq(0)
+                            with m.Else():
+                                m.d.sync += [data_shift.eq(data_shift << 4), nibble_count.eq(nibble_count + 1)]
+                        with m.Case(self.ST_READ_SHIFT):
+                            m.d.sync += read_nibble_count.eq(1)
+                        with m.Case(self.ST_READ_END):
+                            m.d.sync += [self.rvalid.eq(1), state.eq(self.ST_READ_HOLD)]
+        with m.Else():
+            m.d.sync += [div_count.eq(0), qpi_clk.eq(0)]
+
+        with m.If(state == self.ST_POWER_WAIT):
+            with m.If(power_count == self.powerup_cycles - 1):
+                m.d.sync += [spi_shift.eq(0x66), spi_bit_count.eq(0), init_step.eq(0), state.eq(self.ST_SPI_SEND)]
+            with m.Else():
+                m.d.sync += power_count.eq(power_count + 1)
+        with m.If(state == self.ST_INIT_GAP):
+            with m.If(gap_count == self.ce_high_gap_cycles - 1):
+                m.d.sync += gap_count.eq(0)
+                with m.If(init_step == 1):
+                    m.d.sync += [spi_shift.eq(0x35), spi_bit_count.eq(0), init_step.eq(2), state.eq(self.ST_SPI_SEND)]
+                with m.Else():
+                    m.d.sync += [state.eq(self.ST_IDLE), self.init_done.eq(1)]
+            with m.Else():
+                m.d.sync += gap_count.eq(gap_count + 1)
+
+        page_remaining = Signal(11)
+        m.d.comb += page_remaining.eq(1024 - self.addr[0:10])
+        valid_request = ((self.length >= 1) & (self.length <= 1024) &
+                         (self.length <= page_remaining))
+        with m.If((state == self.ST_IDLE) & self.init_done & self.req):
+            with m.If(valid_request):
+                m.d.sync += [
+                    cmd_shift.eq(Mux(self.write, 0x02, 0xEB)),
+                    addr_shift.eq(Cat(self.addr, Const(0, 1))),
+                    length_latched.eq(self.length), byte_count.eq(0),
+                    nibble_count.eq(0), dummy_count.eq(0),
+                    self.rvalid.eq(0), self.error.eq(0), state.eq(self.ST_QPI_CMD),
+                ]
+            with m.Else():
+                m.d.sync += self.error.eq(1)
+
+        with m.If((state == self.ST_WRITE_WAIT) & self.wvalid):
+            m.d.sync += [data_shift.eq(self.wdata), nibble_count.eq(0), state.eq(self.ST_WRITE_SHIFT)]
+
+        with m.If(state == self.ST_READ_HOLD):
+            with m.If(self.rvalid & self.rready):
+                m.d.sync += self.rvalid.eq(0)
+                with m.If(read_last):
+                    m.d.sync += [state.eq(self.ST_FINISH_HOLD), hold_count.eq(0)]
+                with m.Else():
+                    m.d.sync += [byte_count.eq(byte_count + 1), read_nibble_count.eq(0), state.eq(self.ST_READ_SHIFT)]
+
+        with m.If(state == self.ST_FINISH_HOLD):
+            with m.If(hold_count == self.finish_hold_cycles - 1):
+                m.d.sync += [state.eq(self.ST_IDLE), hold_count.eq(0), self.done.eq(1)]
+            with m.Else():
+                m.d.sync += hold_count.eq(hold_count + 1)
+        return m
+
+class PsramWordBank(Elaboratable):
+    ST_IDLE = 0
+    ST_LAUNCH = 1
+    ST_WRITE_STREAM = 2
+    ST_READ_STREAM = 3
+    ST_WAIT_DONE = 4
+    ST_READ_RESPONSE = 5
+
+    def __init__(self, *, data_width=32, depth=1 << 16,
+                 sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000,
+                 external_controller=False):
+        if data_width <= 0 or data_width % 8:
+            raise ValueError("data_width must be a positive multiple of 8")
+        self.bytes_per_word = data_width // 8
+        if 1024 % self.bytes_per_word:
+            raise ValueError("word byte width must divide the 1 KiB PSRAM page")
+        if depth <= 0 or depth * self.bytes_per_word > (1 << 23):
+            raise ValueError("depth exceeds the 23-bit PSRAM byte address space")
+
+        self.data_width = data_width
+        self.depth = depth
+        max_word_depth = (1 << 23) // self.bytes_per_word
+        self.addr_width = max(1, ceil(log2(max_word_depth)))
+
+        self.req = Signal()
+        self.we = Signal()
+        self.addr = Signal(self.addr_width)
+        self.wdata = Signal(data_width)
+        self.ready = Signal()
+        self.done = Signal()
+        self.error = Signal()
+        self.rvalid = Signal()
+        self.rready = Signal()
+        self.rdata = Signal(data_width)
+        self.init_done = Signal()
+        self.busy = Signal()
+
+        self.sclk = Signal()
+        self.ce_n = Signal(init=1)
+        self.dq_i = Signal(4)
+        self.dq_o = Signal(4)
+        self.dq_oe = Signal(4)
+        self.translator_dir = Signal()
+        self.translator_oe_n = Signal(4, init=0b1111)
+
+        self.external_controller = external_controller
+        self.controller = None if external_controller else PsramQpiBurstController(
+            sys_clk_hz=sys_clk_hz, qpi_clk_hz=qpi_clk_hz
+        )
+
+        self.qpi_req = Signal()
+        self.qpi_write = Signal()
+        self.qpi_addr = Signal(23)
+        self.qpi_length = Signal(11)
+        self.qpi_ready = Signal()
+        self.qpi_done = Signal()
+        self.qpi_error = Signal()
+        self.qpi_wdata = Signal(8)
+        self.qpi_wvalid = Signal()
+        self.qpi_wready = Signal()
+        self.qpi_rdata = Signal(8)
+        self.qpi_rvalid = Signal()
+        self.qpi_rready = Signal()
+        self.qpi_init_done = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+        ps = self.controller
+        if ps is not None:
+            m.submodules.psram = ps
+            m.d.comb += [
+                self.qpi_ready.eq(ps.ready), self.qpi_done.eq(ps.done),
+                self.qpi_error.eq(ps.error), self.qpi_wready.eq(ps.wready),
+                self.qpi_rdata.eq(ps.rdata), self.qpi_rvalid.eq(ps.rvalid),
+                self.qpi_init_done.eq(ps.init_done),
+                ps.req.eq(self.qpi_req), ps.write.eq(self.qpi_write),
+                ps.addr.eq(self.qpi_addr), ps.length.eq(self.qpi_length),
+                ps.wdata.eq(self.qpi_wdata), ps.wvalid.eq(self.qpi_wvalid),
+                ps.rready.eq(self.qpi_rready), ps.dq_i.eq(self.dq_i),
+                self.sclk.eq(ps.sclk), self.ce_n.eq(ps.ce_n),
+                self.dq_o.eq(ps.dq_o), self.dq_oe.eq(ps.dq_oe),
+                self.translator_dir.eq(ps.translator_dir),
+                self.translator_oe_n.eq(ps.translator_oe_n),
+            ]
+        else:
+            m.d.comb += [self.sclk.eq(0), self.ce_n.eq(1),
+                         self.dq_o.eq(0), self.dq_oe.eq(0),
+                         self.translator_dir.eq(0),
+                         self.translator_oe_n.eq(0b1111)]
+
+        state = Signal(3, init=self.ST_IDLE)
+        write_latched = Signal()
+        byte_index = Signal(range(self.bytes_per_word))
+        address_latched = Signal(self.addr_width)
+        write_latched_data = Signal(self.data_width)
+        read_buffer = Signal(self.data_width)
+        byte_lanes = Array([
+            write_latched_data[i * 8:(i + 1) * 8]
+            for i in range(self.bytes_per_word)
+        ])
+
+        byte_address = Signal(23)
+        m.d.comb += [
+            byte_address.eq(address_latched * self.bytes_per_word),
+            self.init_done.eq(self.qpi_init_done),
+            self.ready.eq(state == self.ST_IDLE),
+            self.busy.eq(state != self.ST_IDLE),
+            self.qpi_req.eq((state == self.ST_LAUNCH) & self.qpi_ready),
+            self.qpi_write.eq(write_latched),
+            self.qpi_addr.eq(byte_address),
+            self.qpi_length.eq(self.bytes_per_word),
+            self.qpi_wdata.eq(byte_lanes[byte_index]),
+            self.qpi_wvalid.eq((state == self.ST_WRITE_STREAM) & self.qpi_wready),
+            self.qpi_rready.eq(state == self.ST_READ_STREAM),
+        ]
+
+        m.d.sync += [self.done.eq(0), self.error.eq(0)]
+
+        with m.Switch(state):
+            with m.Case(self.ST_IDLE):
+                with m.If(self.req):
+                    with m.If(self.addr < self.depth):
+                        m.d.sync += [
+                            address_latched.eq(self.addr),
+                            write_latched.eq(self.we),
+                            write_latched_data.eq(self.wdata),
+                            byte_index.eq(0),
+                            state.eq(self.ST_LAUNCH),
+                        ]
+                    with m.Else():
+                        m.d.sync += self.error.eq(1)
+
+            with m.Case(self.ST_LAUNCH):
+                with m.If(self.qpi_ready):
+                    with m.If(write_latched):
+                        m.d.sync += state.eq(self.ST_WRITE_STREAM)
+                    with m.Else():
+                        m.d.sync += state.eq(self.ST_READ_STREAM)
+
+            with m.Case(self.ST_WRITE_STREAM):
+                with m.If(self.qpi_wready):
+                    with m.If(byte_index == self.bytes_per_word - 1):
+                        m.d.sync += state.eq(self.ST_WAIT_DONE)
+                    with m.Else():
+                        m.d.sync += byte_index.eq(byte_index + 1)
+
+            with m.Case(self.ST_READ_STREAM):
+                with m.If(self.qpi_rvalid):
+                    m.d.sync += read_buffer.word_select(byte_index, 8).eq(self.qpi_rdata)
+                    with m.If(byte_index == self.bytes_per_word - 1):
+                        m.d.sync += state.eq(self.ST_WAIT_DONE)
+                    with m.Else():
+                        m.d.sync += byte_index.eq(byte_index + 1)
+
+            with m.Case(self.ST_WAIT_DONE):
+                with m.If(self.qpi_done):
+                    with m.If(write_latched):
+                        m.d.sync += [self.done.eq(1), state.eq(self.ST_IDLE)]
+                    with m.Else():
+                        m.d.sync += [self.rdata.eq(read_buffer), state.eq(self.ST_READ_RESPONSE)]
+                with m.If(self.qpi_error):
+                    m.d.sync += [self.error.eq(1), state.eq(self.ST_IDLE)]
+
+            with m.Case(self.ST_READ_RESPONSE):
+                m.d.sync += self.rvalid.eq(1)
+                with m.If(self.rready):
+                    m.d.sync += [self.rvalid.eq(0), state.eq(self.ST_IDLE)]
+
+        return m
+
+class PsramParticleStore(Elaboratable):
+    IDLE = 0
+    LAUNCH_WORD = 1
+    WAIT_WRITE = 2
+    WAIT_READ = 3
+    READ_ASSEMBLE = 4
+    READ_RESPONSE = 5
+
+    def __init__(self, *, particle_count=256, sys_clk_hz=50_000_000,
+                 qpi_clk_hz=25_000_000):
+        if particle_count < 1 or particle_count > 256:
+            raise ValueError("particle_count must be between 1 and 256")
+        self.particle_count = particle_count
+
+        self.req = Signal()
+        self.we = Signal()
+        self.pos_only = Signal()
+        self.addr = Signal(8)
+        self.ready = Signal()
+        self.done = Signal()
+        self.error = Signal()
+        self.rvalid = Signal()
+        self.rready = Signal()
+
+        self.w_pos_x = Signal(signed(20))
+        self.w_pos_y = Signal(signed(20))
+        self.w_vel_x = Signal(signed(20))
+        self.w_vel_y = Signal(signed(20))
+
+        self.r_pos_x = Signal(signed(20))
+        self.r_pos_y = Signal(signed(20))
+        self.r_vel_x = Signal(signed(20))
+        self.r_vel_y = Signal(signed(20))
+
+        self.sclk = Signal()
+        self.ce_n = Signal(init=1)
+        self.dq_i = Signal(4)
+        self.dq_o = Signal(4)
+        self.dq_oe = Signal(4)
+        self.translator_dir = Signal()
+        self.translator_oe_n = Signal(4, init=0b1111)
+        self.init_done = Signal()
+        self.busy = Signal()
+
+        self.word_bank = PsramWordBank(
+            data_width=32,
+            depth=particle_count * 4,
+            sys_clk_hz=sys_clk_hz,
+            qpi_clk_hz=qpi_clk_hz,
+        )
+
+    def elaborate(self, platform):
+        m = Module()
+        bank = self.word_bank
+        m.submodules.word_bank = bank
+
+        state = Signal(3, init=self.IDLE)
+        write_latched = Signal()
+        pos_only_latched = Signal()
+        particle_addr = Signal(8)
+        field_index = Signal(2)
+
+        pos_x_latched = Signal(signed(20))
+        pos_y_latched = Signal(signed(20))
+        vel_x_latched = Signal(signed(20))
+        vel_y_latched = Signal(signed(20))
+
+        read_words = [Signal(32, name=f"particle_read_word_{i}") for i in range(4)]
+        read_words_array = Array(read_words)
+        write_words = Array([
+            Cat(pos_x_latched, Const(0, 12)),
+            Cat(pos_y_latched, Const(0, 12)),
+            Cat(vel_x_latched, Const(0, 12)),
+            Cat(vel_y_latched, Const(0, 12)),
+        ])
+
+        word_addr = Signal(bank.addr_width)
+        selected_word_count = Signal(3)
+        m.d.comb += [
+            self.ready.eq((state == self.IDLE) & bank.init_done),
+            self.busy.eq((state != self.IDLE) | bank.busy),
+            self.init_done.eq(bank.init_done),
+            self.sclk.eq(bank.sclk),
+            self.ce_n.eq(bank.ce_n),
+            bank.dq_i.eq(self.dq_i),
+            self.dq_o.eq(bank.dq_o),
+            self.dq_oe.eq(bank.dq_oe),
+            self.translator_dir.eq(bank.translator_dir),
+            self.translator_oe_n.eq(bank.translator_oe_n),
+
+            word_addr.eq((particle_addr << 2) + field_index),
+            selected_word_count.eq(Mux(pos_only_latched, 2, 4)),
+
+            bank.req.eq((state == self.LAUNCH_WORD) & bank.ready),
+            bank.we.eq(write_latched),
+            bank.addr.eq(word_addr),
+            bank.wdata.eq(write_words[field_index]),
+            bank.rready.eq(state == self.WAIT_READ),
+        ]
+
+        m.d.sync += [self.done.eq(0), self.error.eq(0)]
+
+        with m.Switch(state):
+            with m.Case(self.IDLE):
+                with m.If(self.req & self.ready):
+                    with m.If(self.addr < self.particle_count):
+                        m.d.sync += [
+                            write_latched.eq(self.we),
+                            pos_only_latched.eq(self.pos_only),
+                            particle_addr.eq(self.addr),
+                            field_index.eq(0),
+                            pos_x_latched.eq(self.w_pos_x),
+                            pos_y_latched.eq(self.w_pos_y),
+                            vel_x_latched.eq(self.w_vel_x),
+                            vel_y_latched.eq(self.w_vel_y),
+                            state.eq(self.LAUNCH_WORD),
+                        ]
+                    with m.Else():
+                        m.d.sync += self.error.eq(1)
+
+            with m.Case(self.LAUNCH_WORD):
+                with m.If(bank.ready):
+                    if_write = write_latched
+                    with m.If(if_write):
+                        m.d.sync += state.eq(self.WAIT_WRITE)
+                    with m.Else():
+                        m.d.sync += state.eq(self.WAIT_READ)
+
+            with m.Case(self.WAIT_WRITE):
+                with m.If(bank.done):
+                    with m.If(field_index + 1 >= selected_word_count):
+                        m.d.sync += [self.done.eq(1), state.eq(self.IDLE)]
+                    with m.Else():
+                        m.d.sync += [field_index.eq(field_index + 1), state.eq(self.LAUNCH_WORD)]
+                with m.If(bank.error):
+                    m.d.sync += [self.error.eq(1), state.eq(self.IDLE)]
+
+            with m.Case(self.WAIT_READ):
+                with m.If(bank.rvalid):
+                    m.d.sync += read_words_array[field_index].eq(bank.rdata)
+                    with m.If(field_index + 1 >= selected_word_count):
+                        m.d.sync += state.eq(self.READ_ASSEMBLE)
+                    with m.Else():
+                        m.d.sync += [field_index.eq(field_index + 1), state.eq(self.LAUNCH_WORD)]
+                with m.If(bank.error):
+                    m.d.sync += [self.error.eq(1), state.eq(self.IDLE)]
+
+            with m.Case(self.READ_ASSEMBLE):
+                m.d.sync += [
+                    self.r_pos_x.eq(read_words[0][0:20]),
+                    self.r_pos_y.eq(read_words[1][0:20]),
+                ]
+                with m.If(~pos_only_latched):
+                    m.d.sync += [
+                        self.r_vel_x.eq(read_words[2][0:20]),
+                        self.r_vel_y.eq(read_words[3][0:20]),
+                    ]
+                m.d.sync += [self.rvalid.eq(1), state.eq(self.READ_RESPONSE)]
+
+            with m.Case(self.READ_RESPONSE):
+                with m.If(self.rvalid & self.rready):
+                    m.d.sync += [self.rvalid.eq(0), state.eq(self.IDLE)]
+
+            with m.Default():
+                m.d.sync += state.eq(self.IDLE)
+
+        return m
+
+class PsramParticleMemory(Elaboratable):
+    OWNER_NONE = 0
+    OWNER_GRAVITY = 1
+    OWNER_WALL = 2
+    OWNER_SEPARATION = 3
+    OWNER_HOST = 0
+
+    TX_HOST = 0
+    TX_GRAVITY = 1
+    TX_WALL = 2
+    TX_SEPARATION = 3
+
+    ST_IDLE = 0
+    ST_WAIT_WRITE = 1
+    ST_WAIT_READ = 2
+
+    def __init__(self, *, sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000):
+        self.g_active = Signal()
+        self.w_active = Signal()
+        self.owner = Signal(2)
+
+        self.g_read_req = Signal()
+        self.g_read_addr = Signal(INDEX_WIDTH)
+        self.g_read_valid = Signal()
+        self.g_read_pos_x = Signal(signed(POS_WIDTH))
+        self.g_read_pos_y = Signal(signed(POS_WIDTH))
+        self.g_read_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_read_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_read_velocity_overflow = Signal()
+        self.g_write_req = Signal()
+        self.g_write_addr = Signal(INDEX_WIDTH)
+        self.g_write_pos_x = Signal(signed(POS_WIDTH))
+        self.g_write_pos_y = Signal(signed(POS_WIDTH))
+        self.g_write_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_write_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_write_ready = Signal()
+
+        self.w_read_req = Signal()
+        self.w_read_addr = Signal(INDEX_WIDTH)
+        self.w_read_valid = Signal()
+        self.w_read_pos_x = Signal(signed(POS_WIDTH))
+        self.w_read_pos_y = Signal(signed(POS_WIDTH))
+        self.w_read_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.w_read_vel_y = Signal(signed(STORAGE_WIDTH))
+        self.w_write_req = Signal()
+        self.w_write_addr = Signal(INDEX_WIDTH)
+        self.w_write_pos_x = Signal(signed(POS_WIDTH))
+        self.w_write_pos_y = Signal(signed(POS_WIDTH))
+        self.w_write_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.w_write_vel_y = Signal(signed(STORAGE_WIDTH))
+        self.w_write_ready = Signal()
+
+        self.s_active = Signal()
+        self.s_ready = Signal()
+        self.s_read_req = Signal()
+        self.s_read_addr = Signal(INDEX_WIDTH)
+        self.s_read_valid = Signal()
+        self.s_read_pos_x = Signal(signed(POS_WIDTH))
+        self.s_read_pos_y = Signal(signed(POS_WIDTH))
+        self.s_write_req = Signal()
+        self.s_write_addr = Signal(INDEX_WIDTH)
+        self.s_write_pos_x = Signal(signed(POS_WIDTH))
+        self.s_write_pos_y = Signal(signed(POS_WIDTH))
+        self.s_write_ready = Signal()
+
+        self.host_ready = Signal()
+        self.host_write_req = Signal()
+        self.host_write_ready = Signal()
+        self.host_write_addr = Signal(INDEX_WIDTH)
+        self.host_write_pos_x = Signal(signed(POS_WIDTH))
+        self.host_write_pos_y = Signal(signed(POS_WIDTH))
+        self.host_write_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.host_write_vel_y = Signal(signed(STORAGE_WIDTH))
+        self.host_read_req = Signal()
+        self.host_read_addr = Signal(INDEX_WIDTH)
+        self.host_read_valid = Signal()
+        self.host_read_pos_x = Signal(signed(POS_WIDTH))
+        self.host_read_pos_y = Signal(signed(POS_WIDTH))
+        self.host_read_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.host_read_vel_y = Signal(signed(STORAGE_WIDTH))
+        self.host_pos_write_req = Signal()
+        self.host_pos_write_addr = Signal(INDEX_WIDTH)
+        self.host_pos_write_x = Signal(signed(POS_WIDTH))
+        self.host_pos_write_y = Signal(signed(POS_WIDTH))
+
+        self.sclk = Signal()
+        self.ce_n = Signal(init=1)
+        self.dq_i = Signal(4)
+        self.dq_o = Signal(4)
+        self.dq_oe = Signal(4)
+        self.translator_dir = Signal()
+        self.translator_oe_n = Signal(4, init=0b1111)
+        self.init_done = Signal()
+        self.busy = Signal()
+        self.error = Signal()
+
+        self.store = PsramParticleStore(
+            particle_count=PARTICLE_COUNT,
+            sys_clk_hz=sys_clk_hz,
+            qpi_clk_hz=qpi_clk_hz,
+        )
+
+    def elaborate(self, platform):
+        m = Module()
+        store = self.store
+        m.submodules.store = store
+
+        owner = Signal(2, init=self.OWNER_NONE)
+        state = Signal(2, init=self.ST_IDLE)
+        read_seen = Signal()
+        tx_owner = Signal(2, init=self.TX_HOST)
+
+        g_grant = (owner == self.OWNER_GRAVITY)
+        w_grant = (owner == self.OWNER_WALL)
+        s_grant = (owner == self.OWNER_SEPARATION)
+        owner_none = owner == self.OWNER_NONE
+        host_available = (owner_none & ~self.g_active & ~self.w_active
+                          & ~self.s_active & (state == self.ST_IDLE)
+                          & store.ready)
+
+        g_read = g_grant & self.g_read_req & ~read_seen
+        w_read = w_grant & self.w_read_req & ~read_seen
+        s_read = s_grant & self.s_read_req & ~read_seen
+        host_read = (host_available & self.host_read_req
+                     & ~self.host_write_req & ~self.host_pos_write_req)
+
+        g_write = g_grant & self.g_write_req
+        w_write = w_grant & self.w_write_req
+        s_write = s_grant & self.s_write_req
+        host_full_write = host_available & self.host_write_req
+        host_pos_write = host_available & self.host_pos_write_req
+
+        select_g_read = g_read
+        select_w_read = ~select_g_read & w_read
+        select_s_read = ~(select_g_read | select_w_read) & s_read
+        select_host_read = ~(select_g_read | select_w_read | select_s_read) & host_read
+
+        select_g_write = g_write
+        select_w_write = ~select_g_write & w_write
+        select_s_write = ~(select_g_write | select_w_write) & s_write
+        select_host_full_write = ~(select_g_write | select_w_write | select_s_write) & host_full_write
+        select_host_pos_write = ~(select_g_write | select_w_write | select_s_write
+                                  | select_host_full_write) & host_pos_write
+
+        any_read = select_g_read | select_w_read | select_s_read | select_host_read
+        any_write = (select_g_write | select_w_write | select_s_write
+                     | select_host_full_write | select_host_pos_write)
+        launch = (state == self.ST_IDLE) & store.ready & (any_read | any_write)
+        launch_write = any_write
+        launch_pos_only = select_s_read | select_s_write | select_host_pos_write
+
+        selected_addr = Mux(
+            select_g_read | select_g_write, Mux(select_g_read, self.g_read_addr, self.g_write_addr),
+            Mux(select_w_read | select_w_write, Mux(select_w_read, self.w_read_addr, self.w_write_addr),
+                Mux(select_s_read | select_s_write, Mux(select_s_read, self.s_read_addr, self.s_write_addr),
+                    Mux(select_host_read, self.host_read_addr,
+                        Mux(select_host_full_write, self.host_write_addr, self.host_pos_write_addr))))
+        )
+        selected_pos_x = Mux(
+            select_g_write, self.g_write_pos_x,
+            Mux(select_w_write, self.w_write_pos_x,
+                Mux(select_s_write, self.s_write_pos_x,
+                    Mux(select_host_full_write, self.host_write_pos_x, self.host_pos_write_x)))
+        )
+        selected_pos_y = Mux(
+            select_g_write, self.g_write_pos_y,
+            Mux(select_w_write, self.w_write_pos_y,
+                Mux(select_s_write, self.s_write_pos_y,
+                    Mux(select_host_full_write, self.host_write_pos_y, self.host_pos_write_y)))
+        )
+        selected_vel_x = Mux(
+            select_g_write, CatSignExtend(self.g_write_vel_x),
+            Mux(select_w_write, self.w_write_vel_x, self.host_write_vel_x)
+        )
+        selected_vel_y = Mux(
+            select_g_write, CatSignExtend(self.g_write_vel_y),
+            Mux(select_w_write, self.w_write_vel_y, self.host_write_vel_y)
+        )
+        selected_tx_owner = Mux(
+            select_g_read | select_g_write, self.TX_GRAVITY,
+            Mux(select_w_read | select_w_write, self.TX_WALL,
+                Mux(select_s_read | select_s_write, self.TX_SEPARATION, self.TX_HOST))
+        )
+
+        m.d.comb += [
+            self.owner.eq(owner),
+            self.s_ready.eq(s_grant),
+            self.host_ready.eq(host_available),
+            self.busy.eq((state != self.ST_IDLE) | store.busy),
+            self.init_done.eq(store.init_done),
+            self.sclk.eq(store.sclk),
+            self.ce_n.eq(store.ce_n),
+            store.dq_i.eq(self.dq_i),
+            self.dq_o.eq(store.dq_o),
+            self.dq_oe.eq(store.dq_oe),
+            self.translator_dir.eq(store.translator_dir),
+            self.translator_oe_n.eq(store.translator_oe_n),
+
+            store.req.eq(launch),
+            store.we.eq(launch_write),
+            store.pos_only.eq(launch_pos_only),
+            store.addr.eq(selected_addr),
+            store.w_pos_x.eq(selected_pos_x),
+            store.w_pos_y.eq(selected_pos_y),
+            store.w_vel_x.eq(selected_vel_x),
+            store.w_vel_y.eq(selected_vel_y),
+            store.rready.eq(state == self.ST_WAIT_READ),
+
+            self.g_read_valid.eq(store.rvalid & (tx_owner == self.TX_GRAVITY)),
+            self.w_read_valid.eq(store.rvalid & (tx_owner == self.TX_WALL)),
+            self.s_read_valid.eq(store.rvalid & (tx_owner == self.TX_SEPARATION)),
+            self.host_read_valid.eq(store.rvalid & (tx_owner == self.TX_HOST)),
+
+            self.g_read_pos_x.eq(store.r_pos_x),
+            self.g_read_pos_y.eq(store.r_pos_y),
+            self.g_read_vel_x.eq(store.r_vel_x),
+            self.g_read_vel_y.eq(store.r_vel_y),
+            self.g_read_velocity_overflow.eq(
+                (store.r_vel_x[19] != store.r_vel_x[18])
+                | (store.r_vel_y[19] != store.r_vel_y[18])
+            ),
+            self.w_read_pos_x.eq(store.r_pos_x),
+            self.w_read_pos_y.eq(store.r_pos_y),
+            self.w_read_vel_x.eq(store.r_vel_x),
+            self.w_read_vel_y.eq(store.r_vel_y),
+            self.s_read_pos_x.eq(store.r_pos_x),
+            self.s_read_pos_y.eq(store.r_pos_y),
+            self.host_read_pos_x.eq(store.r_pos_x),
+            self.host_read_pos_y.eq(store.r_pos_y),
+            self.host_read_vel_x.eq(store.r_vel_x),
+            self.host_read_vel_y.eq(store.r_vel_y),
+
+            self.g_write_ready.eq((state == self.ST_WAIT_WRITE) & store.done
+                                  & (tx_owner == self.TX_GRAVITY)),
+            self.w_write_ready.eq((state == self.ST_WAIT_WRITE) & store.done
+                                  & (tx_owner == self.TX_WALL)),
+            self.s_write_ready.eq((state == self.ST_WAIT_WRITE) & store.done
+                                  & (tx_owner == self.TX_SEPARATION)),
+            self.host_write_ready.eq((state == self.ST_WAIT_WRITE) & store.done
+                                     & (tx_owner == self.TX_HOST)),
+        ]
+
+        m.d.sync += self.error.eq(0)
+
+        with m.Switch(owner):
+            with m.Case(self.OWNER_NONE):
+                with m.If(self.g_active):
+                    m.d.sync += owner.eq(self.OWNER_GRAVITY)
+                with m.Elif(self.w_active):
+                    m.d.sync += owner.eq(self.OWNER_WALL)
+                with m.Elif(self.s_active):
+                    m.d.sync += owner.eq(self.OWNER_SEPARATION)
+            with m.Case(self.OWNER_GRAVITY):
+                with m.If(~self.g_active):
+                    m.d.sync += [owner.eq(self.OWNER_NONE), read_seen.eq(0)]
+            with m.Case(self.OWNER_WALL):
+                with m.If(~self.w_active):
+                    m.d.sync += [owner.eq(self.OWNER_NONE), read_seen.eq(0)]
+            with m.Case(self.OWNER_SEPARATION):
+                with m.If(~self.s_active):
+                    m.d.sync += [owner.eq(self.OWNER_NONE), read_seen.eq(0)]
+            with m.Default():
+                m.d.sync += [owner.eq(self.OWNER_NONE), read_seen.eq(0)]
+
+        with m.If(g_grant & ~self.g_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.Elif(w_grant & ~self.w_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.Elif(s_grant & ~self.s_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.If(launch & any_read & (selected_tx_owner != self.TX_HOST)):
+            m.d.sync += read_seen.eq(1)
+
+        with m.If(launch):
+            m.d.sync += [
+                tx_owner.eq(selected_tx_owner),
+                state.eq(Mux(launch_write, self.ST_WAIT_WRITE, self.ST_WAIT_READ)),
+            ]
+
+        with m.If((state == self.ST_WAIT_WRITE) & (store.done | store.error)):
+            m.d.sync += state.eq(self.ST_IDLE)
+            with m.If(store.error):
+                m.d.sync += self.error.eq(1)
+        with m.Elif((state == self.ST_WAIT_READ) & (store.rvalid | store.error)):
+            m.d.sync += state.eq(self.ST_IDLE)
+            with m.If(store.error):
+                m.d.sync += self.error.eq(1)
+
+        return m
+
+def CatSignExtend(value):
+    return Cat(value, value[18])
+
+class ParticleMemorySramAdapter(Elaboratable):
+    IDLE = 0
+    R_P0 = 1
+    R_P0_WAIT = 2
+    R_P1 = 3
+    R_P1_WAIT = 4
+    R_V0 = 5
+    R_V0_WAIT = 6
+    R_V1 = 7
+    R_V1_WAIT = 8
+    R_DONE = 9
+    W_P0 = 10
+    W_P1 = 11
+    W_V0 = 12
+    W_V1 = 13
+
+    def __init__(self):
+        self.pos_rd_req = Signal()
+        self.pos_rd_addr = Signal(8)
+        self.pos_rd_valid = Signal()
+        self.pos_rd_data = Signal(40)
+        self.pos_wr_req = Signal()
+        self.pos_wr_addr = Signal(8)
+        self.pos_wr_data = Signal(40)
+        self.pos_wr_ready = Signal()
+
+        self.vel_rd_req = Signal()
+        self.vel_rd_addr = Signal(8)
+        self.vel_rd_valid = Signal()
+        self.vel_rd_data = Signal(40)
+        self.vel_wr_req = Signal()
+        self.vel_wr_addr = Signal(8)
+        self.vel_wr_data = Signal(40)
+        self.vel_wr_ready = Signal()
+
+        self.rd_ready = Signal()
+        self.busy = Signal()
+        self.write_done = Signal()
+
+        self.sram_en = Signal()
+        self.sram_we = Signal()
+        self.sram_addr = Signal(10)
+        self.sram_wdata = Signal(32)
+        self.sram_rdata = Signal(32)
+
+    def elaborate(self, platform):
+        m = Module()
+        state = Signal(4, init=self.IDLE)
+        saved_addr = Signal(8)
+        saved_pos_data = Signal(40)
+        saved_vel_data = Signal(40)
+        do_pos_write = Signal()
+        do_vel_write = Signal()
+        pos_low = Signal(20)
+        pos_high = Signal(20)
+        vel_low = Signal(20)
+        vel_high = Signal(20)
+
+        m.d.comb += [
+            self.sram_en.eq(0), self.sram_we.eq(0),
+            self.sram_addr.eq(0), self.sram_wdata.eq(0),
+            self.pos_rd_valid.eq(state == self.R_DONE),
+            self.vel_rd_valid.eq(state == self.R_DONE),
+            self.pos_rd_data.eq(Cat(pos_low, pos_high)),
+            self.vel_rd_data.eq(Cat(vel_low, vel_high)),
+            self.rd_ready.eq(state == self.IDLE),
+            self.pos_wr_ready.eq((state == self.IDLE) & self.pos_wr_req),
+            self.vel_wr_ready.eq((state == self.IDLE) & self.vel_wr_req),
+            self.busy.eq(state != self.IDLE),
+            self.write_done.eq(
+                ((state == self.W_P1) & ~do_vel_write) | (state == self.W_V1)
+            ),
+        ]
+
+        with m.Switch(state):
+            with m.Case(self.IDLE):
+                with m.If(self.pos_wr_req | self.vel_wr_req):
+                    with m.If(self.pos_wr_req):
+                        m.d.sync += [saved_addr.eq(self.pos_wr_addr),
+                                     saved_pos_data.eq(self.pos_wr_data)]
+                    with m.Else():
+                        m.d.sync += saved_addr.eq(self.vel_wr_addr)
+                    with m.If(self.vel_wr_req):
+                        m.d.sync += saved_vel_data.eq(self.vel_wr_data)
+                    m.d.sync += [
+                        do_pos_write.eq(self.pos_wr_req),
+                        do_vel_write.eq(self.vel_wr_req),
+                    ]
+                    with m.If(self.pos_wr_req):
+                        m.d.sync += state.eq(self.W_P0)
+                    with m.Else():
+                        m.d.sync += state.eq(self.W_V0)
+                with m.Elif(self.pos_rd_req | self.vel_rd_req):
+                    with m.If(self.pos_rd_req):
+                        m.d.sync += saved_addr.eq(self.pos_rd_addr)
+                    with m.Else():
+                        m.d.sync += saved_addr.eq(self.vel_rd_addr)
+                    m.d.sync += state.eq(self.R_P0)
+
+            with m.Case(self.R_P0):
+                m.d.comb += [self.sram_en.eq(1), self.sram_addr.eq(Cat(Const(0, 2), saved_addr))]
+                m.d.sync += state.eq(self.R_P0_WAIT)
+            with m.Case(self.R_P0_WAIT):
+                m.d.sync += [pos_low.eq(self.sram_rdata[:20]), state.eq(self.R_P1)]
+            with m.Case(self.R_P1):
+                m.d.comb += [self.sram_en.eq(1), self.sram_addr.eq(Cat(Const(1, 2), saved_addr))]
+                m.d.sync += state.eq(self.R_P1_WAIT)
+            with m.Case(self.R_P1_WAIT):
+                m.d.sync += [pos_high.eq(self.sram_rdata[:20]), state.eq(self.R_V0)]
+            with m.Case(self.R_V0):
+                m.d.comb += [self.sram_en.eq(1), self.sram_addr.eq(Cat(Const(2, 2), saved_addr))]
+                m.d.sync += state.eq(self.R_V0_WAIT)
+            with m.Case(self.R_V0_WAIT):
+                m.d.sync += [vel_low.eq(self.sram_rdata[:20]), state.eq(self.R_V1)]
+            with m.Case(self.R_V1):
+                m.d.comb += [self.sram_en.eq(1), self.sram_addr.eq(Cat(Const(3, 2), saved_addr))]
+                m.d.sync += state.eq(self.R_V1_WAIT)
+            with m.Case(self.R_V1_WAIT):
+                m.d.sync += [vel_high.eq(self.sram_rdata[:20]), state.eq(self.R_DONE)]
+            with m.Case(self.R_DONE):
+                m.d.sync += state.eq(self.IDLE)
+
+            with m.Case(self.W_P0):
+                m.d.comb += [self.sram_en.eq(1), self.sram_we.eq(1),
+                             self.sram_addr.eq(Cat(Const(0, 2), saved_addr)),
+                             self.sram_wdata.eq(saved_pos_data[:20])]
+                with m.If(do_pos_write):
+                    m.d.sync += state.eq(self.W_P1)
+                with m.Else():
+                    m.d.sync += state.eq(self.W_V0)
+            with m.Case(self.W_P1):
+                m.d.comb += [self.sram_en.eq(1), self.sram_we.eq(1),
+                             self.sram_addr.eq(Cat(Const(1, 2), saved_addr)),
+                             self.sram_wdata.eq(saved_pos_data[20:40])]
+                with m.If(do_vel_write):
+                    m.d.sync += state.eq(self.W_V0)
+                with m.Else():
+                    m.d.sync += state.eq(self.IDLE)
+            with m.Case(self.W_V0):
+                m.d.comb += [self.sram_en.eq(1), self.sram_we.eq(1),
+                             self.sram_addr.eq(Cat(Const(2, 2), saved_addr)),
+                             self.sram_wdata.eq(saved_vel_data[:20])]
+                m.d.sync += state.eq(self.W_V1)
+            with m.Case(self.W_V1):
+                m.d.comb += [self.sram_en.eq(1), self.sram_we.eq(1),
+                             self.sram_addr.eq(Cat(Const(3, 2), saved_addr)),
+                             self.sram_wdata.eq(saved_vel_data[20:40])]
+                m.d.sync += state.eq(self.IDLE)
+
+        return m
+
+class ParticleMemory(Elaboratable):
+    OWNER_NONE = 0
+    OWNER_GRAVITY = 1
+    OWNER_WALL = 2
+    OWNER_SEPARATION = 3
+    OWNER_HOST = 0
+
+    def __init__(self, *, backend="behavioral", sram_init=None):
+        if backend not in ("behavioral", "sram"):
+            raise ValueError("backend must be behavioral or sram")
+        self.backend = backend
+        self.sram_init = sram_init
+        self.sram_en = Signal()
+        self.sram_we = Signal()
+        self.sram_addr = Signal(10)
+        self.sram_wdata = Signal(32)
+        self.sram_rdata = Signal(32)
+        self.g_active = Signal()
+        self.w_active = Signal()
+        self.owner = Signal(2)
+
+        self.g_read_req = Signal()
+        self.g_read_addr = Signal(INDEX_WIDTH)
+        self.g_read_valid = Signal()
+        self.g_read_pos_x = Signal(signed(POS_WIDTH))
+        self.g_read_pos_y = Signal(signed(POS_WIDTH))
+        self.g_read_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_read_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_read_velocity_overflow = Signal()
+
+        self.g_write_req = Signal()
+        self.g_write_addr = Signal(INDEX_WIDTH)
+        self.g_write_pos_x = Signal(signed(POS_WIDTH))
+        self.g_write_pos_y = Signal(signed(POS_WIDTH))
+        self.g_write_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_write_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.g_write_ready = Signal()
+
+        self.w_read_req = Signal()
+        self.w_read_addr = Signal(INDEX_WIDTH)
+        self.w_read_valid = Signal()
+        self.w_read_pos_x = Signal(signed(POS_WIDTH))
+        self.w_read_pos_y = Signal(signed(POS_WIDTH))
+        self.w_read_vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.w_read_vel_y = Signal(signed(WALL_VEL_WIDTH))
+
+        self.w_write_req = Signal()
+        self.w_write_addr = Signal(INDEX_WIDTH)
+        self.w_write_pos_x = Signal(signed(POS_WIDTH))
+        self.w_write_pos_y = Signal(signed(POS_WIDTH))
+        self.w_write_vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.w_write_vel_y = Signal(signed(WALL_VEL_WIDTH))
+        self.w_write_ready = Signal()
+
+        self.s_active = Signal()
+        self.s_ready = Signal()
+        self.s_read_req = Signal()
+        self.s_read_addr = Signal(INDEX_WIDTH)
+        self.s_read_valid = Signal()
+        self.s_read_pos_x = Signal(signed(POS_WIDTH))
+        self.s_read_pos_y = Signal(signed(POS_WIDTH))
+        self.s_write_req = Signal()
+        self.s_write_addr = Signal(INDEX_WIDTH)
+        self.s_write_pos_x = Signal(signed(POS_WIDTH))
+        self.s_write_pos_y = Signal(signed(POS_WIDTH))
+        self.s_write_ready = Signal()
+
+        self.host_ready = Signal()
+        self.host_write_req = Signal()
+        self.host_write_addr = Signal(INDEX_WIDTH)
+        self.host_write_pos_x = Signal(signed(POS_WIDTH))
+        self.host_write_pos_y = Signal(signed(POS_WIDTH))
+        self.host_write_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.host_write_vel_y = Signal(signed(STORAGE_WIDTH))
+        self.host_write_ready = Signal()
+
+        self.host_read_req = Signal()
+        self.host_read_addr = Signal(INDEX_WIDTH)
+        self.host_read_valid = Signal()
+        self.host_read_pos_x = Signal(signed(POS_WIDTH))
+        self.host_read_pos_y = Signal(signed(POS_WIDTH))
+        self.host_read_vel_x = Signal(signed(STORAGE_WIDTH))
+        self.host_read_vel_y = Signal(signed(STORAGE_WIDTH))
+
+        self.host_pos_write_req = Signal()
+        self.host_pos_write_addr = Signal(INDEX_WIDTH)
+        self.host_pos_write_x = Signal(signed(POS_WIDTH))
+        self.host_pos_write_y = Signal(signed(POS_WIDTH))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        pos_rd_req = Signal()
+        pos_rd_addr = Signal(INDEX_WIDTH)
+        pos_rd_valid = Signal()
+        pos_rd_data = Signal(40)
+        pos_wr_req = Signal()
+        pos_wr_addr = Signal(INDEX_WIDTH)
+        pos_wr_data = Signal(40)
+        pos_wr_ready = Signal()
+        vel_rd_req = Signal()
+        vel_rd_addr = Signal(INDEX_WIDTH)
+        vel_rd_valid = Signal()
+        vel_rd_data = Signal(40)
+        vel_wr_req = Signal()
+        vel_wr_addr = Signal(INDEX_WIDTH)
+        vel_wr_data = Signal(40)
+        vel_wr_ready = Signal()
+
+        if self.backend == "behavioral":
+            pos_bank = SyncMemory1R1W(width=40, depth=PARTICLE_COUNT, name="particle_pos")
+            vel_bank = SyncMemory1R1W(width=40, depth=PARTICLE_COUNT, name="particle_vel")
+            m.submodules.pos_bank = pos_bank
+            m.submodules.vel_bank = vel_bank
+            m.d.comb += [
+                self.sram_en.eq(0), self.sram_we.eq(0), self.sram_addr.eq(0),
+                self.sram_wdata.eq(0),
+                pos_bank.rd_req.eq(pos_rd_req), pos_bank.rd_addr.eq(pos_rd_addr),
+                pos_rd_valid.eq(pos_bank.rd_valid), pos_rd_data.eq(pos_bank.rd_data),
+                pos_bank.wr_req.eq(pos_wr_req), pos_bank.wr_addr.eq(pos_wr_addr),
+                pos_bank.wr_data.eq(pos_wr_data), pos_wr_ready.eq(pos_bank.wr_ready),
+                vel_bank.rd_req.eq(vel_rd_req), vel_bank.rd_addr.eq(vel_rd_addr),
+                vel_rd_valid.eq(vel_bank.rd_valid), vel_rd_data.eq(vel_bank.rd_data),
+                vel_bank.wr_req.eq(vel_wr_req), vel_bank.wr_addr.eq(vel_wr_addr),
+                vel_bank.wr_data.eq(vel_wr_data), vel_wr_ready.eq(vel_bank.wr_ready),
+            ]
+        else:
+            adapter = ParticleMemorySramAdapter()
+            m.submodules.sram_adapter = adapter
+            m.d.comb += [
+                adapter.pos_rd_req.eq(pos_rd_req), adapter.pos_rd_addr.eq(pos_rd_addr),
+                pos_rd_valid.eq(adapter.pos_rd_valid), pos_rd_data.eq(adapter.pos_rd_data),
+                adapter.pos_wr_req.eq(pos_wr_req), adapter.pos_wr_addr.eq(pos_wr_addr),
+                adapter.pos_wr_data.eq(pos_wr_data), pos_wr_ready.eq(adapter.pos_wr_ready),
+                adapter.vel_rd_req.eq(vel_rd_req), adapter.vel_rd_addr.eq(vel_rd_addr),
+                vel_rd_valid.eq(adapter.vel_rd_valid), vel_rd_data.eq(adapter.vel_rd_data),
+                adapter.vel_wr_req.eq(vel_wr_req), adapter.vel_wr_addr.eq(vel_wr_addr),
+                adapter.vel_wr_data.eq(vel_wr_data), vel_wr_ready.eq(adapter.vel_wr_ready),
+            ]
+            m.d.comb += [
+                self.sram_en.eq(adapter.sram_en), self.sram_we.eq(adapter.sram_we),
+                self.sram_addr.eq(adapter.sram_addr), self.sram_wdata.eq(adapter.sram_wdata),
+                adapter.sram_rdata.eq(self.sram_rdata),
+            ]
+
+        owner = Signal(2, init=self.OWNER_NONE)
+        read_seen = Signal(init=0)
+        read_owner = Signal(2, init=self.OWNER_NONE)
+        host_write_pending = Signal()
+
+        g_grant = owner[0] & ~owner[1]
+        w_grant = ~owner[0] & owner[1]
+        s_grant = owner[0] & owner[1]
+        owner_is_none = ~owner[0] & ~owner[1]
+
+        host_base_ready = (owner_is_none & ~self.g_active & ~self.w_active & ~self.s_active)
+        backend_has_write = (
+            (g_grant & self.g_write_req) | (w_grant & self.w_write_req) |
+            (s_grant & self.s_write_req) |
+            (host_base_ready & self.host_write_req) |
+            (host_base_ready & self.host_pos_write_req)
+        )
+        if self.backend == "sram":
+            backend_wr_ready = adapter.rd_ready
+            backend_rd_ready = adapter.rd_ready & ~backend_has_write
+        else:
+            backend_wr_ready = Const(1)
+            backend_rd_ready = Const(1)
+        g_read_accept = g_grant & self.g_read_req & ~read_seen & backend_rd_ready
+        w_read_accept = w_grant & self.w_read_req & ~read_seen & backend_rd_ready
+        s_read_accept = s_grant & self.s_read_req & ~read_seen & backend_rd_ready
+        host_read_accept = self.host_ready & self.host_read_req & backend_rd_ready
+        any_read_accept = (g_read_accept | w_read_accept |
+                           s_read_accept | host_read_accept)
+
+        read_addr = Mux(
+            g_read_accept,
+            self.g_read_addr,
+            Mux(w_read_accept, self.w_read_addr,
+                Mux(s_read_accept, self.s_read_addr, self.host_read_addr)),
+        )
+
+        m.d.comb += [
+            self.owner.eq(owner),
+            self.g_write_ready.eq(g_grant & self.g_write_req & backend_wr_ready),
+            self.w_write_ready.eq(w_grant & self.w_write_req & backend_wr_ready),
+            self.s_ready.eq(s_grant),
+            self.s_write_ready.eq(s_grant & self.s_write_req & backend_wr_ready),
+
+            self.host_ready.eq(
+                host_base_ready & backend_wr_ready
+            ),
+            pos_rd_req.eq(any_read_accept),
+            pos_rd_addr.eq(read_addr),
+            vel_rd_req.eq(any_read_accept),
+            vel_rd_addr.eq(read_addr),
+
+            self.g_read_valid.eq(
+                pos_rd_valid & read_owner[0] & ~read_owner[1]
+            ),
+            self.w_read_valid.eq(
+                pos_rd_valid & ~read_owner[0] & read_owner[1]
+            ),
+            self.s_read_valid.eq(
+                pos_rd_valid & read_owner[0] & read_owner[1]
+            ),
+            self.host_read_valid.eq(
+                pos_rd_valid & ~read_owner[0] & ~read_owner[1]
+            ),
+
+            self.g_read_pos_x.eq(pos_rd_data[0:20]),
+            self.g_read_pos_y.eq(pos_rd_data[20:40]),
+            self.g_read_vel_x.eq(vel_rd_data[0:19]),
+            self.g_read_vel_y.eq(vel_rd_data[20:39]),
+
+            self.w_read_pos_x.eq(pos_rd_data[0:20]),
+            self.w_read_pos_y.eq(pos_rd_data[20:40]),
+            self.w_read_vel_x.eq(vel_rd_data[0:20]),
+            self.w_read_vel_y.eq(vel_rd_data[20:40]),
+
+            self.s_read_pos_x.eq(pos_rd_data[0:20]),
+            self.s_read_pos_y.eq(pos_rd_data[20:40]),
+
+            self.host_read_pos_x.eq(pos_rd_data[0:20]),
+            self.host_read_pos_y.eq(pos_rd_data[20:40]),
+            self.host_read_vel_x.eq(vel_rd_data[0:20]),
+            self.host_read_vel_y.eq(vel_rd_data[20:40]),
+
+            self.g_read_velocity_overflow.eq(
+                (vel_rd_data[19] != vel_rd_data[18]) |
+                (vel_rd_data[39] != vel_rd_data[38])
+            ),
+        ]
+
+        with m.Switch(owner):
+            with m.Case(self.OWNER_NONE):
+                with m.If(self.g_active):
+                    m.d.sync += owner.eq(self.OWNER_GRAVITY)
+                with m.Elif(self.w_active):
+                    m.d.sync += owner.eq(self.OWNER_WALL)
+                with m.Elif(self.s_active):
+                    m.d.sync += owner.eq(self.OWNER_SEPARATION)
+            with m.Case(self.OWNER_GRAVITY):
+                with m.If(~self.g_active):
+                    m.d.sync += [
+                        owner.eq(self.OWNER_NONE),
+                        read_seen.eq(0),
+                    ]
+            with m.Case(self.OWNER_WALL):
+                with m.If(~self.w_active):
+                    m.d.sync += [
+                        owner.eq(self.OWNER_NONE),
+                        read_seen.eq(0),
+                    ]
+            with m.Case(self.OWNER_SEPARATION):
+                with m.If(~self.s_active):
+                    m.d.sync += [
+                        owner.eq(self.OWNER_NONE),
+                        read_seen.eq(0),
+                    ]
+            with m.Default():
+                m.d.sync += [owner.eq(self.OWNER_NONE), read_seen.eq(0)]
+
+        with m.If(g_grant & ~self.g_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.Elif(w_grant & ~self.w_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.Elif(s_grant & ~self.s_read_req):
+            m.d.sync += read_seen.eq(0)
+        with m.If(g_read_accept | w_read_accept | s_read_accept):
+            m.d.sync += read_seen.eq(1)
+
+        with m.If(any_read_accept):
+            m.d.sync += read_owner.eq(
+                Mux(g_read_accept, self.OWNER_GRAVITY,
+                    Mux(w_read_accept, self.OWNER_WALL,
+                    Mux(s_read_accept, self.OWNER_SEPARATION, self.OWNER_HOST)))
+            )
+
+        g_write = g_grant & self.g_write_req
+        w_write = w_grant & self.w_write_req
+        s_write = s_grant & self.s_write_req
+        host_full_write = self.host_ready & self.host_write_req
+        host_position_write = self.host_ready & self.host_pos_write_req
+        pos_write_req = (g_write | w_write | s_write |
+                         host_full_write | host_position_write) & backend_wr_ready
+
+        pos_write_addr = Mux(
+            g_write, self.g_write_addr,
+            Mux(w_write, self.w_write_addr,
+                Mux(s_write, self.s_write_addr,
+                    Mux(host_full_write, self.host_write_addr,
+                        self.host_pos_write_addr)))
+        )
+        pos_write_data = Mux(
+            g_write, Cat(self.g_write_pos_x, self.g_write_pos_y),
+            Mux(w_write, Cat(self.w_write_pos_x, self.w_write_pos_y),
+                Mux(s_write, Cat(self.s_write_pos_x, self.s_write_pos_y),
+                    Mux(host_full_write,
+                        Cat(self.host_write_pos_x, self.host_write_pos_y),
+                        Cat(self.host_pos_write_x, self.host_pos_write_y))))
+        )
+
+        vel_write_req = (g_write | w_write | host_full_write) & backend_wr_ready
+        vel_write_addr = Mux(
+            g_write, self.g_write_addr,
+            Mux(w_write, self.w_write_addr, self.host_write_addr)
+        )
+        g_vel_packed = Cat(
+            self.g_write_vel_x, self.g_write_vel_x[18],
+            self.g_write_vel_y, self.g_write_vel_y[18],
+        )
+        vel_write_data = Mux(
+            g_write, g_vel_packed,
+            Mux(w_write,
+                Cat(self.w_write_vel_x, self.w_write_vel_y),
+                Cat(self.host_write_vel_x, self.host_write_vel_y))
+        )
+
+        m.d.comb += [
+            pos_wr_req.eq(pos_write_req),
+            pos_wr_addr.eq(pos_write_addr),
+            pos_wr_data.eq(pos_write_data),
+            vel_wr_req.eq(vel_write_req),
+            vel_wr_addr.eq(vel_write_addr),
+            vel_wr_data.eq(vel_write_data),
+        ]
+
+        if self.backend == "sram":
+            m.d.comb += self.host_write_ready.eq(
+                adapter.write_done & host_write_pending
+            )
+            with m.If(host_full_write & backend_wr_ready):
+                m.d.sync += host_write_pending.eq(1)
+            with m.If(adapter.write_done & host_write_pending):
+                m.d.sync += host_write_pending.eq(0)
+        else:
+            m.d.comb += self.host_write_ready.eq(host_full_write)
+
+        return m
+
+# 2. STAGE 1: PARTICLE GRAVITY & ADVECTION
+
+DT_Q12 = 68
+VMAX_Q12 = 40 * (1 << SHIFT)
+
+GRAVITY_WIDTH = 8
+
+class GravityAdvect(Elaboratable):
+    def __init__(self):
+        self.pos_x = Signal(signed(POS_WIDTH))
+        self.pos_y = Signal(signed(POS_WIDTH))
+        self.vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.gx = Signal(signed(GRAVITY_WIDTH))
+        self.gy = Signal(signed(GRAVITY_WIDTH))
+
+        self.next_pos_x = Signal(signed(POS_WIDTH))
+        self.next_pos_y = Signal(signed(POS_WIDTH))
+        self.next_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.next_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        dt = Const(DT_Q12, signed(8))
+        vmax = Const(VMAX_Q12, signed(GRAVITY_VEL_WIDTH))
+        vmin = Const(-VMAX_Q12, signed(GRAVITY_VEL_WIDTH))
+
+        gx_delta = Signal(signed(16))
+        gy_delta = Signal(signed(16))
+        vx_sum = Signal(signed(20))
+        vy_sum = Signal(signed(20))
+        vx_clip_wide = Signal(signed(20))
+        vy_clip_wide = Signal(signed(20))
+
+        m.d.comb += [
+            gx_delta.eq(self.gx * DT_Q12),
+            gy_delta.eq(self.gy * DT_Q12),
+            vx_sum.eq(self.vel_x + gx_delta),
+            vy_sum.eq(self.vel_y + gy_delta),
+
+            vx_clip_wide.eq(Mux(vx_sum > VMAX_Q12, VMAX_Q12,
+                                Mux(vx_sum < -VMAX_Q12, -VMAX_Q12, vx_sum))),
+            vy_clip_wide.eq(Mux(vy_sum > VMAX_Q12, VMAX_Q12,
+                                Mux(vy_sum < -VMAX_Q12, -VMAX_Q12, vy_sum))),
+            self.next_vel_x.eq(vx_clip_wide),
+            self.next_vel_y.eq(vy_clip_wide),
+        ]
+
+        dx_product = Signal(signed(GRAVITY_VEL_WIDTH + 8))
+        dy_product = Signal(signed(GRAVITY_VEL_WIDTH + 8))
+        dx = Signal(signed(16))
+        dy = Signal(signed(16))
+
+        m.d.comb += [
+            dx_product.eq(self.next_vel_x * dt),
+            dy_product.eq(self.next_vel_y * dt),
+            dx.eq(dx_product >> SHIFT),
+            dy.eq(dy_product >> SHIFT),
+            self.next_pos_x.eq(self.pos_x + dx),
+            self.next_pos_y.eq(self.pos_y + dy),
+        ]
+        return m
+
+class ParticleGravityAdvectEngine(Elaboratable):
+    IDLE = 0
+    READ = 1
+    WRITE = 2
+
+    def __init__(self):
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.gx = Signal(signed(GRAVITY_WIDTH))
+        self.gy = Signal(signed(GRAVITY_WIDTH))
+
+        self.read_req = Signal()
+        self.read_addr = Signal(INDEX_WIDTH)
+        self.read_valid = Signal()
+        self.read_pos_x = Signal(signed(POS_WIDTH))
+        self.read_pos_y = Signal(signed(POS_WIDTH))
+        self.read_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.read_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        self.write_req = Signal()
+        self.write_addr = Signal(INDEX_WIDTH)
+        self.write_pos_x = Signal(signed(POS_WIDTH))
+        self.write_pos_y = Signal(signed(POS_WIDTH))
+        self.write_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.write_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.write_ready = Signal()
+
+        self.particle_index = Signal(INDEX_WIDTH)
+
+    def elaborate(self, platform):
+        m = Module()
+
+        state = Signal(2, reset=self.IDLE)
+        index = Signal(INDEX_WIDTH)
+        gx_latched = Signal(signed(GRAVITY_WIDTH))
+        gy_latched = Signal(signed(GRAVITY_WIDTH))
+
+        pos_x_latched = Signal(signed(POS_WIDTH))
+        pos_y_latched = Signal(signed(POS_WIDTH))
+        vel_x_latched = Signal(signed(GRAVITY_VEL_WIDTH))
+        vel_y_latched = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        datapath = GravityAdvect()
+        m.submodules.datapath = datapath
+
+        m.d.comb += [
+            self.busy.eq(state != self.IDLE),
+            self.particle_index.eq(index),
+
+            self.read_req.eq(state == self.READ),
+            self.read_addr.eq(index),
+
+            self.write_req.eq(state == self.WRITE),
+            self.write_addr.eq(index),
+
+            datapath.pos_x.eq(pos_x_latched),
+            datapath.pos_y.eq(pos_y_latched),
+            datapath.vel_x.eq(vel_x_latched),
+            datapath.vel_y.eq(vel_y_latched),
+            datapath.gx.eq(gx_latched),
+            datapath.gy.eq(gy_latched),
+
+            self.write_pos_x.eq(datapath.next_pos_x),
+            self.write_pos_y.eq(datapath.next_pos_y),
+            self.write_vel_x.eq(datapath.next_vel_x),
+            self.write_vel_y.eq(datapath.next_vel_y),
+        ]
+
+        m.d.sync += self.done.eq(0)
+
+        with m.Switch(state):
+            with m.Case(self.IDLE):
+                if_start = self.start
+                with m.If(if_start):
+                    m.d.sync += [
+                        gx_latched.eq(self.gx),
+                        gy_latched.eq(self.gy),
+                        index.eq(0),
+                        state.eq(self.READ),
+                    ]
+
+            with m.Case(self.READ):
+                with m.If(self.read_valid):
+                    m.d.sync += [
+                        pos_x_latched.eq(self.read_pos_x),
+                        pos_y_latched.eq(self.read_pos_y),
+                        vel_x_latched.eq(self.read_vel_x),
+                        vel_y_latched.eq(self.read_vel_y),
+                        state.eq(self.WRITE),
+                    ]
+
+            with m.Case(self.WRITE):
+                with m.If(self.write_ready):
+                    with m.If(index == PARTICLE_COUNT - 1):
+                        m.d.sync += [
+                            self.done.eq(1),
+                            state.eq(self.IDLE),
+                        ]
+                    with m.Else():
+                        m.d.sync += [
+                            index.eq(index + 1),
+                            state.eq(self.READ),
+                        ]
+
+            with m.Default():
+                m.d.sync += state.eq(self.IDLE)
+
+        return m
+
+# 3. STAGE 2A: SPATIAL-HASH PARTICLE SEPARATION (2-PASS PUSH-APART)
+
+LINK_WIDTH = 9  # signed values -1..255
+
+class SpatialHashBuilder(Elaboratable):
+    def __init__(self):
+        self.pos_x = [Signal(signed(POS_WIDTH), name=f"pos_x_{p}") for p in range(NP)]
+        self.pos_y = [Signal(signed(POS_WIDTH), name=f"pos_y_{p}") for p in range(NP)]
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.cell_head = [
+            Signal(signed(LINK_WIDTH), name=f"cell_head_{c}") for c in range(NX * NY)
+        ]
+        self.particle_next = [
+            Signal(signed(LINK_WIDTH), name=f"particle_next_{p}") for p in range(NP)
+        ]
+
+        self.particle_index = Signal(unsigned(8))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        pos_x = Array(self.pos_x)
+        pos_y = Array(self.pos_y)
+        head = Array(self.cell_head)
+        nxt = Array(self.particle_next)
+
+        index = self.particle_index
+        x_cell_raw = Signal(signed(POS_WIDTH))
+        y_cell_raw = Signal(signed(POS_WIDTH))
+        cx = Signal(unsigned(4))
+        cy = Signal(unsigned(4))
+        cell_index = Signal(unsigned(8))
+
+        m.d.comb += [
+            x_cell_raw.eq(pos_x[index] >> SHIFT),
+            y_cell_raw.eq(pos_y[index] >> SHIFT),
+            cx.eq(Mux(x_cell_raw < 0, 0,
+                      Mux(x_cell_raw > 15, 15, x_cell_raw[:4]))),
+            cy.eq(Mux(y_cell_raw < 0, 0,
+                      Mux(y_cell_raw > 15, 15, y_cell_raw[:4]))),
+            cell_index.eq(Cat(cx, cy)),
+        ]
+
+        with m.If(self.start & ~self.busy):
+            for entry in self.cell_head:
+                m.d.sync += entry.eq(-1)
+            m.d.sync += [
+                self.particle_index.eq(0),
+                self.busy.eq(1),
+                self.done.eq(0),
+            ]
+        with m.Elif(self.busy):
+            m.d.sync += [
+                nxt[index].eq(head[cell_index]),
+                head[cell_index].eq(index),
+            ]
+            with m.If(index == NP - 1):
+                m.d.sync += [
+                    self.busy.eq(0),
+                    self.done.eq(1),
+                ]
+            with m.Else():
+                m.d.sync += self.particle_index.eq(index + 1)
+        with m.Else():
+            m.d.sync += self.done.eq(0)
+
+        return m
+
+LINK_WIDTH = 9
+
+IDLE = 0
+LOAD_PI = 1
+SAME_START = 2
+SAME_WALK = 3
+NBR_SELECT = 4
+NBR_WALK = 5
+NEXT_PI = 6
+NEXT_CELL = 7
+FINISH = 8
+
+class SpatialHashPairEnumerator(Elaboratable):
+    def __init__(self):
+        self.cell_head = [
+            Signal(signed(LINK_WIDTH), name=f"enum_cell_head_{c}")
+            for c in range(NX * NY)
+        ]
+        self.particle_next = [
+            Signal(signed(LINK_WIDTH), name=f"enum_particle_next_{p}")
+            for p in range(NP)
+        ]
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+        self.pair_valid = Signal()
+        self.pair_i = Signal(unsigned(8))
+        self.pair_j = Signal(unsigned(8))
+
+        self.cell_index = Signal(unsigned(8))
+        self.particle_i = Signal(signed(LINK_WIDTH))
+        self.particle_j = Signal(signed(LINK_WIDTH))
+        self.neighbour_index = Signal(unsigned(3))
+        self._state = Signal(unsigned(4), reset=IDLE)
+
+    def elaborate(self, platform):
+        m = Module()
+        head = Array(self.cell_head)
+        nxt = Array(self.particle_next)
+
+        pi_index = Signal(unsigned(8))
+        pj_index = Signal(unsigned(8))
+        head_value = Signal(signed(LINK_WIDTH))
+        pi_next_value = Signal(signed(LINK_WIDTH))
+        pj_next_value = Signal(signed(LINK_WIDTH))
+        neighbour_head_value = Signal(signed(LINK_WIDTH))
+
+        cell_cx = self.cell_index[:4]
+        cell_cy = self.cell_index[4:8]
+        cell_cx_wide = Signal(signed(6))
+        cell_cy_wide = Signal(signed(6))
+        nbr_cx = Signal(signed(6))
+        nbr_cy = Signal(signed(6))
+        nbr_valid = Signal()
+        nbr_cell_index = Signal(unsigned(8))
+
+        m.d.comb += [
+            pi_index.eq(self.particle_i[:8]),
+            pj_index.eq(self.particle_j[:8]),
+            head_value.eq(head[self.cell_index]),
+            pi_next_value.eq(nxt[pi_index]),
+            pj_next_value.eq(nxt[pj_index]),
+            cell_cx_wide.eq(cell_cx),
+            cell_cy_wide.eq(cell_cy),
+        ]
+
+        with m.Switch(self.neighbour_index):
+            with m.Case(0):  # (+1, 0)
+                m.d.comb += [nbr_cx.eq(cell_cx_wide + 1), nbr_cy.eq(cell_cy_wide)]
+            with m.Case(1):  # (-1, +1)
+                m.d.comb += [nbr_cx.eq(cell_cx_wide - 1), nbr_cy.eq(cell_cy_wide + 1)]
+            with m.Case(2):  # (0, +1)
+                m.d.comb += [nbr_cx.eq(cell_cx_wide), nbr_cy.eq(cell_cy_wide + 1)]
+            with m.Case(3):  # (+1, +1)
+                m.d.comb += [nbr_cx.eq(cell_cx_wide + 1), nbr_cy.eq(cell_cy_wide + 1)]
+            with m.Default():
+                m.d.comb += [nbr_cx.eq(0), nbr_cy.eq(0)]
+
+        m.d.comb += [
+            nbr_valid.eq(
+                (nbr_cx >= Const(0, signed(6)))
+                & (nbr_cx < Const(NX, signed(6)))
+                & (nbr_cy >= Const(0, signed(6)))
+                & (nbr_cy < Const(NY, signed(6)))
+            ),
+            nbr_cell_index.eq(Cat(nbr_cx[:4], nbr_cy[:4])),
+            neighbour_head_value.eq(head[nbr_cell_index]),
+        ]
+
+        m.d.sync += [self.pair_valid.eq(0), self.done.eq(0)]
+
+        with m.Switch(self._state):
+            with m.Case(IDLE):
+                with m.If(self.start & ~self.busy):
+                    m.d.sync += [
+                        self.cell_index.eq(0),
+                        self.particle_i.eq(-1),
+                        self.particle_j.eq(-1),
+                        self.neighbour_index.eq(0),
+                        self.busy.eq(1),
+                        self._state.eq(LOAD_PI),
+                    ]
+
+            with m.Case(LOAD_PI):
+                m.d.sync += self.particle_i.eq(head_value)
+                with m.If(head_value == -1):
+                    m.d.sync += self._state.eq(NEXT_CELL)
+                with m.Else():
+                    m.d.sync += self._state.eq(SAME_START)
+
+            with m.Case(SAME_START):
+                m.d.sync += [
+                    self.particle_j.eq(pi_next_value),
+                    self._state.eq(SAME_WALK),
+                ]
+
+            with m.Case(SAME_WALK):
+                with m.If(self.particle_j == -1):
+                    m.d.sync += [
+                        self.neighbour_index.eq(0),
+                        self._state.eq(NBR_SELECT),
+                    ]
+                with m.Else():
+                    m.d.sync += [
+                        self.pair_i.eq(self.particle_i[:8]),
+                        self.pair_j.eq(self.particle_j[:8]),
+                        self.pair_valid.eq(1),
+                        self.particle_j.eq(pj_next_value),
+                    ]
+
+            with m.Case(NBR_SELECT):
+                with m.If(self.neighbour_index == 4):
+                    m.d.sync += self._state.eq(NEXT_PI)
+                with m.Else():
+                    with m.If(nbr_valid):
+                        m.d.sync += [
+                            self.particle_j.eq(neighbour_head_value),
+                            self._state.eq(NBR_WALK),
+                        ]
+                    with m.Else():
+                        m.d.sync += self.neighbour_index.eq(
+                            self.neighbour_index + 1
+                        )
+
+            with m.Case(NBR_WALK):
+                with m.If(self.particle_j == -1):
+                    m.d.sync += [
+                        self.neighbour_index.eq(self.neighbour_index + 1),
+                        self._state.eq(NBR_SELECT),
+                    ]
+                with m.Else():
+                    m.d.sync += [
+                        self.pair_i.eq(self.particle_i[:8]),
+                        self.pair_j.eq(self.particle_j[:8]),
+                        self.pair_valid.eq(1),
+                        self.particle_j.eq(pj_next_value),
+                    ]
+
+            with m.Case(NEXT_PI):
+                m.d.sync += self.particle_i.eq(pi_next_value)
+                with m.If(pi_next_value == -1):
+                    m.d.sync += self._state.eq(NEXT_CELL)
+                with m.Else():
+                    m.d.sync += self._state.eq(SAME_START)
+
+            with m.Case(NEXT_CELL):
+                with m.If(self.cell_index == (NX * NY - 1)):
+                    m.d.sync += self._state.eq(FINISH)
+                with m.Else():
+                    m.d.sync += [
+                        self.cell_index.eq(self.cell_index + 1),
+                        self._state.eq(LOAD_PI),
+                    ]
+
+            with m.Case(FINISH):
+                m.d.sync += [
+                    self.busy.eq(0),
+                    self.done.eq(1),
+                    self._state.eq(IDLE),
+                ]
+
+        return m
+
+MIN_DIST_Q12 = 2458
+MIN_DIST_SQ_Q12 = 1475
+PAIR_POS_WIDTH = 21
+DX_WIDTH = POS_WIDTH + 1
+
+PUSH_LUT = (
+    10568, 5582, 4047, 3230, 2703, 2328, 2043, 1817,
+    1632, 1477, 1345, 1231, 1130, 1041, 962, 890,
+    825, 765, 711, 660, 614, 570, 530, 492,
+    456, 423, 392, 362, 334, 307, 282, 257,
+    234, 212, 191, 171, 152, 133, 116, 98,
+    82, 66, 51, 36, 22, 8, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0,
+)
+
+class ParticlePairCorrection(Elaboratable):
+    def __init__(self):
+        self.pos_i_x = Signal(signed(POS_WIDTH))
+        self.pos_i_y = Signal(signed(POS_WIDTH))
+        self.pos_j_x = Signal(signed(POS_WIDTH))
+        self.pos_j_y = Signal(signed(POS_WIDTH))
+
+        self.next_i_x = Signal(signed(PAIR_POS_WIDTH))
+        self.next_i_y = Signal(signed(PAIR_POS_WIDTH))
+        self.next_j_x = Signal(signed(PAIR_POS_WIDTH))
+        self.next_j_y = Signal(signed(PAIR_POS_WIDTH))
+        self.pair_is_close = Signal()
+        self.did_correct = Signal()
+        self.lut_index = Signal(unsigned(6))
+        self.factor = Signal(unsigned(14))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        dx = Signal(signed(DX_WIDTH))
+        dy = Signal(signed(DX_WIDTH))
+        dx_sq = Signal(unsigned(42))
+        dy_sq = Signal(unsigned(42))
+        d2_sum = Signal(unsigned(43))
+        d2_q12 = Signal(unsigned(31))
+        close_x = Signal()
+        close_y = Signal()
+        close_distance = Signal()
+        lut = Array(Const(value, unsigned(14)) for value in PUSH_LUT)
+        factor_signed = Signal(signed(15))
+        corr_x_product = Signal(signed(36))
+        corr_y_product = Signal(signed(36))
+        corr_x = Signal(signed(24))
+        corr_y = Signal(signed(24))
+
+        m.d.comb += [
+            dx.eq(self.pos_i_x - self.pos_j_x),
+            dy.eq(self.pos_i_y - self.pos_j_y),
+
+            close_x.eq((dx > -MIN_DIST_Q12) & (dx < MIN_DIST_Q12)),
+            close_y.eq((dy > -MIN_DIST_Q12) & (dy < MIN_DIST_Q12)),
+            self.pair_is_close.eq(close_x & close_y),
+
+            dx_sq.eq(dx * dx),
+            dy_sq.eq(dy * dy),
+            d2_sum.eq(dx_sq + dy_sq),
+            d2_q12.eq(d2_sum >> SHIFT),
+            close_distance.eq((d2_q12 > 0) & (d2_q12 < MIN_DIST_SQ_Q12)),
+            self.did_correct.eq(self.pair_is_close & close_distance),
+
+            self.lut_index.eq(Mux((d2_q12 >> 5) > 63, 63, d2_q12 >> 5)),
+            self.factor.eq(lut[self.lut_index]),
+            factor_signed.eq(self.factor),
+
+            corr_x_product.eq(dx * factor_signed),
+            corr_y_product.eq(dy * factor_signed),
+            corr_x.eq(Mux(self.did_correct, corr_x_product >> SHIFT, 0)),
+            corr_y.eq(Mux(self.did_correct, corr_y_product >> SHIFT, 0)),
+
+            self.next_i_x.eq(self.pos_i_x + corr_x),
+            self.next_i_y.eq(self.pos_i_y + corr_y),
+            self.next_j_x.eq(self.pos_j_x - corr_x),
+            self.next_j_y.eq(self.pos_j_y - corr_y),
+        ]
+        return m
+
+IDLE = 0
+BUILD = 1
+ENUMERATE = 2
+
+class ParticleSeparation2Pass(Elaboratable):
+    def __init__(self):
+        self.pos_x = [
+            Signal(signed(POS_WIDTH), name=f"sep_pos_x_{p}") for p in range(NP)
+        ]
+        self.pos_y = [
+            Signal(signed(POS_WIDTH), name=f"sep_pos_y_{p}") for p in range(NP)
+        ]
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.load_en = Signal()
+        self.load_addr = Signal(8)
+        self.load_pos_x = Signal(signed(POS_WIDTH))
+        self.load_pos_y = Signal(signed(POS_WIDTH))
+        self.read_addr = Signal(8)
+        self.read_pos_x = Signal(signed(POS_WIDTH))
+        self.read_pos_y = Signal(signed(POS_WIDTH))
+
+        self.pass_index = Signal(unsigned(1))
+        self._state = Signal(unsigned(2), init=IDLE)
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.builder = builder = SpatialHashBuilder()
+        m.submodules.enumerator = enumerator = SpatialHashPairEnumerator()
+        m.submodules.correction = correction = ParticlePairCorrection()
+
+        pos_x = Array(self.pos_x)
+        pos_y = Array(self.pos_y)
+
+        m.d.comb += [
+            self.read_pos_x.eq(pos_x[self.read_addr]),
+            self.read_pos_y.eq(pos_y[self.read_addr]),
+        ]
+        with m.If(self.load_en):
+            m.d.sync += [
+                pos_x[self.load_addr].eq(self.load_pos_x),
+                pos_y[self.load_addr].eq(self.load_pos_y),
+            ]
+
+        for p in range(NP):
+            m.d.comb += [
+                builder.pos_x[p].eq(self.pos_x[p]),
+                builder.pos_y[p].eq(self.pos_y[p]),
+            ]
+
+        for c in range(len(builder.cell_head)):
+            m.d.comb += enumerator.cell_head[c].eq(builder.cell_head[c])
+        for p in range(NP):
+            m.d.comb += enumerator.particle_next[p].eq(builder.particle_next[p])
+
+        m.d.comb += [
+            correction.pos_i_x.eq(pos_x[enumerator.pair_i]),
+            correction.pos_i_y.eq(pos_y[enumerator.pair_i]),
+            correction.pos_j_x.eq(pos_x[enumerator.pair_j]),
+            correction.pos_j_y.eq(pos_y[enumerator.pair_j]),
+        ]
+
+        m.d.comb += [
+            builder.start.eq(
+                ((self._state == IDLE) & self.start)
+                | ((self._state == ENUMERATE)
+                   & enumerator.done
+                   & (self.pass_index == 0))
+            ),
+            enumerator.start.eq(
+                (self._state == BUILD) & builder.done
+            ),
+        ]
+
+        with m.If(enumerator.pair_valid):
+            m.d.sync += [
+                pos_x[enumerator.pair_i].eq(correction.next_i_x),
+                pos_y[enumerator.pair_i].eq(correction.next_i_y),
+                pos_x[enumerator.pair_j].eq(correction.next_j_x),
+                pos_y[enumerator.pair_j].eq(correction.next_j_y),
+            ]
+
+        m.d.sync += self.done.eq(0)
+        with m.Switch(self._state):
+            with m.Case(IDLE):
+                with m.If(self.start & ~self.busy):
+                    m.d.sync += [
+                        self.busy.eq(1),
+                        self.pass_index.eq(0),
+                        self._state.eq(BUILD),
+                    ]
+
+            with m.Case(BUILD):
+                with m.If(builder.done):
+                    m.d.sync += self._state.eq(ENUMERATE)
+
+            with m.Case(ENUMERATE):
+                with m.If(enumerator.done):
+                    with m.If(self.pass_index == 0):
+                        m.d.sync += [
+                            self.pass_index.eq(1),
+                            self._state.eq(BUILD),
+                        ]
+                    with m.Else():
+                        m.d.sync += [
+                            self.busy.eq(0),
+                            self.done.eq(1),
+                            self._state.eq(IDLE),
+                        ]
+
+        return m
+
+class ParticleSeparationMemoryAdapter(Elaboratable):
+    IDLE = 0
+    WAIT_MEMORY = 1
+    LOAD_REQUEST = 2
+    LOAD_WAIT = 3
+    LOAD_GAP = 4
+    RUN_START = 5
+    RUN_WAIT = 6
+    STORE = 7
+
+    def __init__(self):
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.mem_ready = Signal()
+        self.mem_read_req = Signal()
+        self.mem_read_addr = Signal(8)
+        self.mem_read_valid = Signal()
+        self.mem_read_pos_x = Signal(signed(20))
+        self.mem_read_pos_y = Signal(signed(20))
+        self.mem_pos_write_req = Signal()
+        self.mem_pos_write_addr = Signal(8)
+        self.mem_pos_write_x = Signal(signed(20))
+        self.mem_pos_write_y = Signal(signed(20))
+        self.mem_write_ready = Signal()
+
+        self.index = Signal(8)
+        self._state = Signal(4, init=self.IDLE)
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.separation = separation = ParticleSeparation2Pass()
+        m.d.comb += [
+            separation.load_en.eq(
+                (self._state == self.LOAD_WAIT) & self.mem_read_valid
+            ),
+            separation.load_addr.eq(self.index),
+            separation.load_pos_x.eq(self.mem_read_pos_x),
+            separation.load_pos_y.eq(self.mem_read_pos_y),
+            separation.read_addr.eq(self.index),
+        ]
+
+        m.d.comb += [
+            self.busy.eq(self._state != self.IDLE),
+            self.mem_read_req.eq((self._state == self.LOAD_REQUEST) & self.mem_ready),
+            self.mem_read_addr.eq(self.index),
+            self.mem_pos_write_req.eq((self._state == self.STORE) & self.mem_ready),
+            self.mem_pos_write_addr.eq(self.index),
+            self.mem_pos_write_x.eq(separation.read_pos_x),
+            self.mem_pos_write_y.eq(separation.read_pos_y),
+            separation.start.eq(self._state == self.RUN_START),
+        ]
+
+        m.d.sync += self.done.eq(0)
+        with m.Switch(self._state):
+            with m.Case(self.IDLE):
+                with m.If(self.start):
+                    m.d.sync += [self.index.eq(0), self._state.eq(self.WAIT_MEMORY)]
+
+            with m.Case(self.WAIT_MEMORY):
+                with m.If(self.mem_ready):
+                    m.d.sync += self._state.eq(self.LOAD_REQUEST)
+
+            with m.Case(self.LOAD_REQUEST):
+                with m.If(self.mem_ready):
+                    m.d.sync += self._state.eq(self.LOAD_WAIT)
+
+            with m.Case(self.LOAD_WAIT):
+                with m.If(self.mem_read_valid):
+                    m.d.sync += self._state.eq(self.LOAD_GAP)
+
+            with m.Case(self.LOAD_GAP):
+                with m.If(self.index == 255):
+                    m.d.sync += self._state.eq(self.RUN_START)
+                with m.Else():
+                    m.d.sync += [self.index.eq(self.index + 1), self._state.eq(self.LOAD_REQUEST)]
+
+            with m.Case(self.RUN_START):
+                m.d.sync += self._state.eq(self.RUN_WAIT)
+
+            with m.Case(self.RUN_WAIT):
+                with m.If(separation.done):
+                    m.d.sync += [self.index.eq(0), self._state.eq(self.STORE)]
+
+            with m.Case(self.STORE):
+                with m.If(self.mem_write_ready):
+                    with m.If(self.index == 255):
+                        m.d.sync += [self._state.eq(self.IDLE), self.done.eq(1)]
+                    with m.Else():
+                        m.d.sync += self.index.eq(self.index + 1)
+
+            with m.Default():
+                m.d.sync += self._state.eq(self.IDLE)
+
+        return m
+
+# 4. STAGE 2B: CIRCULAR WALL COLLISION
+
+CEN_Q12 = 8 << SHIFT
+WALL_R_Q12 = 31744
+WALL_R2_Q8 = 15376
+
+WALL_INV_R_LUT = (
+    528, 527, 526, 525, 524, 523, 522, 520,
+    519, 518, 517, 516, 515, 514, 513, 512,
+    511, 510, 509, 508, 507, 506, 505, 504,
+    503, 503, 502, 501, 500, 499, 498, 497,
+    496, 495, 494, 493, 492, 492, 491, 490,
+    489, 488, 487, 486, 485, 485, 484, 483,
+    482, 481, 480, 480, 479, 478, 477, 476,
+    476, 475, 474, 473, 472, 472, 471, 470,
+)
+
+class WallCollision(Elaboratable):
+    def __init__(self):
+        self.pos_x = Signal(signed(POS_WIDTH))
+        self.pos_y = Signal(signed(POS_WIDTH))
+        self.vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.vel_y = Signal(signed(WALL_VEL_WIDTH))
+
+        self.next_pos_x = Signal(signed(POS_WIDTH))
+        self.next_pos_y = Signal(signed(POS_WIDTH))
+        self.next_vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.next_vel_y = Signal(signed(WALL_VEL_WIDTH))
+        self.outside = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+
+        rx = Signal(signed(POS_WIDTH + 1))
+        ry = Signal(signed(POS_WIDTH + 1))
+        rx_sq = Signal(unsigned(42))
+        ry_sq = Signal(unsigned(42))
+        r2_sum = Signal(unsigned(43))
+        r2_q8 = Signal(unsigned(27))
+        lut_delta = Signal(unsigned(27))
+        lut_index = Signal(unsigned(6))
+        inv_r = Signal(unsigned(10))
+        inv_r_signed = Signal(signed(11))
+
+        nx_product = Signal(signed(32))
+        ny_product = Signal(signed(32))
+        nx = Signal(signed(20))
+        ny = Signal(signed(20))
+
+        projected_x_product = Signal(signed(36))
+        projected_y_product = Signal(signed(36))
+        projected_x = Signal(signed(24))
+        projected_y = Signal(signed(24))
+
+        vx_n_product = Signal(signed(40))
+        vy_n_product = Signal(signed(40))
+        vn_sum = Signal(signed(41))
+        vn_shifted = Signal(signed(29))
+        vn = Signal(signed(29))
+        vx_correction_product = Signal(signed(49))
+        vy_correction_product = Signal(signed(49))
+        vx_correction = Signal(signed(37))
+        vy_correction = Signal(signed(37))
+        corrected_vx = Signal(signed(38))
+        corrected_vy = Signal(signed(38))
+
+        lut = Array(Const(value, unsigned(10)) for value in WALL_INV_R_LUT)
+
+        m.d.comb += [
+            rx.eq(self.pos_x - CEN_Q12),
+            ry.eq(self.pos_y - CEN_Q12),
+            rx_sq.eq(rx * rx),
+            ry_sq.eq(ry * ry),
+            r2_sum.eq(rx_sq + ry_sq),
+            r2_q8.eq(r2_sum >> 16),
+            self.outside.eq(r2_q8 > WALL_R2_Q8),
+            lut_delta.eq(Mux(r2_q8 > WALL_R2_Q8,
+                             r2_q8 - WALL_R2_Q8, 0)),
+            lut_index.eq(Mux(lut_delta > (63 << 6), 63, lut_delta >> 6)),
+            inv_r.eq(lut[lut_index]),
+            inv_r_signed.eq(inv_r),
+
+            nx_product.eq(rx * inv_r_signed),
+            ny_product.eq(ry * inv_r_signed),
+            nx.eq(nx_product >> SHIFT),
+            ny.eq(ny_product >> SHIFT),
+
+            projected_x_product.eq(nx * WALL_R_Q12),
+            projected_y_product.eq(ny * WALL_R_Q12),
+            projected_x.eq(projected_x_product >> SHIFT),
+            projected_y.eq(projected_y_product >> SHIFT),
+
+            vx_n_product.eq(self.vel_x * nx),
+            vy_n_product.eq(self.vel_y * ny),
+            vn_sum.eq(vx_n_product + vy_n_product),
+            vn_shifted.eq(vn_sum >> SHIFT),
+            vn.eq(Mux(vn_shifted > 0, vn_shifted, 0)),
+
+            vx_correction_product.eq(vn * nx),
+            vy_correction_product.eq(vn * ny),
+            vx_correction.eq(vx_correction_product >> SHIFT),
+            vy_correction.eq(vy_correction_product >> SHIFT),
+            corrected_vx.eq(self.vel_x - vx_correction),
+            corrected_vy.eq(self.vel_y - vy_correction),
+
+            self.next_pos_x.eq(Mux(self.outside, CEN_Q12 + projected_x, self.pos_x)),
+            self.next_pos_y.eq(Mux(self.outside, CEN_Q12 + projected_y, self.pos_y)),
+            self.next_vel_x.eq(Mux(self.outside, corrected_vx, self.vel_x)),
+            self.next_vel_y.eq(Mux(self.outside, corrected_vy, self.vel_y)),
+        ]
+        return m
+
+class ParticleWallCollisionEngine(Elaboratable):
+    IDLE = 0
+    READ = 1
+    WRITE = 2
+
+    def __init__(self):
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.read_req = Signal()
+        self.read_addr = Signal(INDEX_WIDTH)
+        self.read_valid = Signal()
+        self.read_pos_x = Signal(signed(POS_WIDTH))
+        self.read_pos_y = Signal(signed(POS_WIDTH))
+        self.read_vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.read_vel_y = Signal(signed(WALL_VEL_WIDTH))
+
+        self.write_req = Signal()
+        self.write_addr = Signal(INDEX_WIDTH)
+        self.write_pos_x = Signal(signed(POS_WIDTH))
+        self.write_pos_y = Signal(signed(POS_WIDTH))
+        self.write_vel_x = Signal(signed(WALL_VEL_WIDTH))
+        self.write_vel_y = Signal(signed(WALL_VEL_WIDTH))
+        self.write_ready = Signal()
+
+        self.particle_index = Signal(INDEX_WIDTH)
+        self.particle_outside = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+
+        state = Signal(2, init=self.IDLE)
+        index = Signal(INDEX_WIDTH)
+
+        pos_x_latched = Signal(signed(POS_WIDTH))
+        pos_y_latched = Signal(signed(POS_WIDTH))
+        vel_x_latched = Signal(signed(WALL_VEL_WIDTH))
+        vel_y_latched = Signal(signed(WALL_VEL_WIDTH))
+
+        datapath = WallCollision()
+        m.submodules.datapath = datapath
+
+        m.d.comb += [
+            self.busy.eq(state != self.IDLE),
+            self.particle_index.eq(index),
+
+            self.read_req.eq(state == self.READ),
+            self.read_addr.eq(index),
+
+            self.write_req.eq(state == self.WRITE),
+            self.write_addr.eq(index),
+
+            datapath.pos_x.eq(pos_x_latched),
+            datapath.pos_y.eq(pos_y_latched),
+            datapath.vel_x.eq(vel_x_latched),
+            datapath.vel_y.eq(vel_y_latched),
+
+            self.write_pos_x.eq(datapath.next_pos_x),
+            self.write_pos_y.eq(datapath.next_pos_y),
+            self.write_vel_x.eq(datapath.next_vel_x),
+            self.write_vel_y.eq(datapath.next_vel_y),
+            self.particle_outside.eq(datapath.outside),
+        ]
+
+        m.d.sync += self.done.eq(0)
+
+        with m.Switch(state):
+            with m.Case(self.IDLE):
+                with m.If(self.start):
+                    m.d.sync += [
+                        index.eq(0),
+                        state.eq(self.READ),
+                    ]
+
+            with m.Case(self.READ):
+                with m.If(self.read_valid):
+                    m.d.sync += [
+                        pos_x_latched.eq(self.read_pos_x),
+                        pos_y_latched.eq(self.read_pos_y),
+                        vel_x_latched.eq(self.read_vel_x),
+                        vel_y_latched.eq(self.read_vel_y),
+                        state.eq(self.WRITE),
+                    ]
+
+            with m.Case(self.WRITE):
+                with m.If(self.write_ready):
+                    with m.If(index == PARTICLE_COUNT - 1):
+                        m.d.sync += [
+                            self.done.eq(1),
+                            state.eq(self.IDLE),
+                        ]
+                    with m.Else():
+                        m.d.sync += [
+                            index.eq(index + 1),
+                            state.eq(self.READ),
+                        ]
+
+            with m.Default():
+                m.d.sync += state.eq(self.IDLE)
+
+        return m
+
+# 5. STAGE 3: PARTICLE-TO-GRID (P2G) & CELL CLASSIFICATION
+
+class BilinearWeights(Elaboratable):
+    def __init__(self, shape_x=16, shape_y=16):
+        if not (2 <= shape_x <= 17 and 2 <= shape_y <= 17):
+            raise ValueError("P2G grid dimensions must be in range 2..17")
+        self.shape_x = shape_x
+        self.shape_y = shape_y
+
+        self.gx_q12 = Signal(signed(21))
+        self.gy_q12 = Signal(signed(21))
+
+        self.corner_x = [Signal(unsigned(5), name=f"corner_x_{k}") for k in range(4)]
+        self.corner_y = [Signal(unsigned(5), name=f"corner_y_{k}") for k in range(4)]
+        self.weight = [Signal(unsigned(13), name=f"weight_{k}") for k in range(4)]
+        self.clipped_gx = Signal(unsigned(16))
+        self.clipped_gy = Signal(unsigned(16))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        max_x = ((self.shape_x - 1) << SHIFT) - 1
+        max_y = ((self.shape_y - 1) << SHIFT) - 1
+
+        gx_clip = Signal(unsigned(16))
+        gy_clip = Signal(unsigned(16))
+        i0 = Signal(unsigned(5))
+        j0 = Signal(unsigned(5))
+        dx = Signal(unsigned(12))
+        dy = Signal(unsigned(12))
+        om_dx = Signal(unsigned(13))
+        om_dy = Signal(unsigned(13))
+
+        p00 = Signal(unsigned(26))
+        p10 = Signal(unsigned(26))
+        p11 = Signal(unsigned(26))
+        p01 = Signal(unsigned(26))
+
+        m.d.comb += [
+            gx_clip.eq(Mux(self.gx_q12 < 0, 0,
+                           Mux(self.gx_q12 > max_x, max_x, self.gx_q12[:16]))),
+            gy_clip.eq(Mux(self.gy_q12 < 0, 0,
+                           Mux(self.gy_q12 > max_y, max_y, self.gy_q12[:16]))),
+            self.clipped_gx.eq(gx_clip),
+            self.clipped_gy.eq(gy_clip),
+
+            i0.eq(gx_clip[SHIFT:SHIFT + 4]),
+            j0.eq(gy_clip[SHIFT:SHIFT + 4]),
+            dx.eq(gx_clip[:SHIFT]),
+            dy.eq(gy_clip[:SHIFT]),
+            om_dx.eq(SCALE - dx),
+            om_dy.eq(SCALE - dy),
+
+            self.corner_x[0].eq(i0),
+            self.corner_y[0].eq(j0),
+            self.corner_x[1].eq(i0 + 1),
+            self.corner_y[1].eq(j0),
+            self.corner_x[2].eq(i0 + 1),
+            self.corner_y[2].eq(j0 + 1),
+            self.corner_x[3].eq(i0),
+            self.corner_y[3].eq(j0 + 1),
+
+            p00.eq(om_dx * om_dy),
+            p10.eq(dx * om_dy),
+            p11.eq(dx * dy),
+            p01.eq(om_dx * dy),
+            self.weight[0].eq(p00 >> SHIFT),
+            self.weight[1].eq(p10 >> SHIFT),
+            self.weight[2].eq(p11 >> SHIFT),
+            self.weight[3].eq(p01 >> SHIFT),
+        ]
+        return m
+
+SUM_WIDTH = 32
+WEIGHT_WIDTH = 32
+NUMERATOR_WIDTH = SUM_WIDTH + SHIFT
+
+def _make_masks():
+    inside = [[((2*x - 15)**2 + (2*y - 15)**2) < 280
+               for y in range(NY)] for x in range(NX)]
+    u_open = []
+    for x in range(NX + 1):
+        for y in range(NY):
+            left = inside[x - 1][y] if x > 0 else False
+            right = inside[x][y] if x < NX else False
+            u_open.append(int(left and right))
+    v_open = []
+    for x in range(NX):
+        for y in range(NY + 1):
+            below = inside[x][y - 1] if y > 0 else False
+            above = inside[x][y] if y < NY else False
+            v_open.append(int(below and above))
+    return inside, u_open, v_open
+
+INSIDE_MASK, U_OPEN_MASK, V_OPEN_MASK = _make_masks()
+
+class P2GNormalizeMasks(Elaboratable):
+    def __init__(self):
+        self.u_sum = [Signal(signed(SUM_WIDTH), name=f"norm_u_sum_{i}") for i in range(U_CELLS)]
+        self.u_weight = [Signal(unsigned(WEIGHT_WIDTH), name=f"norm_u_weight_{i}") for i in range(U_CELLS)]
+        self.v_sum = [Signal(signed(SUM_WIDTH), name=f"norm_v_sum_{i}") for i in range(V_CELLS)]
+        self.v_weight = [Signal(unsigned(WEIGHT_WIDTH), name=f"norm_v_weight_{i}") for i in range(V_CELLS)]
+        self.density_accum = [Signal(unsigned(WEIGHT_WIDTH), name=f"norm_density_accum_{i}") for i in range(DENSITY_CELLS)]
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+        self.phase = Signal(unsigned(2))
+        self.cell_index = Signal(unsigned(9))
+
+        self.u_q12 = [Signal(signed(32), name=f"normalized_u_{i}") for i in range(U_CELLS)]
+        self.v_q12 = [Signal(signed(32), name=f"normalized_v_{i}") for i in range(V_CELLS)]
+        self.density_q12 = [Signal(unsigned(32), name=f"masked_density_{i}") for i in range(DENSITY_CELLS)]
+
+    def elaborate(self, platform):
+        m = Module()
+        u_sum = Array(self.u_sum)
+        u_weight = Array(self.u_weight)
+        v_sum = Array(self.v_sum)
+        v_weight = Array(self.v_weight)
+        density_in = Array(self.density_accum)
+        u_out = Array(self.u_q12)
+        v_out = Array(self.v_q12)
+        density_out = Array(self.density_q12)
+        u_mask = Array([Const(value, unsigned(1)) for value in U_OPEN_MASK])
+        v_mask = Array([Const(value, unsigned(1)) for value in V_OPEN_MASK])
+        inside_mask = Array([Const(int(INSIDE_MASK[i // NY][i % NY]), unsigned(1))
+                             for i in range(DENSITY_CELLS)])
+
+        selected_sum = Signal(signed(SUM_WIDTH))
+        selected_weight = Signal(unsigned(WEIGHT_WIDTH))
+        safe_weight = Signal(unsigned(WEIGHT_WIDTH))
+        numerator = Signal(signed(NUMERATOR_WIDTH))
+        magnitude = Signal(unsigned(NUMERATOR_WIDTH))
+        negative = Signal()
+        quotient = Signal(unsigned(NUMERATOR_WIDTH))
+        remainder = Signal(unsigned(WEIGHT_WIDTH))
+        ceil_quotient = Signal(unsigned(NUMERATOR_WIDTH))
+        signed_quotient = Signal(signed(NUMERATOR_WIDTH + 1))
+        mask_bit = Signal()
+
+        m.d.comb += [
+            selected_sum.eq(Mux(self.phase == 1, u_sum[self.cell_index],
+                                v_sum[self.cell_index])),
+            selected_weight.eq(Mux(self.phase == 1, u_weight[self.cell_index],
+                                   v_weight[self.cell_index])),
+            safe_weight.eq(Mux(selected_weight == 0, 1, selected_weight)),
+            numerator.eq(selected_sum << SHIFT),
+            negative.eq(numerator < 0),
+            magnitude.eq(Mux(negative, -numerator, numerator)),
+            quotient.eq(magnitude // safe_weight),
+            remainder.eq(magnitude % safe_weight),
+            ceil_quotient.eq(quotient + (remainder != 0)),
+            signed_quotient.eq(Mux(negative, -ceil_quotient, quotient)),
+            mask_bit.eq(Mux(self.phase == 1, u_mask[self.cell_index],
+                            v_mask[self.cell_index])),
+        ]
+
+        with m.If(self.start & ~self.busy):
+            m.d.sync += [self.phase.eq(1), self.cell_index.eq(0),
+                         self.busy.eq(1), self.done.eq(0)]
+        with m.Elif(self.busy):
+            with m.If(self.phase == 1):
+                m.d.sync += u_out[self.cell_index].eq(
+                    Mux((selected_weight != 0) & mask_bit, signed_quotient, 0))
+                with m.If(self.cell_index == U_CELLS - 1):
+                    m.d.sync += [self.phase.eq(2), self.cell_index.eq(0)]
+                with m.Else():
+                    m.d.sync += self.cell_index.eq(self.cell_index + 1)
+            with m.Elif(self.phase == 2):
+                m.d.sync += v_out[self.cell_index].eq(
+                    Mux((selected_weight != 0) & mask_bit, signed_quotient, 0))
+                with m.If(self.cell_index == V_CELLS - 1):
+                    m.d.sync += [self.phase.eq(3), self.cell_index.eq(0)]
+                with m.Else():
+                    m.d.sync += self.cell_index.eq(self.cell_index + 1)
+            with m.Else():
+                m.d.sync += density_out[self.cell_index].eq(
+                    Mux(inside_mask[self.cell_index], density_in[self.cell_index], 0))
+                with m.If(self.cell_index == DENSITY_CELLS - 1):
+                    m.d.sync += [self.phase.eq(0), self.busy.eq(0), self.done.eq(1)]
+                with m.Else():
+                    m.d.sync += self.cell_index.eq(self.cell_index + 1)
+        with m.Else():
+            m.d.sync += self.done.eq(0)
+
+        return m
+
+class P2GCompletePipelineSRAM(Elaboratable):
+    def __init__(self):
+        self.pos_x = [Signal(signed(POS_WIDTH), name=f"sram_pos_x_{p}") for p in range(NP)]
+        self.pos_y = [Signal(signed(POS_WIDTH), name=f"sram_pos_y_{p}") for p in range(NP)]
+        self.vel_x = [Signal(signed(WALL_VEL_WIDTH), name=f"sram_vel_x_{p}") for p in range(NP)]
+        self.vel_y = [Signal(signed(WALL_VEL_WIDTH), name=f"sram_vel_y_{p}") for p in range(NP)]
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+        self.cycle_count = Signal(unsigned(24))
+
+        self.u_q12 = [Signal(signed(32), name=f"sram_u_q12_{i}") for i in range(U_CELLS)]
+        self.v_q12 = [Signal(signed(32), name=f"sram_v_q12_{i}") for i in range(V_CELLS)]
+        self.density_q12 = [Signal(unsigned(32), name=f"sram_density_q12_{i}") for i in range(DENSITY_CELLS)]
+
+    def elaborate(self, platform):
+        m = Module()
+
+        u_mem = SyncMemory1R1W(width=64, depth=U_CELLS, name="p2g_u_accum")
+        v_mem = SyncMemory1R1W(width=64, depth=V_CELLS, name="p2g_v_accum")
+        d_mem = SyncMemory1R1W(width=32, depth=DENSITY_CELLS, name="p2g_density_accum")
+        m.submodules.u_mem = u_mem
+        m.submodules.v_mem = v_mem
+        m.submodules.d_mem = d_mem
+
+        px = Array(self.pos_x)
+        py = Array(self.pos_y)
+        vx = Array(self.vel_x)
+        vy = Array(self.vel_y)
+
+        wu = BilinearWeights(NX + 1, NY)
+        wv = BilinearWeights(NX, NY + 1)
+        wd = BilinearWeights(NX, NY)
+        m.submodules.weights_u = wu
+        m.submodules.weights_v = wv
+        m.submodules.weights_d = wd
+
+        gx_u = Signal(signed(21))
+        gy_u = Signal(signed(21))
+        gx_v = Signal(signed(21))
+        gy_v = Signal(signed(21))
+        gx_d = Signal(signed(21))
+        gy_d = Signal(signed(21))
+        particle = Signal(unsigned(8))
+        corner = Signal(unsigned(2))
+        phase = Signal(unsigned(2))  # 0=U, 1=V, 2=density
+        state = Signal(unsigned(3))
+        clear_addr = Signal(unsigned(9))
+        pending_addr = Signal(unsigned(9))
+        pending_sum = Signal(signed(22))
+        pending_weight = Signal(unsigned(13))
+        scatter_addr = Signal(unsigned(9))
+        scatter_weight = Signal(unsigned(13))
+        scatter_sum = Signal(signed(22))
+
+        m.d.comb += [
+            gx_u.eq(px[particle]),
+            gy_u.eq(py[particle] - HALF_CELL_Q12),
+            gx_v.eq(px[particle] - HALF_CELL_Q12),
+            gy_v.eq(py[particle]),
+            gx_d.eq(px[particle] - HALF_CELL_Q12),
+            gy_d.eq(py[particle] - HALF_CELL_Q12),
+            wu.gx_q12.eq(gx_u), wu.gy_q12.eq(gy_u),
+            wv.gx_q12.eq(gx_v), wv.gy_q12.eq(gy_v),
+            wd.gx_q12.eq(gx_d), wd.gy_q12.eq(gy_d),
+        ]
+
+        u_cx = Array(wu.corner_x)[corner]
+        u_cy = Array(wu.corner_y)[corner]
+        u_w = Array(wu.weight)[corner]
+        v_cx = Array(wv.corner_x)[corner]
+        v_cy = Array(wv.corner_y)[corner]
+        v_w = Array(wv.weight)[corner]
+        d_cx = Array(wd.corner_x)[corner]
+        d_cy = Array(wd.corner_y)[corner]
+        d_w = Array(wd.weight)[corner]
+
+        u_addr = Signal(unsigned(9))
+        v_addr = Signal(unsigned(9))
+        d_addr = Signal(unsigned(8))
+        u_weight_signed = Signal(signed(14))
+        v_weight_signed = Signal(signed(14))
+        u_product = Signal(signed(34))
+        v_product = Signal(signed(34))
+        u_add = Signal(signed(22))
+        v_add = Signal(signed(22))
+        m.d.comb += [
+            u_addr.eq(u_cx * NY + u_cy),
+            v_addr.eq(v_cx * (NY + 1) + v_cy),
+            d_addr.eq(d_cx * NY + d_cy),
+            u_weight_signed.eq(u_w),
+            v_weight_signed.eq(v_w),
+            u_product.eq(vx[particle] * u_weight_signed),
+            v_product.eq(vy[particle] * v_weight_signed),
+            u_add.eq(u_product >> SHIFT),
+            v_add.eq(v_product >> SHIFT),
+            scatter_addr.eq(Mux(phase == 0, u_addr,
+                                Mux(phase == 1, v_addr, d_addr))),
+            scatter_weight.eq(Mux(phase == 0, u_w,
+                                  Mux(phase == 1, v_w, d_w))),
+            scatter_sum.eq(Mux(phase == 0, u_add,
+                               Mux(phase == 1, v_add, 0))),
+        ]
+
+        selected_accum = Signal(unsigned(64))
+        selected_density = Signal(unsigned(32))
+        selected_sum = Signal(signed(32))
+        selected_weight = Signal(unsigned(32))
+        m.d.comb += [
+            selected_accum.eq(Mux(phase == 0, u_mem.rd_data, v_mem.rd_data)),
+            selected_sum.eq(selected_accum[:32].as_signed()),
+            selected_weight.eq(selected_accum[32:64]),
+            selected_density.eq(d_mem.rd_data),
+        ]
+
+        old_sum_ext = Signal(signed(33))
+        new_sum = Signal(signed(32))
+        old_weight_ext = Signal(unsigned(33))
+        new_weight = Signal(unsigned(32))
+        packed_accum = Signal(unsigned(64))
+        m.d.comb += [
+            old_sum_ext.eq(selected_sum + pending_sum),
+            new_sum.eq(old_sum_ext[:32].as_signed()),
+            old_weight_ext.eq(selected_weight + pending_weight),
+            new_weight.eq(old_weight_ext[:32]),
+            packed_accum.eq(Cat(new_sum, new_weight)),
+        ]
+
+        u_outputs = Array(self.u_q12)
+        v_outputs = Array(self.v_q12)
+        density_outputs = Array(self.density_q12)
+        u_mask = Array([Const(v, unsigned(1)) for v in U_OPEN_MASK])
+        v_mask = Array([Const(v, unsigned(1)) for v in V_OPEN_MASK])
+        inside_mask = Array([
+            Const(int(INSIDE_MASK[i // NY][i % NY]), unsigned(1))
+            for i in range(DENSITY_CELLS)
+        ])
+        norm_phase = Signal(unsigned(2))  # 0=U, 1=V, 2=density
+        norm_index = Signal(unsigned(9))
+        norm_sum = Signal(signed(32))
+        norm_weight = Signal(unsigned(32))
+        norm_mask = Signal()
+        safe_weight = Signal(unsigned(32))
+        numerator = Signal(signed(44))
+        magnitude = Signal(unsigned(44))
+        negative = Signal()
+        quotient = Signal(unsigned(44))
+        remainder = Signal(unsigned(32))
+        ceil_quotient = Signal(unsigned(44))
+        signed_quotient = Signal(signed(45))
+        m.d.comb += [
+            norm_sum.eq(Mux(norm_phase == 0, u_mem.rd_data[:32].as_signed(),
+                            v_mem.rd_data[:32].as_signed())),
+            norm_weight.eq(Mux(norm_phase == 0, u_mem.rd_data[32:64],
+                               v_mem.rd_data[32:64])),
+            norm_mask.eq(Mux(norm_phase == 0, u_mask[norm_index],
+                             v_mask[norm_index])),
+            safe_weight.eq(Mux(norm_weight == 0, 1, norm_weight)),
+            numerator.eq(norm_sum << SHIFT),
+            negative.eq(numerator < 0),
+            magnitude.eq(Mux(negative, -numerator, numerator)),
+            quotient.eq(magnitude // safe_weight),
+            remainder.eq(magnitude % safe_weight),
+            ceil_quotient.eq(quotient + (remainder != 0)),
+            signed_quotient.eq(Mux(negative, -ceil_quotient, quotient)),
+        ]
+
+        is_clear = state == 1
+        is_scatter_read = state == 2
+        is_scatter_write = state == 3
+        is_norm_read = state == 4
+        is_norm_apply = state == 5
+        read_u = (is_scatter_read & (phase == 0)) | (is_norm_read & (norm_phase == 0))
+        read_v = (is_scatter_read & (phase == 1)) | (is_norm_read & (norm_phase == 1))
+        read_d = (is_scatter_read & (phase == 2)) | (is_norm_read & (norm_phase == 2))
+        m.d.comb += [
+            u_mem.rd_req.eq(read_u),
+            u_mem.rd_addr.eq(Mux(is_scatter_read, scatter_addr, norm_index)),
+            v_mem.rd_req.eq(read_v),
+            v_mem.rd_addr.eq(Mux(is_scatter_read, scatter_addr, norm_index)),
+            d_mem.rd_req.eq(read_d),
+            d_mem.rd_addr.eq(Mux(is_scatter_read, scatter_addr, norm_index)),
+
+            u_mem.wr_req.eq(is_clear | (is_scatter_write & (phase == 0))),
+            u_mem.wr_addr.eq(Mux(is_clear, clear_addr, pending_addr)),
+            u_mem.wr_data.eq(Mux(is_clear, 0, packed_accum)),
+            v_mem.wr_req.eq(is_clear | (is_scatter_write & (phase == 1))),
+            v_mem.wr_addr.eq(Mux(is_clear, clear_addr, pending_addr)),
+            v_mem.wr_data.eq(Mux(is_clear, 0, packed_accum)),
+            d_mem.wr_req.eq((is_clear & (clear_addr < DENSITY_CELLS)) |
+                     (is_scatter_write & (phase == 2))),
+            d_mem.wr_addr.eq(Mux(is_clear, clear_addr[:8], pending_addr[:8])),
+            d_mem.wr_data.eq(Mux(is_clear, 0, selected_density + pending_weight)),
+        ]
+
+        # 0 IDLE, 1 CLEAR, 2 SCATTER_READ, 3 SCATTER_WRITE,
+        m.d.comb += self.busy.eq((state != 0) & (state != 6))
+        m.d.sync += self.done.eq(0)
+        with m.If(state == 0):
+            with m.If(self.start):
+                m.d.sync += [
+                    state.eq(1), clear_addr.eq(0), phase.eq(0),
+                    particle.eq(0), corner.eq(0), norm_phase.eq(0),
+                    norm_index.eq(0), self.cycle_count.eq(0),
+                ]
+        with m.Elif(state == 1):
+            m.d.sync += self.cycle_count.eq(self.cycle_count + 1)
+            with m.If(clear_addr == U_CELLS - 1):
+                m.d.sync += [state.eq(2), phase.eq(0), particle.eq(0), corner.eq(0)]
+            with m.Else():
+                m.d.sync += clear_addr.eq(clear_addr + 1)
+        with m.Elif(state == 2):  # SCATTER_READ
+            m.d.sync += [
+                self.cycle_count.eq(self.cycle_count + 1),
+                pending_addr.eq(scatter_addr),
+                pending_sum.eq(scatter_sum),
+                pending_weight.eq(scatter_weight),
+                state.eq(3),
+            ]
+        with m.Elif(state == 3):  # SCATTER_WRITE
+            m.d.sync += self.cycle_count.eq(self.cycle_count + 1)
+            with m.If(particle == NP - 1):
+                with m.If(corner == 3):
+                    with m.If(phase == 2):
+                        m.d.sync += [state.eq(4), norm_phase.eq(0), norm_index.eq(0)]
+                    with m.Elif(phase == 0):
+                        m.d.sync += [phase.eq(1), particle.eq(0), corner.eq(0), state.eq(2)]
+                    with m.Else():
+                        m.d.sync += [phase.eq(2), particle.eq(0), corner.eq(0), state.eq(2)]
+                with m.Else():
+                    m.d.sync += [corner.eq(corner + 1), state.eq(2)]
+            with m.Else():
+                with m.If(corner == 3):
+                    m.d.sync += [particle.eq(particle + 1), corner.eq(0), state.eq(2)]
+                with m.Else():
+                    m.d.sync += [corner.eq(corner + 1), state.eq(2)]
+        with m.Elif(state == 4):  # NORM_READ
+            m.d.sync += [self.cycle_count.eq(self.cycle_count + 1), state.eq(5)]
+        with m.Elif(state == 5):  # NORM_APPLY
+            m.d.sync += self.cycle_count.eq(self.cycle_count + 1)
+            with m.If(norm_phase == 0):
+                m.d.sync += u_outputs[norm_index].eq(
+                    Mux((norm_weight != 0) & norm_mask, signed_quotient, 0))
+                with m.If(norm_index == U_CELLS - 1):
+                    m.d.sync += [norm_phase.eq(1), norm_index.eq(0), state.eq(4)]
+                with m.Else():
+                    m.d.sync += [norm_index.eq(norm_index + 1), state.eq(4)]
+            with m.Elif(norm_phase == 1):
+                m.d.sync += v_outputs[norm_index].eq(
+                    Mux((norm_weight != 0) & norm_mask, signed_quotient, 0))
+                with m.If(norm_index == V_CELLS - 1):
+                    m.d.sync += [norm_phase.eq(2), norm_index.eq(0), state.eq(4)]
+                with m.Else():
+                    m.d.sync += [norm_index.eq(norm_index + 1), state.eq(4)]
+            with m.Else():
+                m.d.sync += density_outputs[norm_index].eq(
+                    Mux(inside_mask[norm_index], d_mem.rd_data, 0))
+                with m.If(norm_index == DENSITY_CELLS - 1):
+                    m.d.sync += [state.eq(6)]
+                with m.Else():
+                    m.d.sync += [norm_index.eq(norm_index + 1), state.eq(4)]
+        with m.Else():  # DONE pulse, then return idle
+            m.d.sync += [self.done.eq(1), state.eq(0)]
+
+        return m
+
+WATER_DENS_THS_Q12 = 969
+DENSITY_WIDTH = 32
+COUNT_WIDTH = 9
+CELL_WIDTH = 2
+
+class CellClassifier(Elaboratable):
+    def __init__(self):
+        self.pos_x = [Signal(signed(POS_WIDTH), name=f"cell_pos_x_{p}") for p in range(NP)]
+        self.pos_y = [Signal(signed(POS_WIDTH), name=f"cell_pos_y_{p}") for p in range(NP)]
+        self.density = [Signal(unsigned(DENSITY_WIDTH), name=f"cell_density_{i}")
+                        for i in range(CELL_COUNT)]
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+        self.phase = Signal(unsigned(1))
+        self.index = Signal(unsigned(9))
+
+        self.particle_count = [Signal(unsigned(COUNT_WIDTH), name=f"particle_count_{i}")
+                               for i in range(CELL_COUNT)]
+        self.cell_type = [Signal(unsigned(CELL_WIDTH), name=f"cell_type_{i}")
+                          for i in range(CELL_COUNT)]
+        self.u_valid = [Signal(unsigned(1), name=f"u_valid_{i}") for i in range(U_CELLS)]
+        self.v_valid = [Signal(unsigned(1), name=f"v_valid_{i}") for i in range(V_CELLS)]
+
+    def elaborate(self, platform):
+        m = Module()
+        pos_x = Array(self.pos_x)
+        pos_y = Array(self.pos_y)
+        density = Array(self.density)
+        counts = Array(self.particle_count)
+        cell_types = Array(self.cell_type)
+
+        x_raw = Signal(signed(POS_WIDTH))
+        y_raw = Signal(signed(POS_WIDTH))
+        cx = Signal(unsigned(4))
+        cy = Signal(unsigned(4))
+        cell_index = Signal(unsigned(8))
+        current_count = Signal(unsigned(COUNT_WIDTH))
+        is_inside = Array([
+            Const(int(INSIDE_MASK[x][y]), unsigned(1))
+            for x in range(NX) for y in range(NY)
+        ])
+        selected_inside = Signal()
+        selected_density = Signal(unsigned(DENSITY_WIDTH))
+        selected_count = Signal(unsigned(COUNT_WIDTH))
+
+        m.d.comb += [
+            x_raw.eq(pos_x[self.index] >> SHIFT),
+            y_raw.eq(pos_y[self.index] >> SHIFT),
+            cx.eq(Mux(x_raw < 0, 0, Mux(x_raw > 15, 15, x_raw[:4]))),
+            cy.eq(Mux(y_raw < 0, 0, Mux(y_raw > 15, 15, y_raw[:4]))),
+            cell_index.eq((cx << 4) | cy),
+            current_count.eq(counts[cell_index]),
+            selected_inside.eq(is_inside[self.index]),
+            selected_density.eq(density[self.index]),
+            selected_count.eq(counts[self.index]),
+        ]
+
+        with m.If(self.start & ~self.busy):
+            for count in self.particle_count:
+                m.d.sync += count.eq(0)
+            m.d.sync += [
+                self.index.eq(0),
+                self.phase.eq(0),
+                self.busy.eq(1),
+                self.done.eq(0),
+            ]
+        with m.Elif(self.busy):
+            with m.If(self.phase == 0):
+                m.d.sync += counts[cell_index].eq(current_count + 1)
+                with m.If(self.index == NP - 1):
+                    m.d.sync += [self.phase.eq(1), self.index.eq(0)]
+                with m.Else():
+                    m.d.sync += self.index.eq(self.index + 1)
+            with m.Else():
+                with m.If(~selected_inside):
+                    m.d.sync += cell_types[self.index].eq(SOLID)
+                with m.Elif((selected_count != 0) |
+                            (selected_density > WATER_DENS_THS_Q12)):
+                    m.d.sync += cell_types[self.index].eq(WATER)
+                with m.Else():
+                    m.d.sync += cell_types[self.index].eq(AIR)
+
+                with m.If(self.index == CELL_COUNT - 1):
+                    m.d.sync += [self.busy.eq(0), self.done.eq(1)]
+                with m.Else():
+                    m.d.sync += self.index.eq(self.index + 1)
+        with m.Else():
+            m.d.sync += self.done.eq(0)
+
+        for x in range(NX + 1):
+            for y in range(NY):
+                face = x * NY + y
+                if x == 0 or x == NX:
+                    m.d.comb += self.u_valid[face].eq(1)
+                else:
+                    left = cell_types[(x - 1) * NY + y]
+                    right = cell_types[x * NY + y]
+                    m.d.comb += self.u_valid[face].eq(
+                        (left != AIR) | (right != AIR)
+                    )
+
+        for x in range(NX):
+            for y in range(NY + 1):
+                face = x * (NY + 1) + y
+                if y == 0 or y == NY:
+                    m.d.comb += self.v_valid[face].eq(1)
+                else:
+                    below = cell_types[x * NY + (y - 1)]
+                    above = cell_types[x * NY + y]
+                    m.d.comb += self.v_valid[face].eq(
+                        (below != AIR) | (above != AIR)
+                    )
+
+        return m
+
+# 6. STAGE 4: RED-BLACK GAUSS-SEIDEL PRESSURE SOLVER
+
+DRIFT_K_INT = 3
+INV_REST_DENSITY_Q12 = 1731
+OMEGA_INV_S_LUT = (0, 6554, 3277, 2185, 1638)
+
+class PressureCellUpdate(Elaboratable):
+    def __init__(self):
+        self.u_left = Signal(signed(32))
+        self.u_right = Signal(signed(32))
+        self.v_bottom = Signal(signed(32))
+        self.v_top = Signal(signed(32))
+        self.pressure = Signal(signed(32))
+        self.density = Signal(unsigned(32))
+        self.s_count = Signal(unsigned(3))
+        self.sx0 = Signal(unsigned(1))
+        self.sx1 = Signal(unsigned(1))
+        self.sy0 = Signal(unsigned(1))
+        self.sy1 = Signal(unsigned(1))
+
+        self.divergence_after_drift = Signal(signed(64))
+        self.pressure_delta = Signal(signed(32))
+        self.pressure_next = Signal(signed(32))
+        self.u_left_next = Signal(signed(32))
+        self.u_right_next = Signal(signed(32))
+        self.v_bottom_next = Signal(signed(32))
+        self.v_top_next = Signal(signed(32))
+
+    def elaborate(self, platform):
+        m = Module()
+        omega_lut = Array([Const(v, signed(16)) for v in OMEGA_INV_S_LUT])
+
+        div_raw = Signal(signed(64))
+        density_product = Signal(unsigned(64))
+        density_scaled = Signal(signed(64))
+        compression_raw = Signal(signed(64))
+        compression = Signal(signed(64))
+        drift = Signal(signed(64))
+        div_corrected = Signal(signed(64))
+        pressure_product = Signal(signed(80))
+        pressure_delta_wide = Signal(signed(80))
+
+        m.d.comb += [
+            div_raw.eq((self.u_right - self.u_left) +
+                       (self.v_top - self.v_bottom)),
+            density_product.eq(self.density * Const(INV_REST_DENSITY_Q12, unsigned(12))),
+            density_scaled.eq(density_product >> SHIFT),
+            compression_raw.eq(density_scaled - SCALE),
+            compression.eq(Mux(compression_raw > 0, compression_raw, 0)),
+            drift.eq(compression * DRIFT_K_INT),
+            div_corrected.eq(div_raw - drift),
+            self.divergence_after_drift.eq(div_corrected),
+            pressure_product.eq((-div_corrected) * omega_lut[self.s_count]),
+            pressure_delta_wide.eq(pressure_product >> SHIFT),
+            self.pressure_delta.eq(pressure_delta_wide),
+            self.pressure_next.eq(self.pressure + self.pressure_delta),
+            self.u_left_next.eq(self.u_left - Mux(self.sx0, self.pressure_delta, 0)),
+            self.u_right_next.eq(self.u_right + Mux(self.sx1, self.pressure_delta, 0)),
+            self.v_bottom_next.eq(self.v_bottom - Mux(self.sy0, self.pressure_delta, 0)),
+            self.v_top_next.eq(self.v_top + Mux(self.sy1, self.pressure_delta, 0)),
+        ]
+        return m
+
+LOAD_METADATA = 0
+LOAD_PRESSURE = 1
+LOAD_U = 2
+LOAD_V = 3
+
+META_WIDTH = 41
+
+class PressureRedBlackIteration(Elaboratable):
+    def __init__(self):
+        self.load_enable = Signal()
+        self.load_kind = Signal(unsigned(2))
+        self.load_addr = Signal(unsigned(9))
+        self.load_data = Signal(unsigned(64))
+        self.load_ready = Signal()
+
+        self.start = Signal()
+        self.iteration_count = Signal(unsigned(6), reset=1)
+        self.iteration_index = Signal(unsigned(6))
+        self.busy = Signal()
+        self.done = Signal()
+        self.cell_index = Signal(unsigned(8))
+        self.colour_pass = Signal(unsigned(1))
+        self.progress = Signal(unsigned(10))
+
+        self.result_pressure_addr = Signal(unsigned(8))
+        self.result_pressure_data = Signal(signed(32))
+        self.result_u_addr = Signal(unsigned(9))
+        self.result_u_data = Signal(signed(32))
+        self.result_v_addr = Signal(unsigned(9))
+        self.result_v_data = Signal(signed(32))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        pressure_mem = SyncMemory1R1W(
+            width=32, depth=CELL_COUNT, name="pressure"
+        )
+        meta_mem = SyncMemory1R1W(
+            width=META_WIDTH, depth=CELL_COUNT, name="metadata"
+        )
+        u_mem = SyncMemory1R1W(width=32, depth=U_COUNT, name="u_velocity")
+        v_mem = SyncMemory1R1W(width=32, depth=V_COUNT, name="v_velocity")
+        m.submodules.pressure_mem = pressure_mem
+        m.submodules.meta_mem = meta_mem
+        m.submodules.u_mem = u_mem
+        m.submodules.v_mem = v_mem
+
+        IDLE = 0
+        REQ_PM = 1
+        CAP_PM = 2
+        REQ_UL = 3
+        CAP_UL = 4
+        REQ_UR = 5
+        CAP_UR = 6
+        REQ_VB = 7
+        CAP_VB = 8
+        REQ_VT = 9
+        CAP_VT = 10
+        WRITE0 = 11
+        WRITE1 = 12
+        ADVANCE = 13
+        state = Signal(unsigned(4), reset=IDLE)
+
+        idx = self.cell_index
+        u_left_addr = Signal(unsigned(9))
+        u_right_addr = Signal(unsigned(9))
+        v_bottom_addr = Signal(unsigned(9))
+        v_top_addr = Signal(unsigned(9))
+        m.d.comb += [
+            u_left_addr.eq(idx),
+            u_right_addr.eq(idx + 16),
+            v_bottom_addr.eq(idx + (idx >> 4)),
+            v_top_addr.eq(idx + (idx >> 4) + 1),
+        ]
+
+        pressure_q = Signal(signed(32))
+        metadata_q = Signal(unsigned(META_WIDTH))
+        u_left_q = Signal(signed(32))
+        u_right_q = Signal(signed(32))
+        v_bottom_q = Signal(signed(32))
+        v_top_q = Signal(signed(32))
+
+        solver_read_pressure_meta = state == REQ_PM
+        solver_read_ul = state == REQ_UL
+        solver_read_ur = state == REQ_UR
+        solver_read_vb = state == REQ_VB
+        solver_read_vt = state == REQ_VT
+        idle_readback = (state == IDLE) & ~self.load_enable
+
+        m.d.comb += [
+            pressure_mem.rd_req.eq(solver_read_pressure_meta | idle_readback),
+            pressure_mem.rd_addr.eq(Mux(
+                solver_read_pressure_meta, idx, self.result_pressure_addr
+            )),
+            meta_mem.rd_req.eq(solver_read_pressure_meta),
+            meta_mem.rd_addr.eq(idx),
+            u_mem.rd_req.eq(solver_read_ul | solver_read_ur | idle_readback),
+            u_mem.rd_addr.eq(Mux(
+                solver_read_ul, u_left_addr,
+                Mux(solver_read_ur, u_right_addr, self.result_u_addr)
+            )),
+            v_mem.rd_req.eq(solver_read_vb | solver_read_vt | idle_readback),
+            v_mem.rd_addr.eq(Mux(
+                solver_read_vb, v_bottom_addr,
+                Mux(solver_read_vt, v_top_addr, self.result_v_addr)
+            )),
+            self.result_pressure_data.eq(pressure_mem.rd_data),
+            self.result_u_data.eq(u_mem.rd_data),
+            self.result_v_data.eq(v_mem.rd_data),
+        ]
+
+        metadata = metadata_q
+        cell_type = metadata[39:41]
+        active_colour = (idx[4] ^ idx[0]) == self.colour_pass
+        active_cell = (state == WRITE0) & active_colour & (cell_type == WATER)
+        clear_nonwater = (
+            (state == WRITE0) & (self.colour_pass == 0) &
+            (cell_type != WATER)
+        )
+        pressure_write = active_cell | clear_nonwater
+
+        update = PressureCellUpdate()
+        m.submodules.update = update
+        m.d.comb += [
+            update.pressure.eq(pressure_q),
+            update.density.eq(metadata[0:32]),
+            update.s_count.eq(metadata[32:35]),
+            update.sx0.eq(metadata[35]),
+            update.sx1.eq(metadata[36]),
+            update.sy0.eq(metadata[37]),
+            update.sy1.eq(metadata[38]),
+            update.u_left.eq(u_left_q),
+            update.u_right.eq(u_right_q),
+            update.v_bottom.eq(v_bottom_q),
+            update.v_top.eq(v_top_q),
+        ]
+
+        load_ok = self.load_enable & (state == IDLE)
+        load_meta = load_ok & (self.load_kind == LOAD_METADATA)
+        load_pressure = load_ok & (self.load_kind == LOAD_PRESSURE)
+        load_u = load_ok & (self.load_kind == LOAD_U)
+        load_v = load_ok & (self.load_kind == LOAD_V)
+        m.d.comb += self.load_ready.eq(state == IDLE)
+
+        m.d.comb += [
+            meta_mem.wr_req.eq(load_meta),
+            meta_mem.wr_addr.eq(self.load_addr),
+            meta_mem.wr_data.eq(self.load_data[:META_WIDTH]),
+
+            pressure_mem.wr_req.eq(
+                load_pressure | ((state == WRITE0) & pressure_write)
+            ),
+            pressure_mem.wr_addr.eq(Mux(
+                load_pressure, self.load_addr, idx
+            )),
+            pressure_mem.wr_data.eq(Mux(
+                load_pressure, self.load_data[:32],
+                Mux(active_cell, update.pressure_next, 0)
+            )),
+
+            u_mem.wr_req.eq(
+                load_u |
+                ((state == WRITE0) & active_cell) |
+                ((state == WRITE1) & active_colour & (cell_type == WATER))
+            ),
+            u_mem.wr_addr.eq(Mux(
+                load_u, self.load_addr,
+                Mux(state == WRITE0, u_left_addr, u_right_addr)
+            )),
+            u_mem.wr_data.eq(Mux(
+                load_u, self.load_data[:32],
+                Mux(state == WRITE0, update.u_left_next,
+                    update.u_right_next)
+            )),
+
+            v_mem.wr_req.eq(
+                load_v |
+                ((state == WRITE0) & active_cell) |
+                ((state == WRITE1) & active_colour & (cell_type == WATER))
+            ),
+            v_mem.wr_addr.eq(Mux(
+                load_v, self.load_addr,
+                Mux(state == WRITE0, v_bottom_addr, v_top_addr)
+            )),
+            v_mem.wr_data.eq(Mux(
+                load_v, self.load_data[:32],
+                Mux(state == WRITE0, update.v_bottom_next,
+                    update.v_top_next)
+            )),
+        ]
+
+        m.d.sync += self.done.eq(0)
+        with m.Switch(state):
+            with m.Case(IDLE):
+                with m.If(self.start & ~self.load_enable):
+                    m.d.sync += [
+                        self.cell_index.eq(0),
+                        self.colour_pass.eq(0),
+                        self.iteration_index.eq(0),
+                        self.progress.eq(0),
+                        state.eq(REQ_PM),
+                    ]
+            with m.Case(REQ_PM):
+                m.d.sync += state.eq(CAP_PM)
+            with m.Case(CAP_PM):
+                m.d.sync += [
+                    pressure_q.eq(pressure_mem.rd_data),
+                    metadata_q.eq(meta_mem.rd_data),
+                    state.eq(REQ_UL),
+                ]
+            with m.Case(REQ_UL):
+                m.d.sync += state.eq(CAP_UL)
+            with m.Case(CAP_UL):
+                m.d.sync += [u_left_q.eq(u_mem.rd_data), state.eq(REQ_UR)]
+            with m.Case(REQ_UR):
+                m.d.sync += state.eq(CAP_UR)
+            with m.Case(CAP_UR):
+                m.d.sync += [u_right_q.eq(u_mem.rd_data), state.eq(REQ_VB)]
+            with m.Case(REQ_VB):
+                m.d.sync += state.eq(CAP_VB)
+            with m.Case(CAP_VB):
+                m.d.sync += [v_bottom_q.eq(v_mem.rd_data), state.eq(REQ_VT)]
+            with m.Case(REQ_VT):
+                m.d.sync += state.eq(CAP_VT)
+            with m.Case(CAP_VT):
+                m.d.sync += [v_top_q.eq(v_mem.rd_data), state.eq(WRITE0)]
+            with m.Case(WRITE0):
+                with m.If(active_cell):
+                    m.d.sync += state.eq(WRITE1)
+                with m.Else():
+                    m.d.sync += state.eq(ADVANCE)
+            with m.Case(WRITE1):
+                m.d.sync += state.eq(ADVANCE)
+            with m.Case(ADVANCE):
+                m.d.sync += self.progress.eq(self.progress + 1)
+                with m.If(idx == CELL_COUNT - 1):
+                    with m.If(self.colour_pass == 0):
+                        m.d.sync += [
+                            self.cell_index.eq(0),
+                            self.colour_pass.eq(1),
+                            state.eq(REQ_PM),
+                        ]
+                    with m.Else():
+                        with m.If((self.iteration_index + 1) < self.iteration_count):
+                            m.d.sync += [
+                                self.iteration_index.eq(self.iteration_index + 1),
+                                self.cell_index.eq(0),
+                                self.colour_pass.eq(0),
+                                self.progress.eq(0),
+                                state.eq(REQ_PM),
+                            ]
+                        with m.Else():
+                            m.d.sync += [
+                                state.eq(IDLE),
+                                self.done.eq(1),
+                            ]
+                with m.Else():
+                    m.d.sync += [
+                        self.cell_index.eq(idx + 1),
+                        state.eq(REQ_PM),
+                    ]
+
+        m.d.comb += self.busy.eq(state != IDLE)
+        return m
+
+# 7. STAGE 5: GRID-TO-PARTICLE (G2P) & TOP-LEVEL FLIP PIPELINE
+
+PIC_R_Q12 = 205
+FLIP_R_Q12 = 3891
+VMAX_Q12 = 40 * SCALE
+
+GRID_WIDTH = 32
+
+def _floor_div_wiring(m, numerator, denominator, name, num_width):
+    magnitude = Signal(unsigned(num_width), name=f"{name}_magnitude")
+    quotient_abs = Signal(unsigned(num_width), name=f"{name}_quotient_abs")
+    remainder = Signal(unsigned(num_width), name=f"{name}_remainder")
+    negative_magnitude = Signal(unsigned(num_width + 1), name=f"{name}_negative_magnitude")
+    negative_quotient = Signal(signed(num_width + 1), name=f"{name}_negative_quotient")
+    positive_quotient = Signal(signed(num_width + 1), name=f"{name}_positive_quotient")
+    quotient = Signal(signed(num_width + 1), name=f"{name}_quotient")
+    safe_denominator = Signal(unsigned(len(denominator)), name=f"{name}_safe_denominator")
+
+    m.d.comb += [
+        magnitude.eq(Mux(numerator < 0, -numerator, numerator)),
+        safe_denominator.eq(Mux(denominator == 0, 1, denominator)),
+        quotient_abs.eq(magnitude // safe_denominator),
+        remainder.eq(magnitude % safe_denominator),
+        negative_magnitude.eq(quotient_abs + (remainder != 0)),
+        negative_quotient.eq(-negative_magnitude),
+        positive_quotient.eq(quotient_abs),
+        quotient.eq(Mux(numerator < 0, negative_quotient, positive_quotient)),
+    ]
+    return quotient
+
+class G2PParticle(Elaboratable):
+    def __init__(self):
+        self.pos_x_q12 = Signal(signed(POS_WIDTH))
+        self.pos_y_q12 = Signal(signed(POS_WIDTH))
+        self.vel_x_q12 = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.vel_y_q12 = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        self.u_new = [Signal(signed(GRID_WIDTH), name=f"u_new_{k}") for k in range(4)]
+        self.u_old = [Signal(signed(GRID_WIDTH), name=f"u_old_{k}") for k in range(4)]
+        self.u_valid = [Signal(name=f"u_valid_{k}") for k in range(4)]
+        self.v_new = [Signal(signed(GRID_WIDTH), name=f"v_new_{k}") for k in range(4)]
+        self.v_old = [Signal(signed(GRID_WIDTH), name=f"v_old_{k}") for k in range(4)]
+        self.v_valid = [Signal(name=f"v_valid_{k}") for k in range(4)]
+
+        self.next_vel_x_q12 = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.next_vel_y_q12 = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        self.u_weight_sum = Signal(unsigned(15))
+        self.v_weight_sum = Signal(unsigned(15))
+        self.u_new_gather_q12 = Signal(signed(GRID_WIDTH))
+        self.u_delta_gather_q12 = Signal(signed(GRID_WIDTH))
+        self.v_new_gather_q12 = Signal(signed(GRID_WIDTH))
+        self.v_delta_gather_q12 = Signal(signed(GRID_WIDTH))
+        self.u_has_valid = Signal()
+        self.v_has_valid = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+
+        u_weights = BilinearWeights(17, 16)
+        v_weights = BilinearWeights(16, 17)
+        m.submodules.u_weights = u_weights
+        m.submodules.v_weights = v_weights
+
+        u_gx = Signal(signed(POS_WIDTH + 1))
+        u_gy = Signal(signed(POS_WIDTH + 1))
+        v_gx = Signal(signed(POS_WIDTH + 1))
+        v_gy = Signal(signed(POS_WIDTH + 1))
+        m.d.comb += [
+            u_gx.eq(self.pos_x_q12),
+            u_gy.eq(self.pos_y_q12 - HALF_CELL_Q12),
+            v_gx.eq(self.pos_x_q12 - HALF_CELL_Q12),
+            v_gy.eq(self.pos_y_q12),
+            u_weights.gx_q12.eq(u_gx),
+            u_weights.gy_q12.eq(u_gy),
+            v_weights.gx_q12.eq(v_gx),
+            v_weights.gy_q12.eq(v_gy),
+        ]
+
+        def gather(prefix, weights, new_values, old_values, valid_values):
+            wsum = Signal(unsigned(15), name=f"{prefix}_wsum")
+            new_acc = Signal(signed(48), name=f"{prefix}_new_acc")
+            delta_acc = Signal(signed(49), name=f"{prefix}_delta_acc")
+            weighted = []
+            delta_weighted = []
+            valid_weighted = []
+
+            for k in range(4):
+                wv = Signal(unsigned(13), name=f"{prefix}_wv_{k}")
+                wv_signed = Signal(signed(14), name=f"{prefix}_wv_signed_{k}")
+                new_product = Signal(signed(46), name=f"{prefix}_new_product_{k}")
+                delta = Signal(signed(33), name=f"{prefix}_delta_{k}")
+                delta_product = Signal(signed(47), name=f"{prefix}_delta_product_{k}")
+                m.d.comb += [
+                    wv.eq(Mux(valid_values[k], weights.weight[k], 0)),
+                    wv_signed.eq(wv),
+                    new_product.eq(new_values[k] * wv_signed),
+                    delta.eq(new_values[k] - old_values[k]),
+                    delta_product.eq(delta * wv_signed),
+                ]
+                valid_weighted.append(wv)
+                weighted.append(new_product)
+                delta_weighted.append(delta_product)
+
+            m.d.comb += [
+                wsum.eq(sum(valid_weighted)),
+                new_acc.eq(sum(weighted)),
+                delta_acc.eq(sum(delta_weighted)),
+            ]
+
+            new_quotient = _floor_div_wiring(
+                m, new_acc, wsum, f"{prefix}_new_div", 48
+            )
+            delta_quotient = _floor_div_wiring(
+                m, delta_acc, wsum, f"{prefix}_delta_div", 49
+            )
+            has_valid = Signal(name=f"{prefix}_has_valid")
+            new_out = Signal(signed(GRID_WIDTH), name=f"{prefix}_new_out")
+            delta_out = Signal(signed(GRID_WIDTH), name=f"{prefix}_delta_out")
+            m.d.comb += [
+                has_valid.eq(wsum > 0),
+                new_out.eq(Mux(has_valid, new_quotient, 0)),
+                delta_out.eq(Mux(has_valid, delta_quotient, 0)),
+            ]
+            return wsum, has_valid, new_out, delta_out
+
+        u_wsum, u_ok, u_new_gather, u_delta_gather = gather(
+            "u", u_weights, self.u_new, self.u_old, self.u_valid
+        )
+        v_wsum, v_ok, v_new_gather, v_delta_gather = gather(
+            "v", v_weights, self.v_new, self.v_old, self.v_valid
+        )
+
+        m.d.comb += [
+            self.u_weight_sum.eq(u_wsum),
+            self.v_weight_sum.eq(v_wsum),
+            self.u_has_valid.eq(u_ok),
+            self.v_has_valid.eq(v_ok),
+            self.u_new_gather_q12.eq(u_new_gather),
+            self.u_delta_gather_q12.eq(u_delta_gather),
+            self.v_new_gather_q12.eq(v_new_gather),
+            self.v_delta_gather_q12.eq(v_delta_gather),
+        ]
+
+        def blend(prefix, current, new_gather, delta_gather, ok):
+            current_wide = Signal(signed(20), name=f"{prefix}_current_wide")
+            pic = Signal(signed(33), name=f"{prefix}_pic")
+            flip = Signal(signed(34), name=f"{prefix}_flip")
+            pic_product = Signal(signed(45), name=f"{prefix}_pic_product")
+            flip_product = Signal(signed(46), name=f"{prefix}_flip_product")
+            blend_sum = Signal(signed(47), name=f"{prefix}_blend_sum")
+            blended = Signal(signed(35), name=f"{prefix}_blended")
+            clipped = Signal(signed(GRAVITY_VEL_WIDTH), name=f"{prefix}_clipped")
+
+            m.d.comb += [
+                current_wide.eq(current),
+                pic.eq(Mux(ok, new_gather, current_wide)),
+                flip.eq(Mux(ok, current_wide + delta_gather, current_wide)),
+                pic_product.eq(pic * Const(PIC_R_Q12, signed(9))),
+                flip_product.eq(flip * Const(FLIP_R_Q12, signed(13))),
+                blend_sum.eq(pic_product + flip_product),
+                blended.eq(blend_sum >> SHIFT),
+                clipped.eq(Mux(
+                    blended > Const(VMAX_Q12, signed(35)), VMAX_Q12,
+                    Mux(blended < Const(-VMAX_Q12, signed(35)), -VMAX_Q12, blended)
+                )),
+            ]
+            return clipped
+
+        next_x = blend("x", self.vel_x_q12, u_new_gather, u_delta_gather, u_ok)
+        next_y = blend("y", self.vel_y_q12, v_new_gather, v_delta_gather, v_ok)
+        m.d.comb += [
+            self.next_vel_x_q12.eq(next_x),
+            self.next_vel_y_q12.eq(next_y),
+        ]
+        return m
+
+GRID_WIDTH = 32
+
+class G2PEngine(Elaboratable):
+    IDLE = 0
+    PARTICLE_ISSUE = 1
+    PARTICLE_CAPTURE = 2
+    GRID_ISSUE = 3
+    GRID_CAPTURE = 4
+    COMPUTE = 5
+    WRITEBACK_WAIT = 6
+    PARTICLE_WAIT = 7
+
+    def __init__(self):
+        self.particle_read_en = Signal()
+        self.particle_read_addr = Signal(unsigned(8))
+        self.particle_read_ready = Signal()
+        self.particle_read_valid = Signal()
+        self.particle_pos_x_data = Signal(signed(POS_WIDTH))
+        self.particle_pos_y_data = Signal(signed(POS_WIDTH))
+        self.particle_vel_x_data = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.particle_vel_y_data = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        self.grid_read_en = Signal()
+        self.u_read_addr = Signal(unsigned(9))
+        self.v_read_addr = Signal(unsigned(9))
+        self.u_read_new_data = Signal(signed(GRID_WIDTH))
+        self.u_read_old_data = Signal(signed(GRID_WIDTH))
+        self.u_read_valid_data = Signal()
+        self.v_read_new_data = Signal(signed(GRID_WIDTH))
+        self.v_read_old_data = Signal(signed(GRID_WIDTH))
+        self.v_read_valid_data = Signal()
+
+        self.writeback_valid = Signal()
+        self.writeback_ready = Signal()
+        self.writeback_index = Signal(unsigned(8))
+        self.writeback_pos_x = Signal(signed(POS_WIDTH))
+        self.writeback_pos_y = Signal(signed(POS_WIDTH))
+        self.writeback_vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        self.writeback_vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        self.start = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+        self.particle_index = Signal(unsigned(8))
+        self.corner_index = Signal(unsigned(2))
+        self.phase = Signal(unsigned(3))
+        self.processed_count = Signal(unsigned(9))
+
+    def elaborate(self, platform):
+        m = Module()
+
+        pos_x = Signal(signed(POS_WIDTH))
+        pos_y = Signal(signed(POS_WIDTH))
+        vel_x = Signal(signed(GRAVITY_VEL_WIDTH))
+        vel_y = Signal(signed(GRAVITY_VEL_WIDTH))
+
+        u_new_samples = [
+            Signal(signed(GRID_WIDTH), name=f"g2p_u_new_sample_{k}")
+            for k in range(4)
+        ]
+        u_old_samples = [
+            Signal(signed(GRID_WIDTH), name=f"g2p_u_old_sample_{k}")
+            for k in range(4)
+        ]
+        u_valid_samples = [
+            Signal(name=f"g2p_u_valid_sample_{k}") for k in range(4)
+        ]
+        v_new_samples = [
+            Signal(signed(GRID_WIDTH), name=f"g2p_v_new_sample_{k}")
+            for k in range(4)
+        ]
+        v_old_samples = [
+            Signal(signed(GRID_WIDTH), name=f"g2p_v_old_sample_{k}")
+            for k in range(4)
+        ]
+        v_valid_samples = [
+            Signal(name=f"g2p_v_valid_sample_{k}") for k in range(4)
+        ]
+
+        u_new_store = Array(u_new_samples)
+        u_old_store = Array(u_old_samples)
+        u_valid_store = Array(u_valid_samples)
+        v_new_store = Array(v_new_samples)
+        v_old_store = Array(v_old_samples)
+        v_valid_store = Array(v_valid_samples)
+
+        u_addr_gen = BilinearWeights(NX + 1, NY)
+        v_addr_gen = BilinearWeights(NX, NY + 1)
+        m.submodules.u_addr_gen = u_addr_gen
+        m.submodules.v_addr_gen = v_addr_gen
+
+        u_addresses = []
+        v_addresses = []
+        for k in range(4):
+            u_addr = Signal(unsigned(9), name=f"g2p_u_corner_addr_{k}")
+            v_addr = Signal(unsigned(9), name=f"g2p_v_corner_addr_{k}")
+            u_addresses.append(u_addr)
+            v_addresses.append(v_addr)
+            m.d.comb += [
+                u_addr.eq((u_addr_gen.corner_x[k] << 4) +
+                          u_addr_gen.corner_y[k]),
+                v_addr.eq((v_addr_gen.corner_x[k] << 4) +
+                          v_addr_gen.corner_x[k] +
+                          v_addr_gen.corner_y[k]),
+            ]
+
+        u_address_select = Array(u_addresses)
+        v_address_select = Array(v_addresses)
+
+        datapath = G2PParticle()
+        m.submodules.datapath = datapath
+
+        m.d.comb += [
+            u_addr_gen.gx_q12.eq(pos_x),
+            u_addr_gen.gy_q12.eq(pos_y - HALF_CELL_Q12),
+            v_addr_gen.gx_q12.eq(pos_x - HALF_CELL_Q12),
+            v_addr_gen.gy_q12.eq(pos_y),
+
+            datapath.pos_x_q12.eq(pos_x),
+            datapath.pos_y_q12.eq(pos_y),
+            datapath.vel_x_q12.eq(vel_x),
+            datapath.vel_y_q12.eq(vel_y),
+        ]
+
+        for k in range(4):
+            m.d.comb += [
+                datapath.u_new[k].eq(u_new_samples[k]),
+                datapath.u_old[k].eq(u_old_samples[k]),
+                datapath.u_valid[k].eq(u_valid_samples[k]),
+                datapath.v_new[k].eq(v_new_samples[k]),
+                datapath.v_old[k].eq(v_old_samples[k]),
+                datapath.v_valid[k].eq(v_valid_samples[k]),
+            ]
+
+        m.d.comb += [
+            self.particle_read_en.eq(self.phase == self.PARTICLE_ISSUE),
+            self.particle_read_addr.eq(self.particle_index),
+            self.grid_read_en.eq(self.phase == self.GRID_ISSUE),
+            self.u_read_addr.eq(u_address_select[self.corner_index]),
+            self.v_read_addr.eq(v_address_select[self.corner_index]),
+
+            self.writeback_valid.eq(self.phase == self.COMPUTE),
+            self.writeback_index.eq(self.particle_index),
+            self.writeback_pos_x.eq(pos_x),
+            self.writeback_pos_y.eq(pos_y),
+            self.writeback_vel_x.eq(datapath.next_vel_x_q12),
+            self.writeback_vel_y.eq(datapath.next_vel_y_q12),
+        ]
+
+        with m.If(self.start & ~self.busy):
+            m.d.sync += [
+                self.particle_index.eq(0),
+                self.corner_index.eq(0),
+                self.processed_count.eq(0),
+                self.phase.eq(self.PARTICLE_ISSUE),
+                self.busy.eq(1),
+                self.done.eq(0),
+            ]
+        with m.Elif(self.busy):
+            with m.Switch(self.phase):
+                with m.Case(self.PARTICLE_ISSUE):
+                    with m.If(self.particle_read_ready):
+                        m.d.sync += self.phase.eq(self.PARTICLE_WAIT)
+
+                with m.Case(self.PARTICLE_WAIT):
+                    with m.If(self.particle_read_valid):
+                        m.d.sync += [
+                            pos_x.eq(self.particle_pos_x_data),
+                            pos_y.eq(self.particle_pos_y_data),
+                            vel_x.eq(self.particle_vel_x_data),
+                            vel_y.eq(self.particle_vel_y_data),
+                            self.corner_index.eq(0),
+                            self.phase.eq(self.GRID_ISSUE),
+                        ]
+
+                with m.Case(self.GRID_ISSUE):
+                    m.d.sync += self.phase.eq(self.GRID_CAPTURE)
+
+                with m.Case(self.GRID_CAPTURE):
+                    m.d.sync += [
+                        u_new_store[self.corner_index].eq(self.u_read_new_data),
+                        u_old_store[self.corner_index].eq(self.u_read_old_data),
+                        u_valid_store[self.corner_index].eq(self.u_read_valid_data),
+                        v_new_store[self.corner_index].eq(self.v_read_new_data),
+                        v_old_store[self.corner_index].eq(self.v_read_old_data),
+                        v_valid_store[self.corner_index].eq(self.v_read_valid_data),
+                    ]
+                    with m.If(self.corner_index == 3):
+                        m.d.sync += self.phase.eq(self.COMPUTE)
+                    with m.Else():
+                        m.d.sync += [
+                            self.corner_index.eq(self.corner_index + 1),
+                            self.phase.eq(self.GRID_ISSUE),
+                        ]
+
+                with m.Case(self.COMPUTE):
+                    with m.If(self.writeback_ready):
+                        m.d.sync += self.processed_count.eq(self.processed_count + 1)
+                        with m.If(self.particle_index == NP - 1):
+                            m.d.sync += [
+                                self.phase.eq(self.IDLE),
+                                self.busy.eq(0),
+                                self.done.eq(1),
+                            ]
+                        with m.Else():
+                            m.d.sync += [
+                                self.particle_index.eq(self.particle_index + 1),
+                                self.corner_index.eq(0),
+                                self.phase.eq(self.PARTICLE_ISSUE),
+                            ]
+        with m.Else():
+            m.d.sync += self.done.eq(0)
+
+        return m
+
+def _pressure_geometry_words():
+    words = []
+    for x in range(16):
+        for y in range(16):
+            sx0 = int(INSIDE_MASK[x - 1][y]) if x > 0 else 0
+            sx1 = int(INSIDE_MASK[x + 1][y]) if x < 15 else 0
+            sy0 = int(INSIDE_MASK[x][y - 1]) if y > 0 else 0
+            sy1 = int(INSIDE_MASK[x][y + 1]) if y < 15 else 0
+            words.append((sx0 + sx1 + sy0 + sy1, sx0, sx1, sy0, sy1))
+    return words
+
+_PRESSURE_GEOMETRY = _pressure_geometry_words()
+
+class FLIPPipeline(Elaboratable):
+    IDLE = 0
+    GRAVITY_START = 1
+    GRAVITY_WAIT = 2
+    SEPARATION_START = 3
+    SEPARATION_WAIT = 4
+    WALL_START = 5
+    WALL_WAIT = 6
+    P2G_WAIT_MEMORY = 7
+    P2G_LOAD_REQUEST = 8
+    P2G_LOAD_WAIT = 9
+    P2G_LOAD_GAP = 10
+    P2G_START = 11
+    P2G_WAIT = 12
+    CLASSIFY_START = 13
+    CLASSIFY_WAIT = 14
+    PRESSURE_LOAD_META = 15
+    PRESSURE_LOAD_VALUES = 16
+    PRESSURE_LOAD_U = 17
+    PRESSURE_LOAD_V = 18
+    PRESSURE_START = 19
+    PRESSURE_WAIT = 20
+    PRESSURE_READBACK_REQUEST = 21
+    PRESSURE_READBACK_CAPTURE = 22
+    G2P_START = 23
+    G2P_WAIT = 24
+
+    def __init__(self, *, use_psram=False, particle_memory_backend="behavioral",
+                 sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000):
+        if particle_memory_backend not in ("behavioral", "sram"):
+            raise ValueError("particle_memory_backend must be 'behavioral' or 'sram'")
+        if use_psram and particle_memory_backend != "behavioral":
+            raise ValueError("use_psram and particle_memory_backend='sram' are mutually exclusive")
+        self.use_psram = use_psram
+        self.particle_memory_backend = particle_memory_backend
+        self.sys_clk_hz = sys_clk_hz
+        self.qpi_clk_hz = qpi_clk_hz
+
+        self.psram_sclk = Signal()
+        self.psram_ce_n = Signal(init=1)
+        self.psram_dq_i = Signal(4)
+        self.psram_dq_o = Signal(4)
+        self.psram_dq_oe = Signal(4)
+        self.psram_translator_dir = Signal()
+        self.psram_translator_oe_n = Signal(4, init=0b1111)
+        self.psram_init_done = Signal()
+        self.psram_busy = Signal()
+        self.psram_error = Signal()
+
+        self.sram_en = Signal()
+        self.sram_we = Signal()
+        self.sram_addr = Signal(10)
+        self.sram_wdata = Signal(32)
+        self.sram_rdata = Signal(32)
+
+        self.start = Signal()
+        self.gx = Signal(signed(8))
+        self.gy = Signal(signed(8))
+
+        self.busy = Signal()
+        self.done = Signal()
+        self.stage = Signal(5)
+        self.velocity_overflow = Signal()
+
+        self.host_ready = Signal()
+        self.host_write_req = Signal()
+        self.host_write_addr = Signal(8)
+        self.host_write_pos_x = Signal(signed(20))
+        self.host_write_pos_y = Signal(signed(20))
+        self.host_write_vel_x = Signal(signed(20))
+        self.host_write_vel_y = Signal(signed(20))
+        self.host_read_req = Signal()
+        self.host_read_addr = Signal(8)
+        self.host_read_valid = Signal()
+        self.host_read_pos_x = Signal(signed(20))
+        self.host_read_pos_y = Signal(signed(20))
+        self.host_read_vel_x = Signal(signed(20))
+        self.host_read_vel_y = Signal(signed(20))
+
+        self.p2g_u_q12 = [Signal(signed(32), name=f"chain_p2g_u_{i}") for i in range(U_CELLS)]
+        self.p2g_v_q12 = [Signal(signed(32), name=f"chain_p2g_v_{i}") for i in range(V_CELLS)]
+        self.p2g_density_q12 = [Signal(unsigned(32), name=f"chain_p2g_density_{i}") for i in range(DENSITY_CELLS)]
+        self.p2g_cycle_count = Signal(unsigned(24))
+
+        self.particle_count = [Signal(unsigned(9), name=f"chain_particle_count_{i}")
+                               for i in range(CELL_COUNT)]
+        self.cell_type = [Signal(unsigned(2), name=f"chain_cell_type_{i}")
+                          for i in range(CELL_COUNT)]
+        self.u_valid = [Signal(name=f"chain_u_valid_{i}") for i in range(CLASS_U_CELLS)]
+        self.v_valid = [Signal(name=f"chain_v_valid_{i}") for i in range(CLASS_V_CELLS)]
+
+        self.pressure_q12 = [Signal(signed(32), name=f"chain_pressure_{i}")
+                             for i in range(PRESSURE_CELL_COUNT)]
+        self.projected_u_q12 = [Signal(signed(32), name=f"chain_projected_u_{i}")
+                                for i in range(PRESSURE_U_COUNT)]
+        self.projected_v_q12 = [Signal(signed(32), name=f"chain_projected_v_{i}")
+                                for i in range(PRESSURE_V_COUNT)]
+        self.pressure_iteration_index = Signal(unsigned(6))
+
+        self.g2p_processed_count = Signal(unsigned(9))
+
+    def elaborate(self, platform):
+        m = Module()
+        gravity = ParticleGravityAdvectEngine()
+        separation = ParticleSeparationMemoryAdapter()
+        wall = ParticleWallCollisionEngine()
+        p2g = P2GCompletePipelineSRAM()
+        classifier = CellClassifier()
+        pressure = PressureRedBlackIteration()
+        g2p = G2PEngine()
+        memory = (
+            PsramParticleMemory(sys_clk_hz=self.sys_clk_hz, qpi_clk_hz=self.qpi_clk_hz)
+            if self.use_psram else
+            ParticleMemory(backend=self.particle_memory_backend)
+        )
+
+        m.submodules.gravity = gravity
+        m.submodules.separation = separation
+        m.submodules.wall = wall
+        m.submodules.p2g = p2g
+        m.submodules.classifier = classifier
+        m.submodules.pressure = pressure
+        m.submodules.g2p = g2p
+        m.submodules.memory = memory
+
+        if self.use_psram:
+            m.d.comb += [
+                self.psram_sclk.eq(memory.sclk),
+                self.psram_ce_n.eq(memory.ce_n),
+                memory.dq_i.eq(self.psram_dq_i),
+                self.psram_dq_o.eq(memory.dq_o),
+                self.psram_dq_oe.eq(memory.dq_oe),
+                self.psram_translator_dir.eq(memory.translator_dir),
+                self.psram_translator_oe_n.eq(memory.translator_oe_n),
+                self.psram_init_done.eq(memory.init_done),
+                self.psram_busy.eq(memory.busy),
+                self.psram_error.eq(memory.error),
+                self.sram_en.eq(0), self.sram_we.eq(0),
+                self.sram_addr.eq(0), self.sram_wdata.eq(0),
+            ]
+        else:
+            m.d.comb += [
+                self.psram_sclk.eq(0), self.psram_ce_n.eq(1),
+                self.psram_dq_o.eq(0), self.psram_dq_oe.eq(0),
+                self.psram_translator_dir.eq(0),
+                self.psram_translator_oe_n.eq(0b1111),
+                self.psram_init_done.eq(0), self.psram_busy.eq(0),
+                self.psram_error.eq(0),
+            ]
+            if self.particle_memory_backend == "sram":
+                m.d.comb += [
+                    self.sram_en.eq(memory.sram_en),
+                    self.sram_we.eq(memory.sram_we),
+                    self.sram_addr.eq(memory.sram_addr),
+                    self.sram_wdata.eq(memory.sram_wdata),
+                    memory.sram_rdata.eq(self.sram_rdata),
+                ]
+            else:
+                m.d.comb += [
+                    self.sram_en.eq(0), self.sram_we.eq(0),
+                    self.sram_addr.eq(0), self.sram_wdata.eq(0),
+                ]
+
+        state = Signal(5, init=self.IDLE)
+        p2g_index = Signal(8)
+        pressure_index = Signal(9)
+
+        sep_phase = (state == self.SEPARATION_START) | (state == self.SEPARATION_WAIT)
+        p2g_load_phase = (
+            (state == self.P2G_WAIT_MEMORY)
+            | (state == self.P2G_LOAD_REQUEST)
+            | (state == self.P2G_LOAD_WAIT)
+            | (state == self.P2G_LOAD_GAP)
+        )
+        host_phase = state == self.IDLE
+
+        p2g_pos_x = Array(p2g.pos_x)
+        p2g_pos_y = Array(p2g.pos_y)
+        p2g_vel_x = Array(p2g.vel_x)
+        p2g_vel_y = Array(p2g.vel_y)
+        p2g_density = Array(p2g.density_q12)
+        p2g_u = Array(p2g.u_q12)
+        p2g_v = Array(p2g.v_q12)
+        classifier_cell_type = Array(classifier.cell_type)
+        pressure_state = Array(self.pressure_q12)
+        projected_u_state = Array(self.projected_u_q12)
+        projected_v_state = Array(self.projected_v_q12)
+        g2p_u_valid = Array(classifier.u_valid)
+        g2p_v_valid = Array(classifier.v_valid)
+        geometry_s_count = Array([Const(g[0], unsigned(3)) for g in _PRESSURE_GEOMETRY])
+        geometry_sx0 = Array([Const(g[1], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geometry_sx1 = Array([Const(g[2], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geometry_sy0 = Array([Const(g[3], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geometry_sy1 = Array([Const(g[4], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        safe_cell_index = Mux(pressure_index < PRESSURE_CELL_COUNT, pressure_index, 0)
+
+        g2p_u_new_q = Signal(signed(32))
+        g2p_u_old_q = Signal(signed(32))
+        g2p_u_valid_q = Signal()
+        g2p_v_new_q = Signal(signed(32))
+        g2p_v_old_q = Signal(signed(32))
+        g2p_v_valid_q = Signal()
+
+        for i in range(256):
+            m.d.comb += [
+                classifier.pos_x[i].eq(p2g.pos_x[i]),
+                classifier.pos_y[i].eq(p2g.pos_y[i]),
+            ]
+        for i in range(DENSITY_CELLS):
+            m.d.comb += classifier.density[i].eq(p2g.density_q12[i])
+
+        for i in range(CELL_COUNT):
+            m.d.comb += [
+                self.particle_count[i].eq(classifier.particle_count[i]),
+                self.cell_type[i].eq(classifier.cell_type[i]),
+            ]
+        for i in range(CLASS_U_CELLS):
+            m.d.comb += self.u_valid[i].eq(classifier.u_valid[i])
+        for i in range(CLASS_V_CELLS):
+            m.d.comb += self.v_valid[i].eq(classifier.v_valid[i])
+
+        for i in range(U_CELLS):
+            m.d.comb += self.p2g_u_q12[i].eq(p2g.u_q12[i])
+        for i in range(V_CELLS):
+            m.d.comb += self.p2g_v_q12[i].eq(p2g.v_q12[i])
+        for i in range(DENSITY_CELLS):
+            m.d.comb += self.p2g_density_q12[i].eq(p2g.density_q12[i])
+        m.d.comb += self.p2g_cycle_count.eq(p2g.cycle_count)
+
+        pressure_load_meta = state == self.PRESSURE_LOAD_META
+        pressure_load_values = state == self.PRESSURE_LOAD_VALUES
+        pressure_load_u = state == self.PRESSURE_LOAD_U
+        pressure_load_v = state == self.PRESSURE_LOAD_V
+        pressure_load_phase = (
+            pressure_load_meta | pressure_load_values | pressure_load_u | pressure_load_v
+        )
+
+        pressure_metadata = Cat(
+            p2g_density[safe_cell_index],
+            geometry_s_count[safe_cell_index],
+            geometry_sx0[safe_cell_index],
+            geometry_sx1[safe_cell_index],
+            geometry_sy0[safe_cell_index],
+            geometry_sy1[safe_cell_index],
+            classifier_cell_type[safe_cell_index],
+        )
+        pressure_load_data = Mux(
+            pressure_load_meta, pressure_metadata,
+            Mux(pressure_load_values, pressure_state[safe_cell_index],
+                Mux(pressure_load_u, p2g_u[pressure_index],
+                    p2g_v[pressure_index]))
+        )
+        pressure_load_kind = Mux(
+            pressure_load_meta, LOAD_METADATA,
+            Mux(pressure_load_values, LOAD_PRESSURE,
+                Mux(pressure_load_u, LOAD_U, LOAD_V))
+        )
+        m.d.comb += [
+            pressure.load_enable.eq(pressure_load_phase),
+            pressure.load_kind.eq(pressure_load_kind),
+            pressure.load_addr.eq(pressure_index),
+            pressure.load_data.eq(pressure_load_data),
+            pressure.iteration_count.eq(30),
+            pressure.start.eq(state == self.PRESSURE_START),
+            g2p.start.eq(state == self.G2P_START),
+            pressure.result_pressure_addr.eq(
+                Mux(pressure_index < PRESSURE_CELL_COUNT, pressure_index[:8], 255)
+            ),
+            pressure.result_u_addr.eq(pressure_index),
+            pressure.result_v_addr.eq(pressure_index),
+        ]
+
+        m.d.comb += [
+            self.busy.eq(state != self.IDLE),
+            self.stage.eq(state),
+            self.pressure_iteration_index.eq(pressure.iteration_index),
+            self.g2p_processed_count.eq(g2p.processed_count),
+
+            g2p.particle_pos_x_data.eq(memory.host_read_pos_x),
+            g2p.particle_pos_y_data.eq(memory.host_read_pos_y),
+            g2p.particle_vel_x_data.eq(memory.host_read_vel_x),
+            g2p.particle_vel_y_data.eq(memory.host_read_vel_y),
+            g2p.particle_read_ready.eq(memory.host_ready & (state == self.G2P_WAIT)),
+            g2p.particle_read_valid.eq(memory.host_read_valid & (state == self.G2P_WAIT)),
+            g2p.u_read_new_data.eq(g2p_u_new_q),
+            g2p.u_read_old_data.eq(g2p_u_old_q),
+            g2p.u_read_valid_data.eq(g2p_u_valid_q),
+            g2p.v_read_new_data.eq(g2p_v_new_q),
+            g2p.v_read_old_data.eq(g2p_v_old_q),
+            g2p.v_read_valid_data.eq(g2p_v_valid_q),
+
+            self.host_ready.eq(memory.host_ready & host_phase),
+            memory.host_write_req.eq(
+                (self.host_write_req & host_phase) | (g2p.writeback_valid & (state == self.G2P_WAIT))
+            ),
+            g2p.writeback_ready.eq(
+                memory.host_write_ready & (state == self.G2P_WAIT)
+            ),
+            memory.host_write_addr.eq(Mux(
+                state == self.G2P_WAIT, g2p.writeback_index, self.host_write_addr
+            )),
+            memory.host_write_pos_x.eq(Mux(
+                state == self.G2P_WAIT, g2p.writeback_pos_x, self.host_write_pos_x
+            )),
+            memory.host_write_pos_y.eq(Mux(
+                state == self.G2P_WAIT, g2p.writeback_pos_y, self.host_write_pos_y
+            )),
+            memory.host_write_vel_x.eq(Mux(
+                state == self.G2P_WAIT, g2p.writeback_vel_x, self.host_write_vel_x
+            )),
+            memory.host_write_vel_y.eq(Mux(
+                state == self.G2P_WAIT, g2p.writeback_vel_y, self.host_write_vel_y
+            )),
+            self.host_read_valid.eq(memory.host_read_valid & host_phase),
+            self.host_read_pos_x.eq(memory.host_read_pos_x),
+            self.host_read_pos_y.eq(memory.host_read_pos_y),
+            self.host_read_vel_x.eq(memory.host_read_vel_x),
+            self.host_read_vel_y.eq(memory.host_read_vel_y),
+
+            memory.host_read_req.eq(
+                ((state == self.P2G_LOAD_REQUEST) & memory.host_ready)
+                | ((state == self.G2P_WAIT) & g2p.particle_read_en & memory.host_ready)
+                | (self.host_read_req & host_phase)
+            ),
+            separation.mem_ready.eq(memory.s_ready),
+            separation.mem_read_valid.eq(memory.s_read_valid),
+            separation.mem_read_pos_x.eq(memory.s_read_pos_x),
+            separation.mem_read_pos_y.eq(memory.s_read_pos_y),
+            separation.mem_write_ready.eq(memory.s_write_ready),
+            memory.s_active.eq(separation.busy),
+            memory.s_read_req.eq(separation.mem_read_req & sep_phase),
+            memory.s_read_addr.eq(separation.mem_read_addr),
+            memory.s_write_req.eq(separation.mem_pos_write_req & sep_phase),
+            memory.s_write_addr.eq(separation.mem_pos_write_addr),
+            memory.s_write_pos_x.eq(separation.mem_pos_write_x),
+            memory.s_write_pos_y.eq(separation.mem_pos_write_y),
+
+            gravity.start.eq(state == self.GRAVITY_START),
+            gravity.gx.eq(self.gx),
+            gravity.gy.eq(self.gy),
+            separation.start.eq(state == self.SEPARATION_START),
+            wall.start.eq(state == self.WALL_START),
+            p2g.start.eq(state == self.P2G_START),
+            classifier.start.eq(state == self.CLASSIFY_START),
+
+            memory.g_active.eq(gravity.busy),
+            memory.w_active.eq(wall.busy),
+
+            gravity.read_valid.eq(memory.g_read_valid),
+            gravity.read_pos_x.eq(memory.g_read_pos_x),
+            gravity.read_pos_y.eq(memory.g_read_pos_y),
+            gravity.read_vel_x.eq(memory.g_read_vel_x),
+            gravity.read_vel_y.eq(memory.g_read_vel_y),
+            memory.g_read_req.eq(gravity.read_req),
+            memory.g_read_addr.eq(gravity.read_addr),
+            gravity.write_ready.eq(memory.g_write_ready),
+            memory.g_write_req.eq(gravity.write_req),
+            memory.g_write_addr.eq(gravity.write_addr),
+            memory.g_write_pos_x.eq(gravity.write_pos_x),
+            memory.g_write_pos_y.eq(gravity.write_pos_y),
+            memory.g_write_vel_x.eq(gravity.write_vel_x),
+            memory.g_write_vel_y.eq(gravity.write_vel_y),
+
+            wall.read_valid.eq(memory.w_read_valid),
+            wall.read_pos_x.eq(memory.w_read_pos_x),
+            wall.read_pos_y.eq(memory.w_read_pos_y),
+            wall.read_vel_x.eq(memory.w_read_vel_x),
+            wall.read_vel_y.eq(memory.w_read_vel_y),
+            memory.w_read_req.eq(wall.read_req),
+            memory.w_read_addr.eq(wall.read_addr),
+            wall.write_ready.eq(memory.w_write_ready),
+            memory.w_write_req.eq(wall.write_req),
+            memory.w_write_addr.eq(wall.write_addr),
+            memory.w_write_pos_x.eq(wall.write_pos_x),
+            memory.w_write_pos_y.eq(wall.write_pos_y),
+            memory.w_write_vel_x.eq(wall.write_vel_x),
+            memory.w_write_vel_y.eq(wall.write_vel_y),
+        ]
+
+        m.d.comb += memory.host_read_addr.eq(
+            Mux(p2g_load_phase, p2g_index,
+                Mux(state == self.G2P_WAIT, g2p.particle_read_addr,
+                    self.host_read_addr))
+        )
+
+        with m.If(g2p.grid_read_en & (state == self.G2P_WAIT)):
+            m.d.sync += [
+                g2p_u_new_q.eq(projected_u_state[g2p.u_read_addr]),
+                g2p_u_old_q.eq(p2g_u[g2p.u_read_addr]),
+                g2p_u_valid_q.eq(g2p_u_valid[g2p.u_read_addr]),
+                g2p_v_new_q.eq(projected_v_state[g2p.v_read_addr]),
+                g2p_v_old_q.eq(p2g_v[g2p.v_read_addr]),
+                g2p_v_valid_q.eq(g2p_v_valid[g2p.v_read_addr]),
+            ]
+
+        m.d.sync += self.done.eq(0)
+        with m.If(state == self.IDLE):
+            with m.If(self.start):
+                m.d.sync += [
+                    self.velocity_overflow.eq(0),
+                    state.eq(self.GRAVITY_START),
+                ]
+        with m.Else():
+            with m.If(memory.g_read_valid & memory.g_read_velocity_overflow):
+                m.d.sync += self.velocity_overflow.eq(1)
+
+        with m.Switch(state):
+            with m.Case(self.IDLE):
+                pass
+            with m.Case(self.GRAVITY_START):
+                m.d.sync += state.eq(self.GRAVITY_WAIT)
+            with m.Case(self.GRAVITY_WAIT):
+                with m.If(gravity.done):
+                    m.d.sync += state.eq(self.SEPARATION_START)
+            with m.Case(self.SEPARATION_START):
+                m.d.sync += state.eq(self.SEPARATION_WAIT)
+            with m.Case(self.SEPARATION_WAIT):
+                with m.If(separation.done):
+                    m.d.sync += state.eq(self.WALL_START)
+            with m.Case(self.WALL_START):
+                m.d.sync += state.eq(self.WALL_WAIT)
+            with m.Case(self.WALL_WAIT):
+                with m.If(wall.done):
+                    m.d.sync += [p2g_index.eq(0), state.eq(self.P2G_WAIT_MEMORY)]
+            with m.Case(self.P2G_WAIT_MEMORY):
+                with m.If(memory.host_ready):
+                    m.d.sync += state.eq(self.P2G_LOAD_REQUEST)
+            with m.Case(self.P2G_LOAD_REQUEST):
+                with m.If(memory.host_ready):
+                    m.d.sync += state.eq(self.P2G_LOAD_WAIT)
+            with m.Case(self.P2G_LOAD_WAIT):
+                with m.If(memory.host_read_valid):
+                    m.d.sync += [
+                        p2g_pos_x[p2g_index].eq(memory.host_read_pos_x),
+                        p2g_pos_y[p2g_index].eq(memory.host_read_pos_y),
+                        p2g_vel_x[p2g_index].eq(memory.host_read_vel_x),
+                        p2g_vel_y[p2g_index].eq(memory.host_read_vel_y),
+                        state.eq(self.P2G_LOAD_GAP),
+                    ]
+            with m.Case(self.P2G_LOAD_GAP):
+                with m.If(p2g_index == 255):
+                    m.d.sync += state.eq(self.P2G_START)
+                with m.Else():
+                    m.d.sync += [p2g_index.eq(p2g_index + 1), state.eq(self.P2G_LOAD_REQUEST)]
+            with m.Case(self.P2G_START):
+                m.d.sync += state.eq(self.P2G_WAIT)
+            with m.Case(self.P2G_WAIT):
+                with m.If(p2g.done):
+                    m.d.sync += state.eq(self.CLASSIFY_START)
+            with m.Case(self.CLASSIFY_START):
+                m.d.sync += state.eq(self.CLASSIFY_WAIT)
+            with m.Case(self.CLASSIFY_WAIT):
+                with m.If(classifier.done):
+                    m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_LOAD_META)]
+            with m.Case(self.PRESSURE_LOAD_META):
+                with m.If(pressure.load_ready):
+                    with m.If(pressure_index == PRESSURE_CELL_COUNT - 1):
+                        m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_LOAD_VALUES)]
+                    with m.Else():
+                        m.d.sync += pressure_index.eq(pressure_index + 1)
+            with m.Case(self.PRESSURE_LOAD_VALUES):
+                with m.If(pressure.load_ready):
+                    with m.If(pressure_index == PRESSURE_CELL_COUNT - 1):
+                        m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_LOAD_U)]
+                    with m.Else():
+                        m.d.sync += pressure_index.eq(pressure_index + 1)
+            with m.Case(self.PRESSURE_LOAD_U):
+                with m.If(pressure.load_ready):
+                    with m.If(pressure_index == PRESSURE_U_COUNT - 1):
+                        m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_LOAD_V)]
+                    with m.Else():
+                        m.d.sync += pressure_index.eq(pressure_index + 1)
+            with m.Case(self.PRESSURE_LOAD_V):
+                with m.If(pressure.load_ready):
+                    with m.If(pressure_index == PRESSURE_V_COUNT - 1):
+                        m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_START)]
+                    with m.Else():
+                        m.d.sync += pressure_index.eq(pressure_index + 1)
+            with m.Case(self.PRESSURE_START):
+                m.d.sync += state.eq(self.PRESSURE_WAIT)
+            with m.Case(self.PRESSURE_WAIT):
+                with m.If(pressure.done):
+                    m.d.sync += [pressure_index.eq(0), state.eq(self.PRESSURE_READBACK_REQUEST)]
+            with m.Case(self.PRESSURE_READBACK_REQUEST):
+                m.d.sync += state.eq(self.PRESSURE_READBACK_CAPTURE)
+            with m.Case(self.PRESSURE_READBACK_CAPTURE):
+                with m.If(pressure_index < PRESSURE_CELL_COUNT):
+                    m.d.sync += pressure_state[pressure_index].eq(
+                        pressure.result_pressure_data
+                    )
+                with m.If(pressure_index < PRESSURE_U_COUNT):
+                    m.d.sync += projected_u_state[pressure_index].eq(
+                        pressure.result_u_data
+                    )
+                with m.If(pressure_index < PRESSURE_V_COUNT):
+                    m.d.sync += projected_v_state[pressure_index].eq(
+                        pressure.result_v_data
+                    )
+                with m.If(pressure_index == PRESSURE_V_COUNT - 1):
+                    m.d.sync += state.eq(self.G2P_START)
+                with m.Else():
+                    m.d.sync += [
+                        pressure_index.eq(pressure_index + 1),
+                        state.eq(self.PRESSURE_READBACK_REQUEST),
+                    ]
+            with m.Case(self.G2P_START):
+                m.d.sync += state.eq(self.G2P_WAIT)
+            with m.Case(self.G2P_WAIT):
+                with m.If(g2p.done):
+                    m.d.sync += [self.done.eq(1), state.eq(self.IDLE)]
+            with m.Default():
+                m.d.sync += state.eq(self.IDLE)
+
+        return m
+
+ParticlePhysicsChain = FLIPPipeline
+
+# 8. I2C MASTER, LIS2DW12 ACCELEROMETER, IS31FL3741A LED DRIVER & PENDANT TOP
+
+ACTIVE_CELL_INDICES = tuple(
+    x * NY + y for x in range(NX) for y in range(NY) if INSIDE_MASK[x][y]
+)
+
+class I2CMaster(Elaboratable):
+    ST_IDLE = 0
+    ST_START_A = 1
+    ST_START_B = 2
+    ST_BIT_LOW = 3
+    ST_BIT_HIGH = 4
+    ST_ACK_LOW = 5
+    ST_ACK_HIGH = 6
+    ST_HOLD = 7
+    ST_STOP_A = 8
+    ST_STOP_B = 9
+
+    def __init__(self, *, sys_clk_hz=50_000_000, i2c_clk_hz=400_000):
+        self.quarter_cycles = max(1, int(round(sys_clk_hz / (4 * i2c_clk_hz))))
+
+        self.cmd_start = Signal()
+        self.cmd_stop = Signal()
+        self.cmd_write = Signal()
+        self.cmd_read = Signal()
+        self.cmd_valid = Signal()
+        self.cmd_ready = Signal()
+        self.tx_data = Signal(8)
+        self.tx_ack = Signal()
+
+        self.rx_data = Signal(8)
+        self.rx_valid = Signal()
+        self.ack_error = Signal()
+        self.busy = Signal()
+
+        self.scl_o = Signal(init=1)
+        self.scl_oe = Signal(init=0)
+        self.sda_i = Signal(init=1)
+        self.sda_o = Signal(init=1)
+        self.sda_oe = Signal(init=0)
+
+    def elaborate(self, platform):
+        m = Module()
+
+        state = Signal(4, init=self.ST_IDLE)
+        timer = Signal(range(self.quarter_cycles + 1))
+        bit_idx = Signal(3)
+        shifter = Signal(8)
+        is_read = Signal()
+        send_ack = Signal()
+        scl_high = Signal(init=1)
+        sda_high = Signal(init=1)
+
+        tick = timer == (self.quarter_cycles - 1)
+
+        m.d.comb += [
+            self.scl_o.eq(0),
+            self.scl_oe.eq(~scl_high),
+            self.sda_o.eq(0),
+            self.sda_oe.eq(~sda_high),
+            self.cmd_ready.eq((state == self.ST_IDLE) | (state == self.ST_HOLD)),
+            self.busy.eq(state != self.ST_IDLE),
+        ]
+
+        m.d.sync += self.rx_valid.eq(0)
+
+        with m.Switch(state):
+            with m.Case(self.ST_IDLE, self.ST_HOLD):
+                with m.If(self.cmd_valid):
+                    m.d.sync += timer.eq(0)
+                    with m.If(self.cmd_start):
+                        m.d.sync += [
+                            sda_high.eq(1),
+                            scl_high.eq(1),
+                            self.ack_error.eq(0),
+                            state.eq(self.ST_START_A),
+                        ]
+                    with m.Elif(self.cmd_stop):
+                        m.d.sync += [
+                            sda_high.eq(0),
+                            scl_high.eq(0),
+                            state.eq(self.ST_STOP_A),
+                        ]
+                    with m.Elif(self.cmd_write):
+                        m.d.sync += [
+                            shifter.eq(self.tx_data),
+                            bit_idx.eq(7),
+                            is_read.eq(0),
+                            scl_high.eq(0),
+                            sda_high.eq(self.tx_data[7]),
+                            state.eq(self.ST_BIT_LOW),
+                        ]
+                    with m.Elif(self.cmd_read):
+                        m.d.sync += [
+                            bit_idx.eq(7),
+                            is_read.eq(1),
+                            send_ack.eq(self.tx_ack),
+                            scl_high.eq(0),
+                            sda_high.eq(1),
+                            state.eq(self.ST_BIT_LOW),
+                        ]
+
+            with m.Case(self.ST_START_A):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), sda_high.eq(0), state.eq(self.ST_START_B)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_START_B):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), scl_high.eq(0), state.eq(self.ST_HOLD)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_BIT_LOW):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), scl_high.eq(1), state.eq(self.ST_BIT_HIGH)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_BIT_HIGH):
+                with m.If(tick):
+                    next_shift = Cat(self.sda_i, shifter[:7])
+                    m.d.sync += [timer.eq(0), scl_high.eq(0)]
+                    with m.If(is_read):
+                        m.d.sync += shifter.eq(next_shift)
+                    with m.If(bit_idx == 0):
+                        with m.If(is_read):
+                            m.d.sync += [
+                                self.rx_data.eq(next_shift),
+                                self.rx_valid.eq(1),
+                                sda_high.eq(~send_ack),
+                            ]
+                        with m.Else():
+                            m.d.sync += sda_high.eq(1)
+                        m.d.sync += state.eq(self.ST_ACK_LOW)
+                    with m.Else():
+                        m.d.sync += bit_idx.eq(bit_idx - 1)
+                        with m.If(is_read):
+                            m.d.sync += sda_high.eq(1)
+                        with m.Else():
+                            m.d.sync += [
+                                sda_high.eq(shifter[6]),
+                                shifter.eq(Cat(Const(0, 1), shifter[:7])),
+                            ]
+                        m.d.sync += state.eq(self.ST_BIT_LOW)
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_ACK_LOW):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), scl_high.eq(1), state.eq(self.ST_ACK_HIGH)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_ACK_HIGH):
+                with m.If(tick):
+                    with m.If(~is_read & self.sda_i):
+                        m.d.sync += self.ack_error.eq(1)
+                    m.d.sync += [timer.eq(0), scl_high.eq(0), state.eq(self.ST_HOLD)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_STOP_A):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), scl_high.eq(1), state.eq(self.ST_STOP_B)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+            with m.Case(self.ST_STOP_B):
+                with m.If(tick):
+                    m.d.sync += [timer.eq(0), sda_high.eq(1), state.eq(self.ST_IDLE)]
+                with m.Else():
+                    m.d.sync += timer.eq(timer + 1)
+
+        return m
+
+
+class LIS2DW12Controller(Elaboratable):
+    I2C_ADDR = 0x19  # 7-bit address (SA0=1: 0x19, SA0=0: 0x18)
+
+    REG_CTRL1 = 0x20
+    REG_CTRL2 = 0x21
+    REG_CTRL5_INT2 = 0x24
+    REG_CTRL6 = 0x25
+    REG_OUT_X_L = 0x28
+    REG_WAKE_UP_THS = 0x34
+    REG_WAKE_UP_DUR = 0x35
+    REG_CTRL7 = 0x3F
+
+    def __init__(self, *, i2c_addr=0x19):
+        self.i2c_addr = i2c_addr
+
+        self.init_req = Signal()
+        self.poll_req = Signal()
+        self.init_done = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.gx = Signal(signed(8))
+        self.gy = Signal(signed(8), init=-60)
+        self.int2_sleep = Signal()
+
+        self.i2c_cmd_start = Signal()
+        self.i2c_cmd_stop = Signal()
+        self.i2c_cmd_write = Signal()
+        self.i2c_cmd_read = Signal()
+        self.i2c_cmd_valid = Signal()
+        self.i2c_cmd_ready = Signal()
+        self.i2c_tx_data = Signal(8)
+        self.i2c_tx_ack = Signal()
+        self.i2c_rx_data = Signal(8)
+        self.i2c_rx_valid = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+
+        # Init table: (reg, val) for LIS2DW12 datasheet registers
+        init_regs = Array([
+            Const(self.REG_CTRL2, 8),       Const(0x04, 8),  # BDU=1, IF_ADD_INC=1
+            Const(self.REG_CTRL1, 8),       Const(0x54, 8),  # 100 Hz, High-Performance
+            Const(self.REG_CTRL6, 8),       Const(0x04, 8),  # +/-2g, LOW_NOISE=1
+            Const(self.REG_WAKE_UP_THS, 8), Const(0x42, 8),  # SLEEP_ON=1, WK_THS=2
+            Const(self.REG_WAKE_UP_DUR, 8), Const(0x03, 8),  # SLEEP_DUR=3
+            Const(self.REG_CTRL5_INT2, 8),  Const(0x40, 8),  # INT2_SLEEP_STATE=1
+            Const(self.REG_CTRL7, 8),       Const(0x20, 8),  # INTERRUPTS_ENABLE=1
+        ])
+
+        state = Signal(4, init=0)
+        init_idx = Signal(3)
+        sub_step = Signal(3)
+
+        m.d.comb += self.busy.eq(state != 0)
+        m.d.sync += self.done.eq(0)
+
+        with m.Switch(state):
+            with m.Case(0):  # IDLE
+                with m.If(self.init_req):
+                    m.d.sync += [init_idx.eq(0), sub_step.eq(0), state.eq(1)]
+                with m.Elif(self.poll_req):
+                    m.d.sync += [sub_step.eq(0), state.eq(2)]
+
+            with m.Case(1):  # INIT WRITE SEQUENCE
+                reg_addr = init_regs[Cat(Const(0, 1), init_idx)]
+                reg_val = init_regs[Cat(Const(1, 1), init_idx)]
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(sub_step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += sub_step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += sub_step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(reg_addr)]
+                            m.d.sync += sub_step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(reg_val)]
+                            m.d.sync += sub_step.eq(4)
+                        with m.Case(4):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += sub_step.eq(0)
+                            with m.If(init_idx == 6):
+                                m.d.sync += [self.init_done.eq(1), self.done.eq(1), state.eq(0)]
+                            with m.Else():
+                                m.d.sync += init_idx.eq(init_idx + 1)
+
+            with m.Case(2):  # POLL OUT_X_L..OUT_Y_H (0x28..0x2B)
+                with m.If(self.i2c_rx_valid):
+                    with m.If(sub_step == 6):
+                        m.d.sync += self.gx.eq(self.i2c_rx_data.as_signed())
+                    with m.Elif(sub_step == 8):
+                        m.d.sync += self.gy.eq(self.i2c_rx_data.as_signed())
+
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(sub_step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += sub_step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += sub_step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(self.REG_OUT_X_L),
+                            ]
+                            m.d.sync += sub_step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += sub_step.eq(4)
+                        with m.Case(4):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 1),
+                            ]
+                            m.d.sync += sub_step.eq(5)
+                        with m.Case(5):  # Read OUT_X_L (ACK)
+                            m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
+                            m.d.sync += sub_step.eq(6)
+                        with m.Case(6):  # Read OUT_X_H (ACK)
+                            m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
+                            m.d.sync += sub_step.eq(7)
+                        with m.Case(7):  # Read OUT_Y_L (ACK)
+                            m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
+                            m.d.sync += sub_step.eq(8)
+                        with m.Case(8):  # Read OUT_Y_H (NACK)
+                            m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(0)]
+                            m.d.sync += sub_step.eq(9)
+                        with m.Case(9):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += [self.done.eq(1), state.eq(0)]
+
+        return m
+
+
+class IS31FL3741AController(Elaboratable):
+    I2C_ADDR = 0x30
+    REG_CMD = 0xFD
+    REG_LOCK = 0xFE
+    UNLOCK_KEY = 0xC5
+
+    PAGE_PWM0 = 0x00
+    PAGE_PWM1 = 0x01
+    PAGE_SCALE0 = 0x02
+    PAGE_SCALE1 = 0x03
+    PAGE_FUNC = 0x04
+
+    def __init__(self, *, i2c_addr=0x30):
+        self.i2c_addr = i2c_addr
+
+        self.init_req = Signal()
+        self.frame_req = Signal()
+        self.init_done = Signal()
+        self.busy = Signal()
+        self.done = Signal()
+
+        self.density_q12 = [
+            Signal(unsigned(32), name=f"led_dens_{i}") for i in range(DENSITY_CELLS)
+        ]
+
+        self.i2c_cmd_start = Signal()
+        self.i2c_cmd_stop = Signal()
+        self.i2c_cmd_write = Signal()
+        self.i2c_cmd_valid = Signal()
+        self.i2c_cmd_ready = Signal()
+        self.i2c_tx_data = Signal(8)
+
+    def elaborate(self, platform):
+        m = Module()
+
+        density_arr = Array(self.density_q12)
+        active_rom = Array([Const(idx, unsigned(8)) for idx in ACTIVE_CELL_INDICES])
+
+        state = Signal(4, init=0)
+        step = Signal(3)
+        led_idx = Signal(8)
+        target_page = Signal(8)
+        burst_limit = Signal(8)
+        is_scaling = Signal()
+
+        cell_addr = Signal(8)
+        raw_dens = Signal(unsigned(32))
+        scaled_pwm = Signal(unsigned(32))
+        pwm_byte = Signal(8)
+
+        m.d.comb += [
+            cell_addr.eq(active_rom[led_idx]),
+            raw_dens.eq(density_arr[cell_addr]),
+            scaled_pwm.eq(raw_dens >> 5),
+            pwm_byte.eq(Mux(scaled_pwm > 255, 255, scaled_pwm[:8])),
+            self.busy.eq(state != 0),
+        ]
+
+        m.d.sync += self.done.eq(0)
+
+        with m.Switch(state):
+            with m.Case(0):  # IDLE
+                with m.If(self.init_req):
+                    m.d.sync += [
+                        target_page.eq(self.PAGE_FUNC),
+                        step.eq(0),
+                        state.eq(1),
+                    ]
+                with m.Elif(self.frame_req):
+                    m.d.sync += [
+                        target_page.eq(self.PAGE_PWM0),
+                        burst_limit.eq(179),
+                        led_idx.eq(0),
+                        is_scaling.eq(0),
+                        step.eq(0),
+                        state.eq(1),
+                    ]
+
+            with m.Case(1):  # UNLOCK 0xFE = 0xC5 & SELECT PAGE 0xFD = target_page
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(self.REG_LOCK),
+                            ]
+                            m.d.sync += step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(self.UNLOCK_KEY),
+                            ]
+                            m.d.sync += step.eq(4)
+                        with m.Case(4):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += [step.eq(0), state.eq(2)]
+
+            with m.Case(2):  # WRITE 0xFD = target_page
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(self.REG_CMD),
+                            ]
+                            m.d.sync += step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(target_page),
+                            ]
+                            m.d.sync += step.eq(4)
+                        with m.Case(4):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += step.eq(0)
+                            with m.If(target_page == self.PAGE_FUNC):
+                                m.d.sync += state.eq(3)
+                            with m.Else():
+                                m.d.sync += state.eq(4)
+
+            with m.Case(3):  # PAGE 4 INIT: Config (0x00=0x01) + GCC (0x01=0xFF)
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
+                            m.d.sync += step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x01)]
+                            m.d.sync += step.eq(4)
+                        with m.Case(4):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0xFF)]
+                            m.d.sync += step.eq(5)
+                        with m.Case(5):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += [
+                                target_page.eq(self.PAGE_SCALE0),
+                                burst_limit.eq(179),
+                                led_idx.eq(0),
+                                is_scaling.eq(1),
+                                step.eq(0),
+                                state.eq(1),
+                            ]
+
+            with m.Case(4):  # PAGE STREAM BURST (180 bytes on Page 0/2, 36 bytes on Page 1/3)
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq((self.i2c_addr << 1) | 0),
+                            ]
+                            m.d.sync += step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
+                            m.d.sync += step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [
+                                self.i2c_cmd_write.eq(1),
+                                self.i2c_tx_data.eq(Mux(is_scaling, 0xFF, pwm_byte)),
+                            ]
+                            with m.If(led_idx == burst_limit):
+                                m.d.sync += step.eq(4)
+                            with m.Else():
+                                m.d.sync += led_idx.eq(led_idx + 1)
+                        with m.Case(4):
+                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.sync += step.eq(0)
+                            with m.If(target_page == self.PAGE_SCALE0):
+                                m.d.sync += [
+                                    target_page.eq(self.PAGE_SCALE1),
+                                    burst_limit.eq(215),
+                                    led_idx.eq(180),
+                                    state.eq(1),
+                                ]
+                            with m.Elif(target_page == self.PAGE_SCALE1):
+                                m.d.sync += [self.init_done.eq(1), self.done.eq(1), state.eq(0)]
+                            with m.Elif(target_page == self.PAGE_PWM0):
+                                m.d.sync += [
+                                    target_page.eq(self.PAGE_PWM1),
+                                    burst_limit.eq(215),
+                                    led_idx.eq(180),
+                                    state.eq(1),
+                                ]
+                            with m.Else():
+                                m.d.sync += [self.done.eq(1), state.eq(0)]
+
+        return m
+
+
+class PendantSystemTop(Elaboratable):
+    ST_BOOT_ACCEL = 0
+    ST_BOOT_ACCEL_WAIT = 1
+    ST_BOOT_LED = 2
+    ST_BOOT_LED_WAIT = 3
+    ST_POLL_ACCEL = 4
+    ST_POLL_ACCEL_WAIT = 5
+    ST_CHECK_SLEEP = 6
+    ST_RUN_FLIP = 7
+    ST_WAIT_FLIP = 8
+    ST_STREAM_LEDS = 9
+    ST_WAIT_LEDS = 10
+
+    def __init__(self, *, use_psram=False, particle_memory_backend="sram",
+                 sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000, i2c_clk_hz=400_000):
+        self.core = FLIPPipeline(
+            use_psram=use_psram,
+            particle_memory_backend=particle_memory_backend,
+            sys_clk_hz=sys_clk_hz,
+            qpi_clk_hz=qpi_clk_hz,
+        )
+        self.i2c = I2CMaster(sys_clk_hz=sys_clk_hz, i2c_clk_hz=i2c_clk_hz)
+        self.accel = LIS2DW12Controller()
+        self.leds = IS31FL3741AController()
+
+        self.frame_sync = Signal()
+        self.lis_int2_sleep = Signal()
+        self.clock_gated_sleep = Signal()
+        self.sleep_hold_frames = Signal(7)
+
+        self.i2c_scl_o = Signal(init=1)
+        self.i2c_scl_oe = Signal(init=0)
+        self.i2c_sda_i = Signal(init=1)
+        self.i2c_sda_o = Signal(init=1)
+        self.i2c_sda_oe = Signal(init=0)
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.core = core = self.core
+        m.submodules.i2c = i2c = self.i2c
+        m.submodules.accel = accel = self.accel
+        m.submodules.leds = leds = self.leds
+
+        state = Signal(4, init=self.ST_BOOT_ACCEL)
+        last_gx = Signal(signed(8), init=0)
+        last_gy = Signal(signed(8), init=-60)
+
+        use_led_i2c = (
+            (state == self.ST_BOOT_LED)
+            | (state == self.ST_BOOT_LED_WAIT)
+            | (state == self.ST_STREAM_LEDS)
+            | (state == self.ST_WAIT_LEDS)
+        )
+
+        for i in range(DENSITY_CELLS):
+            m.d.comb += leds.density_q12[i].eq(core.p2g_density_q12[i])
+
+        m.d.comb += [
+            self.i2c_scl_o.eq(i2c.scl_o),
+            self.i2c_scl_oe.eq(i2c.scl_oe),
+            i2c.sda_i.eq(self.i2c_sda_i),
+            self.i2c_sda_o.eq(i2c.sda_o),
+            self.i2c_sda_oe.eq(i2c.sda_oe),
+
+            accel.i2c_cmd_ready.eq(i2c.cmd_ready & ~use_led_i2c),
+            accel.i2c_rx_data.eq(i2c.rx_data),
+            accel.i2c_rx_valid.eq(i2c.rx_valid),
+            leds.i2c_cmd_ready.eq(i2c.cmd_ready & use_led_i2c),
+
+            i2c.cmd_start.eq(Mux(use_led_i2c, leds.i2c_cmd_start, accel.i2c_cmd_start)),
+            i2c.cmd_stop.eq(Mux(use_led_i2c, leds.i2c_cmd_stop, accel.i2c_cmd_stop)),
+            i2c.cmd_write.eq(Mux(use_led_i2c, leds.i2c_cmd_write, accel.i2c_cmd_write)),
+            i2c.cmd_read.eq(Mux(use_led_i2c, 0, accel.i2c_cmd_read)),
+            i2c.cmd_valid.eq(Mux(use_led_i2c, leds.i2c_cmd_valid, accel.i2c_cmd_valid)),
+            i2c.tx_data.eq(Mux(use_led_i2c, leds.i2c_tx_data, accel.i2c_tx_data)),
+            i2c.tx_ack.eq(Mux(use_led_i2c, 0, accel.i2c_tx_ack)),
+
+            core.gx.eq(accel.gx),
+            core.gy.eq(accel.gy),
+            core.start.eq(state == self.ST_RUN_FLIP),
+            accel.init_req.eq(state == self.ST_BOOT_ACCEL),
+            accel.poll_req.eq(state == self.ST_POLL_ACCEL),
+            leds.init_req.eq(state == self.ST_BOOT_LED),
+            leds.frame_req.eq(state == self.ST_STREAM_LEDS),
+        ]
+
+        dx = Signal(signed(9))
+        dy = Signal(signed(9))
+        accel_changed = Signal()
+        m.d.comb += [
+            dx.eq(accel.gx - last_gx),
+            dy.eq(accel.gy - last_gy),
+            accel_changed.eq((dx > 1) | (dx < -1) | (dy > 1) | (dy < -1)),
+        ]
+
+        with m.Switch(state):
+            with m.Case(self.ST_BOOT_ACCEL):
+                m.d.sync += state.eq(self.ST_BOOT_ACCEL_WAIT)
+            with m.Case(self.ST_BOOT_ACCEL_WAIT):
+                with m.If(accel.done):
+                    m.d.sync += state.eq(self.ST_BOOT_LED)
+            with m.Case(self.ST_BOOT_LED):
+                m.d.sync += state.eq(self.ST_BOOT_LED_WAIT)
+            with m.Case(self.ST_BOOT_LED_WAIT):
+                with m.If(leds.done):
+                    m.d.sync += state.eq(self.ST_POLL_ACCEL)
+            with m.Case(self.ST_POLL_ACCEL):
+                with m.If(self.frame_sync):
+                    m.d.sync += state.eq(self.ST_POLL_ACCEL_WAIT)
+            with m.Case(self.ST_POLL_ACCEL_WAIT):
+                with m.If(accel.done):
+                    m.d.sync += state.eq(self.ST_CHECK_SLEEP)
+            with m.Case(self.ST_CHECK_SLEEP):
+                m.d.sync += [last_gx.eq(accel.gx), last_gy.eq(accel.gy)]
+                with m.If(accel_changed | ~self.lis_int2_sleep):
+                    m.d.sync += [
+                        self.clock_gated_sleep.eq(0),
+                        self.sleep_hold_frames.eq(0),
+                        state.eq(self.ST_RUN_FLIP),
+                    ]
+                with m.Elif(self.clock_gated_sleep):
+                    m.d.sync += state.eq(self.ST_POLL_ACCEL)
+                with m.Else():
+                    with m.If(self.sleep_hold_frames >= 89):
+                        m.d.sync += [
+                            self.clock_gated_sleep.eq(1),
+                            state.eq(self.ST_POLL_ACCEL),
+                        ]
+                    with m.Else():
+                        m.d.sync += [
+                            self.sleep_hold_frames.eq(self.sleep_hold_frames + 1),
+                            state.eq(self.ST_RUN_FLIP),
+                        ]
+            with m.Case(self.ST_RUN_FLIP):
+                m.d.sync += state.eq(self.ST_WAIT_FLIP)
+            with m.Case(self.ST_WAIT_FLIP):
+                with m.If(core.done):
+                    m.d.sync += state.eq(self.ST_STREAM_LEDS)
+            with m.Case(self.ST_STREAM_LEDS):
+                m.d.sync += state.eq(self.ST_WAIT_LEDS)
+            with m.Case(self.ST_WAIT_LEDS):
+                with m.If(leds.done):
+                    m.d.sync += state.eq(self.ST_POLL_ACCEL)
+
+        return m
+
+class TTUmFlipPendant(Elaboratable):
+    def __init__(self, *, sys_clk_hz=25_000_000, qpi_clk_hz=12_500_000, i2c_clk_hz=400_000):
+        self.sys_clk_hz = sys_clk_hz
+        self.frame_reload = max(1, sys_clk_hz // 60)
+
+        self.ui_in = Signal(8, name="ui_in")
+        self.uo_out = Signal(8, name="uo_out")
+        self.uio_in = Signal(8, name="uio_in")
+        self.uio_out = Signal(8, name="uio_out")
+        self.uio_oe = Signal(8, name="uio_oe")
+        self.ena = Signal(name="ena")
+
+        self.system = PendantSystemTop(
+            use_psram=True,
+            particle_memory_backend="behavioral",
+            sys_clk_hz=sys_clk_hz,
+            qpi_clk_hz=qpi_clk_hz,
+            i2c_clk_hz=i2c_clk_hz,
+        )
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.system = sys_top = self.system
+        core = sys_top.core
+
+        frame_timer = Signal(range(self.frame_reload + 1))
+        auto_tick = Signal()
+        with m.If(frame_timer == self.frame_reload - 1):
+            m.d.sync += [frame_timer.eq(0), auto_tick.eq(1)]
+        with m.Else():
+            m.d.sync += [frame_timer.eq(frame_timer + 1), auto_tick.eq(0)]
+
+        lis_int2_sleep = self.ui_in[0]
+        shake_btn = self.ui_in[1]
+        ext_frame_sync = self.ui_in[2]
+        auto_run_en = self.ui_in[3]
+        force_awake = self.ui_in[5]
+
+        m.d.comb += [
+            sys_top.lis_int2_sleep.eq(lis_int2_sleep & ~shake_btn & ~force_awake),
+            sys_top.frame_sync.eq(Mux(auto_run_en, auto_tick, ext_frame_sync)),
+        ]
+
+        trans_oe_n = (
+            core.psram_translator_oe_n[0]
+            & core.psram_translator_oe_n[1]
+            & core.psram_translator_oe_n[2]
+            & core.psram_translator_oe_n[3]
+        )
+
+        m.d.comb += [
+            core.psram_dq_i.eq(self.uio_in[0:4]),
+            sys_top.i2c_sda_i.eq(self.uio_in[4]),
+
+            self.uio_out.eq(Cat(
+                core.psram_dq_o,
+                Const(0, 1),
+                Const(0, 1),
+                trans_oe_n,
+                Const(1, 1),
+            )),
+            self.uio_oe.eq(Cat(
+                core.psram_dq_oe,
+                sys_top.i2c_sda_oe,
+                sys_top.i2c_scl_oe,
+                Const(1, 1),
+                Const(1, 1),
+            )),
+            self.uo_out.eq(Cat(
+                core.psram_sclk,
+                core.psram_ce_n,
+                core.psram_translator_dir,
+                core.busy,
+                core.done,
+                sys_top.clock_gated_sleep,
+                sys_top.i2c.busy,
+                core.psram_error | sys_top.i2c.ack_error | core.velocity_overflow,
+            )),
+        ]
+
+        return m
+
+_CURRENT_MODULE = _sys.modules[__name__]
+for _mod_name in ('sync_memory_1r1w', 'psram_level_shifter', 'psram_qpi_burst_controller', 'psram_word_bank', 'psram_particle_store', 'psram_particle_memory', 'particle_memory_sram_adapter', 'particle_memory', 'gravity_advect', 'particle_gravity_advect_engine', 'spatial_hash_builder', 'spatial_hash_pair_enumerator', 'particle_pair_correction', 'particle_separation_2pass', 'particle_separation_memory_adapter', 'wall_collision', 'particle_wall_collision_engine', 'bilinear_weights', 'p2g_normalize_masks', 'p2g_complete_pipeline_sram', 'cell_classifier', 'pressure_cell_update', 'pressure_red_black_iteration', 'g2p_particle', 'g2p_engine', 'flip_asic', 'i2c_master', 'lis2dw12_controller', 'is31fl3741a_controller', 'pendant_system_top'):
+    _sys.modules.setdefault(_mod_name, _CURRENT_MODULE)
+
+__all__ = [
+    "FLIPPipeline",
+    "ParticlePhysicsChain",
+    "PendantSystemTop",
+    "TTUmFlipPendant",
+    "I2CMaster",
+    "LIS2DW12Controller",
+    "IS31FL3741AController",
+    "SyncMemory1R1W",
+    "PsramLevelShifterControl",
+    "PsramQpiBurstController",
+    "PsramWordBank",
+    "PsramParticleStore",
+    "PsramParticleMemory",
+    "ParticleMemorySramAdapter",
+    "ParticleMemory",
+    "GravityAdvect",
+    "ParticleGravityAdvectEngine",
+    "SpatialHashBuilder",
+    "SpatialHashPairEnumerator",
+    "ParticlePairCorrection",
+    "ParticleSeparation2Pass",
+    "ParticleSeparationMemoryAdapter",
+    "WallCollision",
+    "ParticleWallCollisionEngine",
+    "BilinearWeights",
+    "P2GNormalizeMasks",
+    "P2GCompletePipelineSRAM",
+    "CellClassifier",
+    "PressureCellUpdate",
+    "PressureRedBlackIteration",
+    "G2PParticle",
+    "G2PEngine",
+]
