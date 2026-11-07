@@ -245,22 +245,19 @@ class PsramQpiBurstController(Elaboratable):
                 (state == self.ST_WRITE_WAIT) | (state == self.ST_WRITE_SHIFT) |
                 (state == self.ST_READ_SHIFT) | (state == self.ST_READ_END) |
                 (state == self.ST_READ_HOLD) | (state == self.ST_FINISH_HOLD))),
-            self.dq_o.eq(0), self.dq_oe.eq(0),
+            self.dq_o.eq(
+                Mux(state == self.ST_SPI_SEND, Cat(spi_shift[7], Const(0, 3)),
+                    Mux(state == self.ST_QPI_CMD, cmd_shift[4:8],
+                        Mux(state == self.ST_QPI_ADDR, addr_shift[20:24],
+                            Mux(state == self.ST_WRITE_SHIFT, data_shift[4:8], 0))))
+            ),
+            self.dq_oe.eq(
+                Mux((state == self.ST_POWER_WAIT) | (state == self.ST_QPI_CMD) |
+                    (state == self.ST_QPI_ADDR) | (state == self.ST_WRITE_SHIFT),
+                    0b1111,
+                    Mux(state == self.ST_SPI_SEND, 0b0001, 0))
+            ),
         ]
-        with m.Switch(state):
-            with m.Case(self.ST_POWER_WAIT):
-                m.d.comb += self.dq_oe.eq(0b1111)
-            with m.Case(self.ST_SPI_SEND):
-                m.d.comb += [self.dq_o.eq(Cat(spi_shift[7], Const(0, 3))),
-                             self.dq_oe.eq(0b0001)]
-            with m.Case(self.ST_QPI_CMD):
-                m.d.comb += [self.dq_o.eq(cmd_shift[4:8]), self.dq_oe.eq(0b1111)]
-            with m.Case(self.ST_QPI_ADDR):
-                m.d.comb += [self.dq_o.eq(addr_shift[20:24]), self.dq_oe.eq(0b1111)]
-            with m.Case(self.ST_WRITE_SHIFT):
-                m.d.comb += [self.dq_o.eq(data_shift[4:8]), self.dq_oe.eq(0b1111)]
-            with m.Case(self.ST_READ_SHIFT, self.ST_READ_END, self.ST_QPI_DUMMY):
-                m.d.comb += self.dq_oe.eq(0)
 
         tick = div_count == self.half_period_cycles - 1
         m.d.sync += [self.done.eq(0), self.error.eq(0)]
@@ -4485,7 +4482,7 @@ class LIS2DW12Controller(Elaboratable):
 
         state = Signal(4, init=0)
         init_idx = Signal(3)
-        sub_step = Signal(3)
+        sub_step = Signal(4)
 
         m.d.comb += self.busy.eq(state != 0)
         m.d.sync += self.done.eq(0)
