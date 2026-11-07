@@ -956,7 +956,11 @@ def export_verilog(path, export_system=False):
         tt_v = verilog.convert(tt_top, name="tt_um_flip_pendant", ports=tt_ports)
         tt_path = path.parent / "project.v"
         tt_path.write_text(tt_v)
-        print("Exported %s (%s bytes)." % (tt_path, format(tt_path.stat().st_size, ",")))
+        print("Exported %s (%s bytes)." % (tt_path.resolve(), format(tt_path.stat().st_size, ",")))
+        for candidate in (Path("../project.v"), Path("src/project.v")):
+            if candidate.parent.exists() and (candidate.exists() or candidate.parent.name == "src"):
+                candidate.write_text(tt_v)
+                print("Updated  %s (%s bytes)." % (candidate.resolve(), format(candidate.stat().st_size, ",")))
 
         class ExportSystemTop(Elaboratable):
             def __init__(self):
