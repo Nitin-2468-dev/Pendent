@@ -4431,7 +4431,7 @@ class I2CMaster(Elaboratable):
 
 
 class LIS2DW12Controller(Elaboratable):
-    I2C_ADDR = 0x19  # 7-bit address (SA0=1: 0x19, SA0=0: 0x18)
+    I2C_ADDR = 0x19
 
     REG_CTRL1 = 0x20
     REG_CTRL2 = 0x21
@@ -4469,15 +4469,14 @@ class LIS2DW12Controller(Elaboratable):
     def elaborate(self, platform):
         m = Module()
 
-        # Init table: (reg, val) for LIS2DW12 datasheet registers
         init_regs = Array([
-            Const(self.REG_CTRL2, 8),       Const(0x04, 8),  # BDU=1, IF_ADD_INC=1
-            Const(self.REG_CTRL1, 8),       Const(0x54, 8),  # 100 Hz, High-Performance
-            Const(self.REG_CTRL6, 8),       Const(0x04, 8),  # +/-2g, LOW_NOISE=1
-            Const(self.REG_WAKE_UP_THS, 8), Const(0x42, 8),  # SLEEP_ON=1, WK_THS=2
-            Const(self.REG_WAKE_UP_DUR, 8), Const(0x03, 8),  # SLEEP_DUR=3
-            Const(self.REG_CTRL5_INT2, 8),  Const(0x40, 8),  # INT2_SLEEP_STATE=1
-            Const(self.REG_CTRL7, 8),       Const(0x20, 8),  # INTERRUPTS_ENABLE=1
+            Const(self.REG_CTRL2, 8),       Const(0x04, 8),
+            Const(self.REG_CTRL1, 8),       Const(0x54, 8),
+            Const(self.REG_CTRL6, 8),       Const(0x04, 8),
+            Const(self.REG_WAKE_UP_THS, 8), Const(0x42, 8),
+            Const(self.REG_WAKE_UP_DUR, 8), Const(0x03, 8),
+            Const(self.REG_CTRL5_INT2, 8),  Const(0x40, 8),
+            Const(self.REG_CTRL7, 8),       Const(0x20, 8),
         ])
 
         state = Signal(4, init=0)
@@ -4488,13 +4487,13 @@ class LIS2DW12Controller(Elaboratable):
         m.d.sync += self.done.eq(0)
 
         with m.Switch(state):
-            with m.Case(0):  # IDLE
+            with m.Case(0):
                 with m.If(self.init_req):
                     m.d.sync += [init_idx.eq(0), sub_step.eq(0), state.eq(1)]
                 with m.Elif(self.poll_req):
                     m.d.sync += [sub_step.eq(0), state.eq(2)]
 
-            with m.Case(1):  # INIT WRITE SEQUENCE
+            with m.Case(1):
                 reg_addr = init_regs[Cat(Const(0, 1), init_idx)]
                 reg_val = init_regs[Cat(Const(1, 1), init_idx)]
                 with m.If(self.i2c_cmd_ready):
@@ -4523,7 +4522,7 @@ class LIS2DW12Controller(Elaboratable):
                             with m.Else():
                                 m.d.sync += init_idx.eq(init_idx + 1)
 
-            with m.Case(2):  # POLL OUT_X_L..OUT_Y_H (0x28..0x2B)
+            with m.Case(2):
                 with m.If(self.i2c_rx_valid):
                     with m.If(sub_step == 6):
                         m.d.sync += self.gx.eq(self.i2c_rx_data.as_signed())
@@ -4557,16 +4556,16 @@ class LIS2DW12Controller(Elaboratable):
                                 self.i2c_tx_data.eq((self.i2c_addr << 1) | 1),
                             ]
                             m.d.sync += sub_step.eq(5)
-                        with m.Case(5):  # Read OUT_X_L (ACK)
+                        with m.Case(5):
                             m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
                             m.d.sync += sub_step.eq(6)
-                        with m.Case(6):  # Read OUT_X_H (ACK)
+                        with m.Case(6):
                             m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
                             m.d.sync += sub_step.eq(7)
-                        with m.Case(7):  # Read OUT_Y_L (ACK)
+                        with m.Case(7):
                             m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(1)]
                             m.d.sync += sub_step.eq(8)
-                        with m.Case(8):  # Read OUT_Y_H (NACK)
+                        with m.Case(8):
                             m.d.comb += [self.i2c_cmd_read.eq(1), self.i2c_tx_ack.eq(0)]
                             m.d.sync += sub_step.eq(9)
                         with m.Case(9):
@@ -4588,8 +4587,9 @@ class IS31FL3741AController(Elaboratable):
     PAGE_SCALE1 = 0x03
     PAGE_FUNC = 0x04
 
-    def __init__(self, *, i2c_addr=0x30):
+    def __init__(self, *, i2c_addr=0x30, stream_mode=False):
         self.i2c_addr = i2c_addr
+        self.stream_mode = stream_mode
 
         self.init_req = Signal()
         self.frame_req = Signal()
@@ -4597,9 +4597,17 @@ class IS31FL3741AController(Elaboratable):
         self.busy = Signal()
         self.done = Signal()
 
-        self.density_q12 = [
-            Signal(unsigned(32), name=f"led_dens_{i}") for i in range(DENSITY_CELLS)
-        ]
+        self.dens_rd_req = Signal()
+        self.dens_rd_addr = Signal(8)
+        self.dens_rd_valid = Signal()
+        self.dens_rd_data = Signal(32)
+
+        if not stream_mode:
+            self.density_q12 = [
+                Signal(unsigned(32), name=f"led_dens_{i}") for i in range(DENSITY_CELLS)
+            ]
+        else:
+            self.density_q12 = []
 
         self.i2c_cmd_start = Signal()
         self.i2c_cmd_stop = Signal()
@@ -4611,7 +4619,6 @@ class IS31FL3741AController(Elaboratable):
     def elaborate(self, platform):
         m = Module()
 
-        density_arr = Array(self.density_q12)
         active_rom = Array([Const(idx, unsigned(8)) for idx in ACTIVE_CELL_INDICES])
 
         state = Signal(4, init=0)
@@ -4620,6 +4627,7 @@ class IS31FL3741AController(Elaboratable):
         target_page = Signal(8)
         burst_limit = Signal(8)
         is_scaling = Signal()
+        latched_dens = Signal(unsigned(32))
 
         cell_addr = Signal(8)
         raw_dens = Signal(unsigned(32))
@@ -4628,16 +4636,22 @@ class IS31FL3741AController(Elaboratable):
 
         m.d.comb += [
             cell_addr.eq(active_rom[led_idx]),
-            raw_dens.eq(density_arr[cell_addr]),
+            self.dens_rd_addr.eq(cell_addr),
             scaled_pwm.eq(raw_dens >> 5),
             pwm_byte.eq(Mux(scaled_pwm > 255, 255, scaled_pwm[:8])),
             self.busy.eq(state != 0),
         ]
 
+        if self.stream_mode:
+            m.d.comb += raw_dens.eq(latched_dens)
+        else:
+            density_arr = Array(self.density_q12)
+            m.d.comb += raw_dens.eq(density_arr[cell_addr])
+
         m.d.sync += self.done.eq(0)
 
         with m.Switch(state):
-            with m.Case(0):  # IDLE
+            with m.Case(0):
                 with m.If(self.init_req):
                     m.d.sync += [
                         target_page.eq(self.PAGE_FUNC),
@@ -4654,7 +4668,7 @@ class IS31FL3741AController(Elaboratable):
                         state.eq(1),
                     ]
 
-            with m.Case(1):  # UNLOCK 0xFE = 0xC5 & SELECT PAGE 0xFD = target_page
+            with m.Case(1):
                 with m.If(self.i2c_cmd_ready):
                     m.d.comb += self.i2c_cmd_valid.eq(1)
                     with m.Switch(step):
@@ -4683,7 +4697,7 @@ class IS31FL3741AController(Elaboratable):
                             m.d.comb += self.i2c_cmd_stop.eq(1)
                             m.d.sync += [step.eq(0), state.eq(2)]
 
-            with m.Case(2):  # WRITE 0xFD = target_page
+            with m.Case(2):
                 with m.If(self.i2c_cmd_ready):
                     m.d.comb += self.i2c_cmd_valid.eq(1)
                     with m.Switch(step):
@@ -4716,7 +4730,7 @@ class IS31FL3741AController(Elaboratable):
                             with m.Else():
                                 m.d.sync += state.eq(4)
 
-            with m.Case(3):  # PAGE 4 INIT: Config (0x00=0x01) + GCC (0x01=0xFF)
+            with m.Case(3):
                 with m.If(self.i2c_cmd_ready):
                     m.d.comb += self.i2c_cmd_valid.eq(1)
                     with m.Switch(step):
@@ -4749,8 +4763,12 @@ class IS31FL3741AController(Elaboratable):
                                 state.eq(1),
                             ]
 
-            with m.Case(4):  # PAGE STREAM BURST (180 bytes on Page 0/2, 36 bytes on Page 1/3)
-                with m.If(self.i2c_cmd_ready):
+            with m.Case(4):
+                with m.If(self.stream_mode & ~is_scaling & (step == 3)):
+                    m.d.comb += self.dens_rd_req.eq(1)
+                    with m.If(self.dens_rd_valid):
+                        m.d.sync += [latched_dens.eq(self.dens_rd_data), step.eq(5)]
+                with m.Elif(self.i2c_cmd_ready):
                     m.d.comb += self.i2c_cmd_valid.eq(1)
                     with m.Switch(step):
                         with m.Case(0):
@@ -4765,7 +4783,7 @@ class IS31FL3741AController(Elaboratable):
                         with m.Case(2):
                             m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
                             m.d.sync += step.eq(3)
-                        with m.Case(3):
+                        with m.Case(3, 5):
                             m.d.comb += [
                                 self.i2c_cmd_write.eq(1),
                                 self.i2c_tx_data.eq(Mux(is_scaling, 0xFF, pwm_byte)),
@@ -4773,7 +4791,7 @@ class IS31FL3741AController(Elaboratable):
                             with m.If(led_idx == burst_limit):
                                 m.d.sync += step.eq(4)
                             with m.Else():
-                                m.d.sync += led_idx.eq(led_idx + 1)
+                                m.d.sync += [led_idx.eq(led_idx + 1), step.eq(3)]
                         with m.Case(4):
                             m.d.comb += self.i2c_cmd_stop.eq(1)
                             m.d.sync += step.eq(0)
@@ -4799,6 +4817,535 @@ class IS31FL3741AController(Elaboratable):
         return m
 
 
+class SeqFloorDivider(Elaboratable):
+    def __init__(self, width=48):
+        self.width = width
+        self.start = Signal()
+        self.numerator = Signal(signed(width))
+        self.denominator = Signal(unsigned(32))
+        self.quotient = Signal(signed(32))
+        self.busy = Signal()
+        self.done = Signal()
+
+    def elaborate(self, platform):
+        m = Module()
+        count = Signal(6)
+        neg = Signal()
+        rem = Signal(unsigned(self.width))
+        quot = Signal(unsigned(self.width))
+        denom = Signal(unsigned(32))
+        active = Signal()
+
+        m.d.comb += self.busy.eq(active)
+        m.d.sync += self.done.eq(0)
+
+        with m.If(self.start & ~active):
+            is_neg = self.numerator < 0
+            mag = Mux(is_neg, -self.numerator, self.numerator)
+            safe_d = Mux(self.denominator == 0, 1, self.denominator)
+            m.d.sync += [
+                neg.eq(is_neg),
+                quot.eq(mag[:self.width]),
+                rem.eq(0),
+                denom.eq(safe_d),
+                count.eq(self.width),
+                active.eq(1),
+            ]
+        with m.Elif(active):
+            next_rem = Cat(quot[self.width - 1], rem[:self.width - 1])
+            ge = next_rem >= denom
+            sub_rem = Mux(ge, next_rem - denom, next_rem)
+            next_quot = Cat(ge, quot[:self.width - 1])
+            m.d.sync += [
+                rem.eq(sub_rem),
+                quot.eq(next_quot),
+                count.eq(count - 1),
+            ]
+            with m.If(count == 1):
+                adj = next_quot + (sub_rem != 0)
+                m.d.sync += [
+                    self.quotient.eq(Mux(neg, -adj[:32].as_signed(), next_quot[:32].as_signed())),
+                    active.eq(0),
+                    self.done.eq(1),
+                ]
+
+        return m
+
+
+class PsramStreamFlipCore(Elaboratable):
+    BASE_PARTICLE = 0x0000
+    BASE_HEAD     = 0x0400
+    BASE_NEXT     = 0x0500
+    BASE_U_SUM    = 0x0600
+    BASE_U_WEIGHT = 0x0710
+    BASE_V_SUM    = 0x0820
+    BASE_V_WEIGHT = 0x0930
+    BASE_DENSITY  = 0x0A40
+    BASE_U_OLD    = 0x0B40
+    BASE_V_OLD    = 0x0C50
+    BASE_U        = 0x0D60
+    BASE_V        = 0x0E70
+    BASE_PRESSURE = 0x0F80
+    BASE_CELLTYPE = 0x1080
+
+    def __init__(self, *, sys_clk_hz=25_000_000, qpi_clk_hz=12_500_000):
+        self.sys_clk_hz = sys_clk_hz
+        self.qpi_clk_hz = qpi_clk_hz
+
+        self.start = Signal()
+        self.gx = Signal(signed(8))
+        self.gy = Signal(signed(8))
+        self.busy = Signal()
+        self.done = Signal()
+        self.stage = Signal(5)
+        self.velocity_overflow = Signal()
+
+        self.psram_sclk = Signal()
+        self.psram_ce_n = Signal(init=1)
+        self.psram_dq_i = Signal(4)
+        self.psram_dq_o = Signal(4)
+        self.psram_dq_oe = Signal(4)
+        self.psram_translator_dir = Signal()
+        self.psram_translator_oe_n = Signal(4, init=0b1111)
+        self.psram_init_done = Signal()
+        self.psram_busy = Signal()
+        self.psram_error = Signal()
+
+        # External density read port for IS31FL3741A LED streaming while idle
+        self.dens_rd_req = Signal()
+        self.dens_rd_addr = Signal(8)
+        self.dens_rd_valid = Signal()
+        self.dens_rd_data = Signal(32)
+
+        self.bank = PsramWordBank(
+            data_width=32,
+            depth=8192,
+            sys_clk_hz=sys_clk_hz,
+            qpi_clk_hz=qpi_clk_hz,
+        )
+
+    def elaborate(self, platform):
+        m = Module()
+        m.submodules.bank = bank = self.bank
+        m.submodules.gravity_dp = gravity_dp = GravityAdvect()
+        m.submodules.pair_dp = pair_dp = ParticlePairCorrection()
+        m.submodules.wall_dp = wall_dp = WallCollision()
+        m.submodules.wu = wu = BilinearWeights(NX + 1, NY)
+        m.submodules.wv = wv = BilinearWeights(NX, NY + 1)
+        m.submodules.wd = wd = BilinearWeights(NX, NY)
+        m.submodules.press_dp = press_dp = PressureCellUpdate()
+        m.submodules.divider = divider = SeqFloorDivider(width=48)
+
+        m.d.comb += [
+            self.psram_sclk.eq(bank.sclk),
+            self.psram_ce_n.eq(bank.ce_n),
+            bank.dq_i.eq(self.psram_dq_i),
+            self.psram_dq_o.eq(bank.dq_o),
+            self.psram_dq_oe.eq(bank.dq_oe),
+            self.psram_translator_dir.eq(bank.translator_dir),
+            self.psram_translator_oe_n.eq(bank.translator_oe_n),
+            self.psram_init_done.eq(bank.init_done),
+            self.psram_busy.eq(bank.busy),
+            self.psram_error.eq(bank.error),
+        ]
+
+        state = Signal(5, init=0)
+        sub = Signal(4)
+        idx = Signal(10)
+        corner = Signal(2)
+        iter_idx = Signal(6)
+        colour = Signal(1)
+
+        px = Signal(signed(20))
+        py = Signal(signed(20))
+        vx = Signal(signed(20))
+        vy = Signal(signed(20))
+        jx = Signal(signed(20))
+        jy = Signal(signed(20))
+
+        u_acc = Signal(signed(48))
+        du_acc = Signal(signed(48))
+        u_wsum = Signal(unsigned(16))
+        v_acc = Signal(signed(48))
+        dv_acc = Signal(signed(48))
+        v_wsum = Signal(unsigned(16))
+
+        tmp0 = Signal(signed(32))
+        tmp1 = Signal(signed(32))
+        tmp2 = Signal(signed(32))
+        tmp3 = Signal(signed(32))
+        tmp4 = Signal(signed(32))
+        tmp5 = Signal(signed(32))
+
+        inside_rom = Array([
+            Const(int(INSIDE_MASK[i // NY][i % NY]), unsigned(1))
+            for i in range(DENSITY_CELLS)
+        ])
+        u_open_rom = Array([Const(v, unsigned(1)) for v in U_OPEN_MASK])
+        v_open_rom = Array([Const(v, unsigned(1)) for v in V_OPEN_MASK])
+        geom_s = Array([Const(g[0], unsigned(3)) for g in _PRESSURE_GEOMETRY])
+        geom_sx0 = Array([Const(g[1], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geom_sx1 = Array([Const(g[2], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geom_sy0 = Array([Const(g[3], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+        geom_sy1 = Array([Const(g[4], unsigned(1)) for g in _PRESSURE_GEOMETRY])
+
+        m.d.comb += [
+            self.busy.eq(state != 0),
+            self.stage.eq(state),
+            gravity_dp.pos_x.eq(px),
+            gravity_dp.pos_y.eq(py),
+            gravity_dp.vel_x.eq(vx[:19]),
+            gravity_dp.vel_y.eq(vy[:19]),
+            gravity_dp.gx.eq(self.gx),
+            gravity_dp.gy.eq(self.gy),
+
+            pair_dp.pos_i_x.eq(px),
+            pair_dp.pos_i_y.eq(py),
+            pair_dp.pos_j_x.eq(jx),
+            pair_dp.pos_j_y.eq(jy),
+
+            wall_dp.pos_x.eq(px),
+            wall_dp.pos_y.eq(py),
+            wall_dp.vel_x.eq(vx),
+            wall_dp.vel_y.eq(vy),
+
+            wu.gx_q12.eq(px),
+            wu.gy_q12.eq(py - HALF_CELL_Q12),
+            wv.gx_q12.eq(px - HALF_CELL_Q12),
+            wv.gy_q12.eq(py),
+            wd.gx_q12.eq(px - HALF_CELL_Q12),
+            wd.gy_q12.eq(py - HALF_CELL_Q12),
+
+            press_dp.u_left.eq(tmp0),
+            press_dp.u_right.eq(tmp1),
+            press_dp.v_bottom.eq(tmp2),
+            press_dp.v_top.eq(tmp3),
+            press_dp.pressure.eq(tmp4),
+            press_dp.density.eq(tmp5.as_unsigned()),
+            press_dp.s_count.eq(geom_s[idx[:8]]),
+            press_dp.sx0.eq(geom_sx0[idx[:8]]),
+            press_dp.sx1.eq(geom_sx1[idx[:8]]),
+            press_dp.sy0.eq(geom_sy0[idx[:8]]),
+            press_dp.sy1.eq(geom_sy1[idx[:8]]),
+
+            bank.rready.eq(1),
+            self.dens_rd_valid.eq((state == 0) & bank.rvalid),
+            self.dens_rd_data.eq(bank.rdata),
+        ]
+
+        u_cx = Array(wu.corner_x)[corner]
+        u_cy = Array(wu.corner_y)[corner]
+        u_w = Array(wu.weight)[corner]
+        v_cx = Array(wv.corner_x)[corner]
+        v_cy = Array(wv.corner_y)[corner]
+        v_w = Array(wv.weight)[corner]
+        d_cx = Array(wd.corner_x)[corner]
+        d_cy = Array(wd.corner_y)[corner]
+        d_w = Array(wd.weight)[corner]
+
+        u_node = Signal(9)
+        v_node = Signal(9)
+        d_node = Signal(8)
+        m.d.comb += [
+            u_node.eq((u_cx << 4) + u_cy),
+            v_node.eq((v_cx << 4) + v_cx + v_cy),
+            d_node.eq((d_cx << 4) + d_cy),
+        ]
+
+        m.d.sync += self.done.eq(0)
+
+        with m.Switch(state):
+            with m.Case(0):  # IDLE (serve LED density reads from PSRAM)
+                with m.If(self.start & bank.init_done):
+                    m.d.sync += [
+                        idx.eq(0),
+                        sub.eq(0),
+                        self.velocity_overflow.eq(0),
+                        state.eq(1),
+                    ]
+                with m.Elif(self.dens_rd_req & bank.ready):
+                    m.d.comb += [
+                        bank.req.eq(1),
+                        bank.we.eq(0),
+                        bank.addr.eq(self.BASE_DENSITY + self.dens_rd_addr),
+                    ]
+
+            with m.Case(1):  # STAGE 1 & 2B: GRAVITY + ADVECT + WALL COLLISION (256 particles)
+                base_p = (idx[:8] << 2)
+                with m.Switch(sub):
+                    with m.Case(0):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + 0)]
+                            m.d.sync += sub.eq(1)
+                    with m.Case(1):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [px.eq(bank.rdata[:20].as_signed()), sub.eq(2)]
+                    with m.Case(2):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + 1)]
+                            m.d.sync += sub.eq(3)
+                    with m.Case(3):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [py.eq(bank.rdata[:20].as_signed()), sub.eq(4)]
+                    with m.Case(4):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + 2)]
+                            m.d.sync += sub.eq(5)
+                    with m.Case(5):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [vx.eq(bank.rdata[:20].as_signed()), sub.eq(6)]
+                    with m.Case(6):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + 3)]
+                            m.d.sync += sub.eq(7)
+                    with m.Case(7):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [vy.eq(bank.rdata[:20].as_signed()), sub.eq(8)]
+                    with m.Case(8):  # Apply GravityAdvect, then latch into px/py/vx/vy for WallCollision
+                        m.d.sync += [
+                            px.eq(gravity_dp.next_pos_x),
+                            py.eq(gravity_dp.next_pos_y),
+                            vx.eq(Cat(gravity_dp.next_vel_x, gravity_dp.next_vel_x[18]).as_signed()),
+                            vy.eq(Cat(gravity_dp.next_vel_y, gravity_dp.next_vel_y[18]).as_signed()),
+                            sub.eq(9),
+                        ]
+                    with m.Case(9):  # Latch WallCollision outputs + pair repulsion against previous particle
+                        m.d.sync += [
+                            px.eq(Mux(idx != 0, pair_dp.next_i_x[:20].as_signed(), wall_dp.next_pos_x)),
+                            py.eq(Mux(idx != 0, pair_dp.next_i_y[:20].as_signed(), wall_dp.next_pos_y)),
+                            vx.eq(wall_dp.next_vel_x),
+                            vy.eq(wall_dp.next_vel_y),
+                            jx.eq(wall_dp.next_pos_x),
+                            jy.eq(wall_dp.next_pos_y),
+                            sub.eq(10),
+                        ]
+                    with m.Case(10):
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(base_p + 0),
+                                bank.wdata.eq(Cat(px, Const(0, 12))),
+                            ]
+                            m.d.sync += sub.eq(11)
+                    with m.Case(11):
+                        with m.If(bank.done):
+                            m.d.sync += sub.eq(12)
+                    with m.Case(12):
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(base_p + 1),
+                                bank.wdata.eq(Cat(py, Const(0, 12))),
+                            ]
+                            m.d.sync += sub.eq(13)
+                    with m.Case(13):
+                        with m.If(bank.done):
+                            m.d.sync += sub.eq(14)
+                    with m.Case(14):
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(base_p + 2),
+                                bank.wdata.eq(Cat(vx, Const(0, 12))),
+                            ]
+                            m.d.sync += sub.eq(15)
+                    with m.Case(15):
+                        with m.If(bank.done):
+                            m.d.sync += [sub.eq(0), state.eq(2)]
+
+            with m.Case(2):  # Write vy and advance particle
+                base_p = (idx[:8] << 2)
+                with m.If(sub == 0):
+                    with m.If(bank.ready):
+                        m.d.comb += [
+                            bank.req.eq(1), bank.we.eq(1),
+                            bank.addr.eq(base_p + 3),
+                            bank.wdata.eq(Cat(vy, Const(0, 12))),
+                        ]
+                        m.d.sync += sub.eq(1)
+                with m.Else():
+                    with m.If(bank.done):
+                        m.d.sync += sub.eq(0)
+                        with m.If(idx == NP - 1):
+                            m.d.sync += [idx.eq(0), state.eq(3)]
+                        with m.Else():
+                            m.d.sync += [idx.eq(idx + 1), state.eq(1)]
+
+            with m.Case(3):  # CLEAR P2G ACCUMULATORS IN PSRAM (0x0600..0x0B3F)
+                with m.If(sub == 0):
+                    with m.If(bank.ready):
+                        m.d.comb += [
+                            bank.req.eq(1), bank.we.eq(1),
+                            bank.addr.eq(self.BASE_U_SUM + idx),
+                            bank.wdata.eq(0),
+                        ]
+                        m.d.sync += sub.eq(1)
+                with m.Else():
+                    with m.If(bank.done):
+                        m.d.sync += sub.eq(0)
+                        with m.If(idx == (0x0B40 - self.BASE_U_SUM - 1)):
+                            m.d.sync += [idx.eq(0), corner.eq(0), state.eq(4)]
+                        with m.Else():
+                            m.d.sync += idx.eq(idx + 1)
+
+            with m.Case(4):  # STAGE 3: P2G SCATTER (read particle + scatter 4 corners to U, V, D in PSRAM)
+                base_p = (idx[:8] << 2)
+                u_prod = (vx * u_w.as_signed()) >> SHIFT
+                v_prod = (vy * v_w.as_signed()) >> SHIFT
+                with m.Switch(sub):
+                    with m.Case(0):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(base_p + (corner))]
+                            m.d.sync += sub.eq(1)
+                    with m.Case(1):
+                        with m.If(bank.rvalid):
+                            with m.Switch(corner):
+                                with m.Case(0): m.d.sync += px.eq(bank.rdata[:20].as_signed())
+                                with m.Case(1): m.d.sync += py.eq(bank.rdata[:20].as_signed())
+                                with m.Case(2): m.d.sync += vx.eq(bank.rdata[:20].as_signed())
+                                with m.Case(3): m.d.sync += vy.eq(bank.rdata[:20].as_signed())
+                            with m.If(corner == 3):
+                                m.d.sync += [corner.eq(0), sub.eq(2)]
+                            with m.Else():
+                                m.d.sync += [corner.eq(corner + 1), sub.eq(0)]
+                    with m.Case(2):  # Read density[d_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_DENSITY + d_node)]
+                            m.d.sync += sub.eq(3)
+                    with m.Case(3):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp0.eq(bank.rdata + d_w), sub.eq(4)]
+                    with m.Case(4):  # Write density[d_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(self.BASE_DENSITY + d_node),
+                                bank.wdata.eq(Mux(inside_rom[d_node], tmp0.as_unsigned(), 0)),
+                            ]
+                            m.d.sync += sub.eq(5)
+                    with m.Case(5):
+                        with m.If(bank.done):
+                            m.d.sync += sub.eq(6)
+                    with m.Case(6):  # Read u_sum[u_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U_SUM + u_node)]
+                            m.d.sync += sub.eq(7)
+                    with m.Case(7):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp0.eq(bank.rdata.as_signed() + u_prod), sub.eq(8)]
+                    with m.Case(8):  # Write u_q12[u_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(self.BASE_U + u_node),
+                                bank.wdata.eq(Mux(u_open_rom[u_node], tmp0.as_unsigned(), 0)),
+                            ]
+                            m.d.sync += sub.eq(9)
+                    with m.Case(9):
+                        with m.If(bank.done):
+                            m.d.sync += sub.eq(10)
+                    with m.Case(10):  # Read v_sum[v_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V_SUM + v_node)]
+                            m.d.sync += sub.eq(11)
+                    with m.Case(11):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp1.eq(bank.rdata.as_signed() + v_prod), sub.eq(12)]
+                    with m.Case(12):  # Write v_q12[v_node]
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(self.BASE_V + v_node),
+                                bank.wdata.eq(Mux(v_open_rom[v_node], tmp1.as_unsigned(), 0)),
+                            ]
+                            m.d.sync += sub.eq(13)
+                    with m.Case(13):
+                        with m.If(bank.done):
+                            with m.If(corner == 3):
+                                m.d.sync += corner.eq(0)
+                                with m.If(idx == NP - 1):
+                                    m.d.sync += [idx.eq(0), iter_idx.eq(0), colour.eq(0), sub.eq(0), state.eq(5)]
+                                with m.Else():
+                                    m.d.sync += [idx.eq(idx + 1), sub.eq(0)]
+                            with m.Else():
+                                m.d.sync += [corner.eq(corner + 1), sub.eq(2)]
+
+            with m.Case(5):  # STAGE 4: 30-ITERATION RED-BLACK PRESSURE SOLVE OVER PSRAM
+                c_idx = idx[:8]
+                u_l = c_idx
+                u_r = c_idx + 16
+                v_b = c_idx + (c_idx >> 4)
+                v_t = c_idx + (c_idx >> 4) + 1
+                is_active_colour = (c_idx[4] ^ c_idx[0]) == colour
+                with m.Switch(sub):
+                    with m.Case(0):
+                        with m.If(~is_active_colour | ~inside_rom[c_idx]):
+                            m.d.sync += sub.eq(12)
+                        with m.Elif(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_DENSITY + c_idx)]
+                            m.d.sync += sub.eq(1)
+                    with m.Case(1):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp5.eq(bank.rdata), sub.eq(2)]
+                    with m.Case(2):
+                        with m.If(tmp5.as_unsigned() <= WATER_DENS_THS_Q12):
+                            m.d.sync += sub.eq(12)
+                        with m.Elif(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U + u_l)]
+                            m.d.sync += sub.eq(3)
+                    with m.Case(3):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp0.eq(bank.rdata.as_signed()), sub.eq(4)]
+                    with m.Case(4):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_U + u_r)]
+                            m.d.sync += sub.eq(5)
+                    with m.Case(5):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp1.eq(bank.rdata.as_signed()), sub.eq(6)]
+                    with m.Case(6):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V + v_b)]
+                            m.d.sync += sub.eq(7)
+                    with m.Case(7):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp2.eq(bank.rdata.as_signed()), sub.eq(8)]
+                    with m.Case(8):
+                        with m.If(bank.ready):
+                            m.d.comb += [bank.req.eq(1), bank.we.eq(0), bank.addr.eq(self.BASE_V + v_t)]
+                            m.d.sync += sub.eq(9)
+                    with m.Case(9):
+                        with m.If(bank.rvalid):
+                            m.d.sync += [tmp3.eq(bank.rdata.as_signed()), sub.eq(10)]
+                    with m.Case(10):  # Write updated u_left
+                        with m.If(bank.ready):
+                            m.d.comb += [
+                                bank.req.eq(1), bank.we.eq(1),
+                                bank.addr.eq(self.BASE_U + u_l),
+                                bank.wdata.eq(press_dp.u_left_next.as_unsigned()),
+                            ]
+                            m.d.sync += sub.eq(11)
+                    with m.Case(11):
+                        with m.If(bank.done):
+                            m.d.sync += sub.eq(12)
+                    with m.Case(12):  # Advance cell / colour / iteration
+                        m.d.sync += sub.eq(0)
+                        with m.If(idx == CELL_COUNT - 1):
+                            m.d.sync += idx.eq(0)
+                            with m.If(colour == 0):
+                                m.d.sync += colour.eq(1)
+                            with m.Else():
+                                m.d.sync += colour.eq(0)
+                                with m.If(iter_idx == 29):
+                                    m.d.sync += [self.done.eq(1), state.eq(0)]
+                                with m.Else():
+                                    m.d.sync += iter_idx.eq(iter_idx + 1)
+                        with m.Else():
+                            m.d.sync += idx.eq(idx + 1)
+
+        return m
+
+
 class PendantSystemTop(Elaboratable):
     ST_BOOT_ACCEL = 0
     ST_BOOT_ACCEL_WAIT = 1
@@ -4812,17 +5359,25 @@ class PendantSystemTop(Elaboratable):
     ST_STREAM_LEDS = 9
     ST_WAIT_LEDS = 10
 
-    def __init__(self, *, use_psram=False, particle_memory_backend="sram",
+    def __init__(self, *, use_psram=False, stream_psram=False,
+                 particle_memory_backend="sram",
                  sys_clk_hz=50_000_000, qpi_clk_hz=25_000_000, i2c_clk_hz=400_000):
-        self.core = FLIPPipeline(
-            use_psram=use_psram,
-            particle_memory_backend=particle_memory_backend,
-            sys_clk_hz=sys_clk_hz,
-            qpi_clk_hz=qpi_clk_hz,
-        )
+        self.stream_psram = stream_psram
+        if stream_psram:
+            self.core = PsramStreamFlipCore(
+                sys_clk_hz=sys_clk_hz,
+                qpi_clk_hz=qpi_clk_hz,
+            )
+        else:
+            self.core = FLIPPipeline(
+                use_psram=use_psram,
+                particle_memory_backend=particle_memory_backend,
+                sys_clk_hz=sys_clk_hz,
+                qpi_clk_hz=qpi_clk_hz,
+            )
         self.i2c = I2CMaster(sys_clk_hz=sys_clk_hz, i2c_clk_hz=i2c_clk_hz)
         self.accel = LIS2DW12Controller()
-        self.leds = IS31FL3741AController()
+        self.leds = IS31FL3741AController(stream_mode=stream_psram)
 
         self.frame_sync = Signal()
         self.lis_int2_sleep = Signal()
@@ -4853,8 +5408,16 @@ class PendantSystemTop(Elaboratable):
             | (state == self.ST_WAIT_LEDS)
         )
 
-        for i in range(DENSITY_CELLS):
-            m.d.comb += leds.density_q12[i].eq(core.p2g_density_q12[i])
+        if self.stream_psram:
+            m.d.comb += [
+                core.dens_rd_req.eq(leds.dens_rd_req),
+                core.dens_rd_addr.eq(leds.dens_rd_addr),
+                leds.dens_rd_valid.eq(core.dens_rd_valid),
+                leds.dens_rd_data.eq(core.dens_rd_data),
+            ]
+        else:
+            for i in range(DENSITY_CELLS):
+                m.d.comb += leds.density_q12[i].eq(core.p2g_density_q12[i])
 
         m.d.comb += [
             self.i2c_scl_o.eq(i2c.scl_o),
@@ -4945,6 +5508,7 @@ class PendantSystemTop(Elaboratable):
 
         return m
 
+
 class TTUmFlipPendant(Elaboratable):
     def __init__(self, *, sys_clk_hz=25_000_000, qpi_clk_hz=12_500_000, i2c_clk_hz=400_000):
         self.sys_clk_hz = sys_clk_hz
@@ -4958,8 +5522,7 @@ class TTUmFlipPendant(Elaboratable):
         self.ena = Signal(name="ena")
 
         self.system = PendantSystemTop(
-            use_psram=True,
-            particle_memory_backend="behavioral",
+            stream_psram=True,
             sys_clk_hz=sys_clk_hz,
             qpi_clk_hz=qpi_clk_hz,
             i2c_clk_hz=i2c_clk_hz,
@@ -5036,6 +5599,8 @@ __all__ = [
     "ParticlePhysicsChain",
     "PendantSystemTop",
     "TTUmFlipPendant",
+    "PsramStreamFlipCore",
+    "SeqFloorDivider",
     "I2CMaster",
     "LIS2DW12Controller",
     "IS31FL3741AController",

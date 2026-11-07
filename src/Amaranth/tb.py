@@ -950,7 +950,7 @@ def export_verilog(path, export_system=False):
     if export_system:
         class ExportSystemTop(Elaboratable):
             def __init__(self):
-                self.sys = PendantSystemTop(particle_memory_backend="sram")
+                self.sys = PendantSystemTop(stream_psram=True)
             def elaborate(self, platform):
                 m = Module()
                 m.domains.sync = ClockDomain("sync")
@@ -963,7 +963,7 @@ def export_verilog(path, export_system=False):
             ClockSignal("sync"), ResetSignal("sync"),
             s.frame_sync, s.lis_int2_sleep, s.clock_gated_sleep, s.sleep_hold_frames,
             s.i2c_scl_o, s.i2c_scl_oe, s.i2c_sda_i, s.i2c_sda_o, s.i2c_sda_oe,
-            s.core.sram_en, s.core.sram_we, s.core.sram_addr, s.core.sram_wdata, s.core.sram_rdata,
+            s.core.psram_sclk, s.core.psram_ce_n, s.core.psram_dq_i, s.core.psram_dq_o, s.core.psram_dq_oe,
             s.core.busy, s.core.done, s.core.stage,
         ]
         sys_path = path.parent / "PendantSystemTop.v"
