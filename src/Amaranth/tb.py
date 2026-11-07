@@ -917,59 +917,9 @@ def export_verilog(path, export_system=False):
     from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, ResetSignal, Signal
     from amaranth.back import verilog
 
-    class ExportTop(Elaboratable):
-        def __init__(self):
-            self.core = FLIPPipeline(particle_memory_backend="sram")
-        def elaborate(self, platform):
-            m = Module()
-            m.domains.sync = ClockDomain("sync")
-            m.submodules.core = self.core
-            return m
-
-    top = ExportTop()
-    dut = top.core
-    ports = [
-        ClockSignal("sync"), ResetSignal("sync"),
-        dut.start, dut.gx, dut.gy, dut.busy, dut.done, dut.stage,
-        dut.velocity_overflow,
-        dut.sram_en, dut.sram_we, dut.sram_addr, dut.sram_wdata, dut.sram_rdata,
-        dut.host_ready,
-        dut.host_write_req, dut.host_write_addr,
-        dut.host_write_pos_x, dut.host_write_pos_y,
-        dut.host_write_vel_x, dut.host_write_vel_y,
-        dut.host_read_req, dut.host_read_addr, dut.host_read_valid,
-        dut.host_read_pos_x, dut.host_read_pos_y,
-        dut.host_read_vel_x, dut.host_read_vel_y,
-        dut.p2g_cycle_count, dut.pressure_iteration_index,
-        dut.g2p_processed_count,
-    ]
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(verilog.convert(top, name="FLIPPipeline", ports=ports))
-    print("Exported %s (%s bytes)." % (path, format(path.stat().st_size, ",")))
 
     if export_system:
-        class ExportSystemTop(Elaboratable):
-            def __init__(self):
-                self.sys = PendantSystemTop(stream_psram=True)
-            def elaborate(self, platform):
-                m = Module()
-                m.domains.sync = ClockDomain("sync")
-                m.submodules.sys = self.sys
-                return m
-
-        sys_top = ExportSystemTop()
-        s = sys_top.sys
-        sys_ports = [
-            ClockSignal("sync"), ResetSignal("sync"),
-            s.frame_sync, s.lis_int2_sleep, s.clock_gated_sleep, s.sleep_hold_frames,
-            s.i2c_scl_o, s.i2c_scl_oe, s.i2c_sda_i, s.i2c_sda_o, s.i2c_sda_oe,
-            s.core.psram_sclk, s.core.psram_ce_n, s.core.psram_dq_i, s.core.psram_dq_o, s.core.psram_dq_oe,
-            s.core.busy, s.core.done, s.core.stage,
-        ]
-        sys_path = path.parent / "PendantSystemTop.v"
-        sys_path.write_text(verilog.convert(sys_top, name="PendantSystemTop", ports=sys_ports))
-        print("Exported %s (%s bytes)." % (sys_path, format(sys_path.stat().st_size, ",")))
-
         class ExportTTUmTop(Elaboratable):
             def __init__(self):
                 self.sync = ClockDomain("sync")
@@ -1007,6 +957,58 @@ def export_verilog(path, export_system=False):
         tt_path = path.parent / "project.v"
         tt_path.write_text(tt_v)
         print("Exported %s (%s bytes)." % (tt_path, format(tt_path.stat().st_size, ",")))
+
+        class ExportSystemTop(Elaboratable):
+            def __init__(self):
+                self.sys = PendantSystemTop(stream_psram=True)
+            def elaborate(self, platform):
+                m = Module()
+                m.domains.sync = ClockDomain("sync")
+                m.submodules.sys = self.sys
+                return m
+
+        sys_top = ExportSystemTop()
+        s = sys_top.sys
+        sys_ports = [
+            ClockSignal("sync"), ResetSignal("sync"),
+            s.frame_sync, s.lis_int2_sleep, s.clock_gated_sleep, s.sleep_hold_frames,
+            s.i2c_scl_o, s.i2c_scl_oe, s.i2c_sda_i, s.i2c_sda_o, s.i2c_sda_oe,
+            s.core.psram_sclk, s.core.psram_ce_n, s.core.psram_dq_i, s.core.psram_dq_o, s.core.psram_dq_oe,
+            s.core.busy, s.core.done, s.core.stage,
+        ]
+        sys_path = path.parent / "PendantSystemTop.v"
+        sys_path.write_text(verilog.convert(sys_top, name="PendantSystemTop", ports=sys_ports))
+        print("Exported %s (%s bytes)." % (sys_path, format(sys_path.stat().st_size, ",")))
+        return
+
+    class ExportTop(Elaboratable):
+        def __init__(self):
+            self.core = FLIPPipeline(particle_memory_backend="sram")
+        def elaborate(self, platform):
+            m = Module()
+            m.domains.sync = ClockDomain("sync")
+            m.submodules.core = self.core
+            return m
+
+    top = ExportTop()
+    dut = top.core
+    ports = [
+        ClockSignal("sync"), ResetSignal("sync"),
+        dut.start, dut.gx, dut.gy, dut.busy, dut.done, dut.stage,
+        dut.velocity_overflow,
+        dut.sram_en, dut.sram_we, dut.sram_addr, dut.sram_wdata, dut.sram_rdata,
+        dut.host_ready,
+        dut.host_write_req, dut.host_write_addr,
+        dut.host_write_pos_x, dut.host_write_pos_y,
+        dut.host_write_vel_x, dut.host_write_vel_y,
+        dut.host_read_req, dut.host_read_addr, dut.host_read_valid,
+        dut.host_read_pos_x, dut.host_read_pos_y,
+        dut.host_read_vel_x, dut.host_read_vel_y,
+        dut.p2g_cycle_count, dut.pressure_iteration_index,
+        dut.g2p_processed_count,
+    ]
+    path.write_text(verilog.convert(top, name="FLIPPipeline", ports=ports))
+    print("Exported %s (%s bytes)." % (path, format(path.stat().st_size, ",")))
 
 CPP_TESTBENCH = r"""#include "VFLIPPipeline.h"
 #include "verilated.h"
