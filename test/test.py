@@ -11,7 +11,7 @@ async def test_project(dut):
     dut._log.info("Starting tt_um_flip_pendant reset and boot peripheral check")
 
     # 25 MHz system clock (40 ns period)
-    clock = Clock(dut.clk, 40, units="ns")
+    clock = Clock(dut.clk, 40, unit="ns")
     cocotb.start_soon(clock.start())
 
     # Initialize inputs: pull-ups on I2C SDA (uio_in[4]=1) and SCL (uio_in[5]=1)
@@ -22,6 +22,8 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 10)
+
+    dut._log.info(f"Post-reset uo_out={dut.uo_out.value} uio_out={dut.uio_out.value} uio_oe={dut.uio_oe.value}")
 
     # Check static output/enable pins immediately after reset release:
     # uio_out[7] = is31_sdb must be 1 (IS31FL3741A enabled) and uio_oe[7] = 1

@@ -8,7 +8,6 @@ from pathlib import Path
 
 import numpy as np
 
-from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, ResetSignal, Signal
 from asic import FLIPPipeline, PendantSystemTop, TTUmFlipPendant
 
 AIR = 0
@@ -915,7 +914,7 @@ def compare_results(expected_path, actual_path):
     return False
 
 def export_verilog(path, export_system=False):
-    from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, ResetSignal
+    from amaranth import ClockDomain, ClockSignal, Elaboratable, Module, ResetSignal, Signal
     from amaranth.back import verilog
 
     class ExportTop(Elaboratable):
@@ -973,23 +972,22 @@ def export_verilog(path, export_system=False):
 
         class ExportTTUmTop(Elaboratable):
             def __init__(self):
+                self.sync = ClockDomain("sync")
                 self.ui_in = Signal(8, name="ui_in")
                 self.uo_out = Signal(8, name="uo_out")
                 self.uio_in = Signal(8, name="uio_in")
                 self.uio_out = Signal(8, name="uio_out")
                 self.uio_oe = Signal(8, name="uio_oe")
                 self.ena = Signal(name="ena")
-                self.clk = Signal(name="clk")
                 self.rst_n = Signal(name="rst_n")
                 self.tt = TTUmFlipPendant()
 
             def elaborate(self, platform):
                 m = Module()
-                m.domains.sync = ClockDomain("sync", local=True)
+                m.domains.sync = self.sync
                 m.submodules.tt = self.tt
                 m.d.comb += [
-                    ClockSignal("sync").eq(self.clk),
-                    ResetSignal("sync").eq(~self.rst_n),
+                    self.sync.rst.eq(~self.rst_n),
                     self.tt.ui_in.eq(self.ui_in),
                     self.uo_out.eq(self.tt.uo_out),
                     self.tt.uio_in.eq(self.uio_in),
@@ -1003,7 +1001,7 @@ def export_verilog(path, export_system=False):
         tt_ports = [
             tt_top.ui_in, tt_top.uo_out,
             tt_top.uio_in, tt_top.uio_out, tt_top.uio_oe,
-            tt_top.ena, tt_top.clk, tt_top.rst_n,
+            tt_top.ena, tt_top.sync.clk, tt_top.rst_n,
         ]
         tt_v = verilog.convert(tt_top, name="tt_um_flip_pendant", ports=tt_ports)
         tt_path = path.parent / "project.v"
