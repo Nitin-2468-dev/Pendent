@@ -2,13 +2,13 @@
 project:
   title: "FLIP Fluid Simulation Pendant ASIC"
   author: "Nitin Swarnkar"
-  discord: ""
+  discord: "nitin2468"
   description: "256-particle Q4.12 PIC/FLIP fluid simulation ASIC with QPI PSRAM and I2C LIS2DW12/IS31FL3741A drivers for a 216-LED circular pendant"
-  language: "Verilog"
+  language: "Amaranth"
   clock_hz: 25000000
 
   # Tile size on GF180MCU (wafer.space): options are "1x1", "1x2", "2x2", "4x2", "8x2"
-  tiles: "2x2"
+  tiles: "1x2"
 
   # Top module name must start with "tt_um_"
   top_module: "tt_um_flip_pendant"
