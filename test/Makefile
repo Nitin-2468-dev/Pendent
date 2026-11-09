@@ -1,4 +1,6 @@
 # Makefile
+# See https://docs.cocotb.org/en/stable/quickstart.html for more info
+
 SIM ?= icarus
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
@@ -17,7 +19,6 @@ SIM_BUILD        = sim_build/gl
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL
 COMPILE_ARGS    += -DSIM
-COMPILE_ARGS    += -DUSE_POWER_PINS
 ifneq ($(wildcard $(PDK_ROOT)/ihp-sg13cmos5l),)
 VERILOG_SOURCES += $(PDK_ROOT)/ihp-sg13cmos5l/libs.ref/sg13cmos5l_io/verilog/sg13cmos5l_io.v
 VERILOG_SOURCES += $(PDK_ROOT)/ihp-sg13cmos5l/libs.ref/sg13cmos5l_stdcell/verilog/sg13cmos5l_udp.v
