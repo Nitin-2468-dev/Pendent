@@ -4,10 +4,10 @@
 (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:51" *)
 (* generator = "Amaranth" *)
 module tt_um_flip_pendant(uio_in, ena, clk, rst_n, uo_out, uio_out, uio_oe, ui_in);
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1033" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1037" *)
   input [7:0] uio_in;
   wire [7:0] uio_in;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1036" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1040" *)
   input ena;
   wire ena;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
@@ -16,16 +16,16 @@ module tt_um_flip_pendant(uio_in, ena, clk, rst_n, uo_out, uio_out, uio_oe, ui_i
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:47" *)
   input rst_n;
   wire rst_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1032" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1036" *)
   output [7:0] uo_out;
   wire [7:0] uo_out;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1034" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1038" *)
   output [7:0] uio_out;
   wire [7:0] uio_out;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1035" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1039" *)
   output [7:0] uio_oe;
   wire [7:0] uio_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1031" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1035" *)
   input [7:0] ui_in;
   wire [7:0] ui_in;
   wire \$1 ;
@@ -41,19 +41,19 @@ module tt_um_flip_pendant(uio_in, ena, clk, rst_n, uo_out, uio_out, uio_oe, ui_i
   wire \$7 ;
   wire \$8 ;
   wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1036" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1040" *)
   wire \ena$14 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1031" *)
-  wire [7:0] \ui_in$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1033" *)
-  wire [7:0] \uio_in$11 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1035" *)
+  wire [7:0] \ui_in$9 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1037" *)
+  wire [7:0] \uio_in$11 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1039" *)
   wire [7:0] \uio_oe$13 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1034" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1038" *)
   wire [7:0] \uio_out$12 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1032" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1036" *)
   wire [7:0] \uo_out$10 ;
   assign rst = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:55" *) rst_n;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:53" *)
@@ -87,11 +87,11 @@ module tt_um_flip_pendant(uio_in, ena, clk, rst_n, uo_out, uio_out, uio_oe, ui_i
   assign uio_oe = { 2'h3, \$8 , \$9 , \$6  };
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1045" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1049" *)
 (* generator = "Amaranth" *)
 module \tt_um_flip_pendant.tt (uio_in, clk, rst, \port$13$0 , \port$15$0 , busy, psram_ce_n, psram_dq_o, psram_dq_oe, psram_translator_dir, i2c_scl_oe, i2c_sda_oe, \busy$25 , clock_gated_sleep, done, psram_sclk, ui_in);
   reg \$auto$verilog_backend.cc:2524:dump_module$1  = 0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1033" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1037" *)
   input [7:0] uio_in;
   wire [7:0] uio_in;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
@@ -104,40 +104,40 @@ module \tt_um_flip_pendant.tt (uio_in, clk, rst, \port$13$0 , \port$15$0 , busy,
   wire \port$13$0 ;
   output \port$15$0 ;
   wire \port$15$0 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:646" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:650" *)
   output busy;
   wire busy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:652" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:656" *)
   output psram_ce_n;
   wire psram_ce_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:654" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:658" *)
   output [3:0] psram_dq_o;
   wire [3:0] psram_dq_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:655" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:659" *)
   output [3:0] psram_dq_oe;
   wire [3:0] psram_dq_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:656" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:660" *)
   output psram_translator_dir;
   wire psram_translator_dir;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:908" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:912" *)
   output i2c_scl_oe;
   wire i2c_scl_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:911" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:915" *)
   output i2c_sda_oe;
   wire i2c_sda_oe;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:260" *)
   output \busy$25 ;
   wire \busy$25 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:904" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:908" *)
   output clock_gated_sleep;
   wire clock_gated_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
   output done;
   wire done;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:655" *)
   output psram_sclk;
   wire psram_sclk;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1031" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1035" *)
   input [7:0] ui_in;
   wire [7:0] ui_in;
   wire \$1 ;
@@ -152,51 +152,51 @@ module \tt_um_flip_pendant.tt (uio_in, clk, rst, \port$13$0 , \port$15$0 , busy,
   wire \$7 ;
   wire \$8 ;
   wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:903" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:907" *)
   wire accel_sa0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:259" *)
   wire ack_error;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1050" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1054" *)
   reg auto_tick = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:901" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:905" *)
   wire frame_sync;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1049" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1053" *)
   reg [18:0] frame_timer = 19'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:909" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:913" *)
   wire i2c_sda_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:902" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:906" *)
   wire lis_int2_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:653" *)
-  wire [3:0] psram_dq_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:660" *)
-  wire psram_error;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:657" *)
+  wire [3:0] psram_dq_i;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:664" *)
+  wire psram_error;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:661" *)
   wire [3:0] psram_translator_oe_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1035" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1039" *)
   wire [7:0] uio_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1034" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1038" *)
   wire [7:0] uio_out;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1032" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1036" *)
   wire [7:0] uo_out;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:649" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:653" *)
   wire velocity_overflow;
-  assign \$1  = frame_timer == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1051" *) 19'h65b99;
-  assign \$2  = frame_timer + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1054" *) 1'h1;
-  assign \$3  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1071" *) ui_in[1];
-  assign \$4  = ui_in[0] & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1071" *) \$3 ;
-  assign \$5  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1071" *) ui_in[5];
-  assign lis_int2_sleep = \$4  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1071" *) \$5 ;
-  assign frame_sync = ui_in[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1072" *) auto_tick : ui_in[2];
-  assign \$6  = psram_translator_oe_n[0] & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1064" *) psram_translator_oe_n[1];
-  assign \$7  = \$6  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1064" *) psram_translator_oe_n[2];
-  assign \$8  = \$7  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1064" *) psram_translator_oe_n[3];
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1049" *)
+  assign \$1  = frame_timer == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1055" *) 19'h65b99;
+  assign \$2  = frame_timer + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1058" *) 1'h1;
+  assign \$3  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1075" *) ui_in[1];
+  assign \$4  = ui_in[0] & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1075" *) \$3 ;
+  assign \$5  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1075" *) ui_in[5];
+  assign lis_int2_sleep = \$4  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1075" *) \$5 ;
+  assign frame_sync = ui_in[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1076" *) auto_tick : ui_in[2];
+  assign \$6  = psram_translator_oe_n[0] & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1068" *) psram_translator_oe_n[1];
+  assign \$7  = \$6  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1068" *) psram_translator_oe_n[2];
+  assign \$8  = \$7  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1068" *) psram_translator_oe_n[3];
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1053" *)
   always @(posedge clk)
     frame_timer <= \$11 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1050" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1054" *)
   always @(posedge clk)
     auto_tick <= \$12 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1046" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1050" *)
   \tt_um_flip_pendant.tt.system  system (
     .ack_error(ack_error),
     .busy(busy),
@@ -256,7 +256,7 @@ module \tt_um_flip_pendant.tt (uio_in, clk, rst, \port$13$0 , \port$15$0 , busy,
   assign \$10  = ack_error;
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:914" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:918" *)
 (* generator = "Amaranth" *)
 module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, frame_sync, busy, psram_ce_n, psram_dq_o, psram_dq_oe, psram_translator_dir, psram_translator_oe_n, i2c_scl_oe, i2c_sda_oe, \busy$79 , clock_gated_sleep, \done$69 , psram_sclk, ack_error, sa0);
   reg \$auto$verilog_backend.cc:2524:dump_module$2  = 0;
@@ -268,28 +268,28 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
   input rst;
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:902" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:906" *)
   input lis_int2_sleep;
   wire lis_int2_sleep;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:901" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:905" *)
   input frame_sync;
   wire frame_sync;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:646" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:650" *)
   output busy;
   wire busy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:652" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:656" *)
   output psram_ce_n;
   wire psram_ce_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:654" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:658" *)
   output [3:0] psram_dq_o;
   wire [3:0] psram_dq_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:655" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:659" *)
   output [3:0] psram_dq_oe;
   wire [3:0] psram_dq_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:656" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:660" *)
   output psram_translator_dir;
   wire psram_translator_dir;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:657" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:661" *)
   output [3:0] psram_translator_oe_n;
   wire [3:0] psram_translator_oe_n;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:263" *)
@@ -301,19 +301,19 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:260" *)
   output \busy$79 ;
   wire \busy$79 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:904" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:908" *)
   output clock_gated_sleep;
   reg clock_gated_sleep = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
   output \done$69 ;
   wire \done$69 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:655" *)
   output psram_sclk;
   wire psram_sclk;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:259" *)
   output ack_error;
   wire ack_error;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:903" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:907" *)
   input sa0;
   wire sa0;
   wire \$1 ;
@@ -395,9 +395,9 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   reg [6:0] \$79 ;
   wire \$8 ;
   wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:933" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:937" *)
   wire accel_changed;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:903" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:907" *)
   wire accel_sa0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:251" *)
   wire cmd_read;
@@ -411,37 +411,37 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   wire cmd_valid;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:250" *)
   wire cmd_write;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:663" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:667" *)
   wire [7:0] dens_rd_addr;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:500" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:520" *)
   wire [7:0] \dens_rd_addr$5 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:502" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:522" *)
   wire [31:0] dens_rd_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:665" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:669" *)
   wire [31:0] \dens_rd_data$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:662" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:666" *)
   wire dens_rd_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:499" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:519" *)
   wire \dens_rd_req$3 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:501" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:521" *)
   wire dens_rd_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:664" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:668" *)
   wire \dens_rd_valid$7 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:398" *)
   wire done;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:497" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:517" *)
   wire \done$64 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:935" *)
   wire signed [8:0] dx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:936" *)
   wire signed [8:0] dy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:495" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:515" *)
   wire frame_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:644" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:648" *)
   wire signed [7:0] gx;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:399" *)
   wire signed [7:0] \gx$48 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:645" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:649" *)
   wire signed [7:0] gy;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:400" *)
   wire signed [7:0] \gy$50 ;
@@ -449,53 +449,53 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   wire i2c_cmd_read;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:407" *)
   wire i2c_cmd_ready;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:508" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:528" *)
   wire \i2c_cmd_ready$27 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:402" *)
   wire i2c_cmd_start;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:504" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:524" *)
   wire \i2c_cmd_start$30 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:403" *)
   wire i2c_cmd_stop;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:505" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:525" *)
   wire \i2c_cmd_stop$33 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:406" *)
   wire i2c_cmd_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:507" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:527" *)
   wire \i2c_cmd_valid$41 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:404" *)
   wire i2c_cmd_write;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:506" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:526" *)
   wire \i2c_cmd_write$36 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:410" *)
   wire [7:0] i2c_rx_data;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:411" *)
   wire i2c_rx_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:907" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:911" *)
   wire i2c_scl_o;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:909" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:913" *)
   wire i2c_sda_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:910" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:914" *)
   wire i2c_sda_o;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:409" *)
   wire i2c_tx_ack;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:408" *)
   wire [7:0] i2c_tx_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:509" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:529" *)
   wire [7:0] \i2c_tx_data$44 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:395" *)
   wire init_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:494" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:514" *)
   wire \init_req$54 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:921" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *)
   reg signed [7:0] last_gx = 8'h00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:922" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *)
   reg signed [7:0] last_gy = 8'hc4;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:396" *)
   wire poll_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:653" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:657" *)
   wire [3:0] psram_dq_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:660" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:664" *)
   wire psram_error;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:257" *)
   wire [7:0] rx_data;
@@ -511,123 +511,123 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
   wire sda_o;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:266" *)
   wire sda_oe;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:905" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:909" *)
   reg [6:0] sleep_hold_frames = 7'h00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:643" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
   wire start;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:920" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:924" *)
   reg [3:0] state = 4'h0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:255" *)
   wire tx_ack;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:254" *)
   wire [7:0] tx_data;
-  assign \$19  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$20  = \$18  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$19 ;
-  assign \$21  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$22  = \$20  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$21 ;
-  assign cmd_start = \$22  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:953" *) \i2c_cmd_start$30  : i2c_cmd_start;
-  assign \$23  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$24  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$25  = \$23  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$24 ;
-  assign \$26  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$27  = \$25  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$26 ;
-  assign \$28  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$29  = \$27  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$28 ;
-  assign cmd_stop = \$29  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:954" *) \i2c_cmd_stop$33  : i2c_cmd_stop;
-  assign \$30  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$31  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$32  = \$30  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$31 ;
-  assign \$33  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$34  = \$32  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$33 ;
-  assign \$35  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$36  = \$34  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$35 ;
-  assign cmd_write = \$36  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:955" *) \i2c_cmd_write$36  : i2c_cmd_write;
-  assign \$37  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$38  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$39  = \$37  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$38 ;
-  assign \$40  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$41  = \$39  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$40 ;
-  assign \$42  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$43  = \$41  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$42 ;
-  assign cmd_read = \$43  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:956" *) 1'h0 : i2c_cmd_read;
-  assign \$44  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$45  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$46  = \$44  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$45 ;
-  assign \$47  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$48  = \$46  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$47 ;
-  assign \$49  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$50  = \$48  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$49 ;
-  assign cmd_valid = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:957" *) \i2c_cmd_valid$41  : i2c_cmd_valid;
-  assign \$51  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$53  = \$51  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$52 ;
-  assign \$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$55  = \$53  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$54 ;
-  assign \$56  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$57  = \$55  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$56 ;
-  assign tx_data = \$57  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:958" *) \i2c_tx_data$44  : i2c_tx_data;
-  assign \$58  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$59  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$60  = \$58  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$59 ;
-  assign \$61  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$62  = \$60  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$61 ;
-  assign \$63  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$64  = \$62  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$63 ;
-  assign tx_ack = \$64  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:959" *) 1'h0 : i2c_tx_ack;
-  assign start = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:963" *) 3'h7;
-  assign init_req = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:964" *) state;
-  assign poll_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:965" *) 3'h4;
-  assign \init_req$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:966" *) 2'h2;
-  assign frame_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:967" *) 4'h9;
-  assign dx = $signed(gx) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:969" *) $signed(last_gx);
-  assign dy = $signed(gy) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:970" *) $signed(last_gy);
-  assign \$65  = $signed(dx) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) $signed(2'h1);
-  assign \$66  = $signed(dx) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) $signed(1'h1);
-  assign \$67  = \$65  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) \$66 ;
-  assign \$68  = $signed(dy) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) $signed(2'h1);
-  assign \$69  = \$67  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) \$68 ;
-  assign \$70  = $signed(dy) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) $signed(1'h1);
-  assign accel_changed = \$69  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) \$70 ;
-  assign \$71  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:993" *) lis_int2_sleep;
-  assign \$72  = accel_changed | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:993" *) \$71 ;
-  assign \$73  = sleep_hold_frames >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1002" *) 7'h59;
-  assign \$74  = sleep_hold_frames + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1009" *) 1'h1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:920" *)
+  assign \$19  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$20  = \$18  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$19 ;
+  assign \$21  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$22  = \$20  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$21 ;
+  assign cmd_start = \$22  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:957" *) \i2c_cmd_start$30  : i2c_cmd_start;
+  assign \$23  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$24  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$25  = \$23  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$24 ;
+  assign \$26  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$27  = \$25  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$26 ;
+  assign \$28  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$29  = \$27  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$28 ;
+  assign cmd_stop = \$29  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:958" *) \i2c_cmd_stop$33  : i2c_cmd_stop;
+  assign \$30  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$31  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$32  = \$30  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$31 ;
+  assign \$33  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$34  = \$32  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$33 ;
+  assign \$35  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$36  = \$34  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$35 ;
+  assign cmd_write = \$36  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:959" *) \i2c_cmd_write$36  : i2c_cmd_write;
+  assign \$37  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$38  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$39  = \$37  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$38 ;
+  assign \$40  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$41  = \$39  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$40 ;
+  assign \$42  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$43  = \$41  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$42 ;
+  assign cmd_read = \$43  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:960" *) 1'h0 : i2c_cmd_read;
+  assign \$44  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$45  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$46  = \$44  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$45 ;
+  assign \$47  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$48  = \$46  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$47 ;
+  assign \$49  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$50  = \$48  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$49 ;
+  assign cmd_valid = \$50  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:961" *) \i2c_cmd_valid$41  : i2c_cmd_valid;
+  assign \$51  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$52  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$53  = \$51  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$52 ;
+  assign \$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$55  = \$53  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$54 ;
+  assign \$56  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$57  = \$55  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$56 ;
+  assign tx_data = \$57  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:962" *) \i2c_tx_data$44  : i2c_tx_data;
+  assign \$58  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$59  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$60  = \$58  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$59 ;
+  assign \$61  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$62  = \$60  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$61 ;
+  assign \$63  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$64  = \$62  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$63 ;
+  assign tx_ack = \$64  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:963" *) 1'h0 : i2c_tx_ack;
+  assign start = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:967" *) 3'h7;
+  assign init_req = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:968" *) state;
+  assign poll_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:969" *) 3'h4;
+  assign \init_req$54  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:970" *) 2'h2;
+  assign frame_req = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:971" *) 4'h9;
+  assign dx = $signed(gx) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:973" *) $signed(last_gx);
+  assign dy = $signed(gy) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:974" *) $signed(last_gy);
+  assign \$65  = $signed(dx) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) $signed(2'h1);
+  assign \$66  = $signed(dx) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) $signed(1'h1);
+  assign \$67  = \$65  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) \$66 ;
+  assign \$68  = $signed(dy) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) $signed(2'h1);
+  assign \$69  = \$67  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) \$68 ;
+  assign \$70  = $signed(dy) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) $signed(1'h1);
+  assign accel_changed = \$69  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:975" *) \$70 ;
+  assign \$71  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:997" *) lis_int2_sleep;
+  assign \$72  = accel_changed | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:997" *) \$71 ;
+  assign \$73  = sleep_hold_frames >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1006" *) 7'h59;
+  assign \$74  = sleep_hold_frames + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:1013" *) 1'h1;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:924" *)
   always @(posedge clk)
     state <= \$75 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:921" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *)
   always @(posedge clk)
     last_gx <= \$76 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:922" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *)
   always @(posedge clk)
     last_gy <= \$77 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:904" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:908" *)
   always @(posedge clk)
     clock_gated_sleep <= \$78 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:905" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:909" *)
   always @(posedge clk)
     sleep_hold_frames <= \$79 ;
-  assign \$1  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$2  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$3  = \$1  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$2 ;
-  assign \$4  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$5  = \$3  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$4 ;
-  assign \$6  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$7  = \$5  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$6 ;
-  assign \$8  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:948" *) \$7 ;
-  assign i2c_cmd_ready = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:948" *) \$8 ;
-  assign \$9  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$10  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$11  = \$9  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$10 ;
-  assign \$12  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:927" *) 4'h9;
-  assign \$13  = \$11  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$12 ;
-  assign \$14  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:928" *) 4'ha;
-  assign \$15  = \$13  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$14 ;
-  assign \i2c_cmd_ready$27  = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:951" *) \$15 ;
-  assign \$16  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) 2'h2;
-  assign \$17  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:926" *) 2'h3;
-  assign \$18  = \$16  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:925" *) \$17 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:917" *)
+  assign \$1  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$2  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$3  = \$1  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$2 ;
+  assign \$4  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$5  = \$3  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$4 ;
+  assign \$6  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$7  = \$5  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$6 ;
+  assign \$8  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:952" *) \$7 ;
+  assign i2c_cmd_ready = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:952" *) \$8 ;
+  assign \$9  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$10  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$11  = \$9  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$10 ;
+  assign \$12  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:931" *) 4'h9;
+  assign \$13  = \$11  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$12 ;
+  assign \$14  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:932" *) 4'ha;
+  assign \$15  = \$13  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$14 ;
+  assign \i2c_cmd_ready$27  = cmd_ready & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:955" *) \$15 ;
+  assign \$16  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) 2'h2;
+  assign \$17  = state == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:930" *) 2'h3;
+  assign \$18  = \$16  | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:929" *) \$17 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:921" *)
   \tt_um_flip_pendant.tt.system.accel  accel (
     .clk(clk),
     .done(done),
@@ -648,7 +648,7 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
     .rst(rst),
     .sa0(sa0)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:915" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:919" *)
   \tt_um_flip_pendant.tt.system.core  core (
     .\busy$20 (busy),
     .clk(clk),
@@ -669,7 +669,7 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
     .rst(rst),
     .start(start)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:916" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:920" *)
   \tt_um_flip_pendant.tt.system.i2c  i2c (
     .ack_error(ack_error),
     .busy(\busy$79 ),
@@ -689,7 +689,7 @@ module \tt_um_flip_pendant.tt.system (\port$0$10 , clk, rst, lis_int2_sleep, fra
     .tx_ack(tx_ack),
     .tx_data(tx_data)
   );
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:918" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:922" *)
   \tt_um_flip_pendant.tt.system.leds  leds (
     .clk(clk),
     .dens_rd_addr(dens_rd_addr),
@@ -1388,7 +1388,7 @@ module \tt_um_flip_pendant.tt.system.accel (clk, rst, i2c_cmd_ready, init_req, p
   end
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:670" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:674" *)
 (* generator = "Amaranth" *)
 module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_valid, psram_ce_n, psram_dq_o, psram_dq_oe, psram_translator_dir, psram_translator_oe_n, done, psram_sclk, dens_rd_data, gx, gy, dens_rd_req, dens_rd_addr, dq_i);
   reg \$auto$verilog_backend.cc:2524:dump_module$4  = 0;
@@ -1398,13 +1398,13 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
   input rst;
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:643" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
   input start;
   wire start;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:646" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:650" *)
   output \busy$20 ;
   wire \busy$20 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:664" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:668" *)
   output dens_rd_valid;
   wire dens_rd_valid;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:68" *)
@@ -1422,7 +1422,7 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:73" *)
   output [3:0] psram_translator_oe_n;
   wire [3:0] psram_translator_oe_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
   output done;
   reg done = 1'h0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:67" *)
@@ -1431,19 +1431,19 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:58" *)
   output [31:0] dens_rd_data;
   wire [31:0] dens_rd_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:644" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:648" *)
   input signed [7:0] gx;
   wire signed [7:0] gx;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:645" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:649" *)
   input signed [7:0] gy;
   wire signed [7:0] gy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:662" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:666" *)
   input dens_rd_req;
   wire dens_rd_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:663" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:667" *)
   input [7:0] dens_rd_addr;
   wire [7:0] dens_rd_addr;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:653" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:657" *)
   input [3:0] dq_i;
   wire [3:0] dq_i;
   wire \$1 ;
@@ -1936,7 +1936,7 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   wire [20:0] \$97 ;
   wire \$98 ;
   wire [20:0] \$99 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:696" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:700" *)
   reg signed [23:0] accum = 24'h000000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:56" *)
   reg [12:0] addr;
@@ -1952,25 +1952,25 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   wire [3:0] dq_oe;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:64" *)
   wire error;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:688" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:692" *)
   reg [8:0] idx = 9'h000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:62" *)
   wire init_done;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:694" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:698" *)
   reg signed [19:0] prev_x = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:695" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:699" *)
   reg signed [19:0] prev_y = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:659" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:663" *)
   wire psram_busy;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:653" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:657" *)
   wire [3:0] psram_dq_i;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:660" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:664" *)
   wire psram_error;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:658" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:662" *)
   wire psram_init_done;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:690" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:694" *)
   reg signed [19:0] px = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:691" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:695" *)
   reg signed [19:0] py = 20'h00000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:58" *)
   wire [31:0] rdata;
@@ -1982,493 +1982,493 @@ module \tt_um_flip_pendant.tt.system.core (clk, rst, start, \busy$20 , dens_rd_v
   wire rvalid;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:67" *)
   wire sclk;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:648" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:652" *)
   wire [3:0] stage;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:686" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:690" *)
   reg [2:0] state = 3'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:687" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:691" *)
   reg [3:0] sub = 4'h0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:72" *)
   wire translator_dir;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:73" *)
   wire [3:0] translator_oe_n;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:692" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:696" *)
   reg signed [19:0] vx = 20'h00000;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:693" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:697" *)
   reg signed [19:0] vy = 20'h00000;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:57" *)
   reg [31:0] wdata;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:55" *)
   reg we;
-  assign \busy$20  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:699" *) state;
-  assign \$1  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:701" *) state;
-  assign dens_rd_valid = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:701" *) rvalid;
-  assign \$2  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:734" *) psram_init_done;
-  assign \$3  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:736" *) ready;
-  assign \$4  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:740" *) dens_rd_addr;
-  assign \$5  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:744" *) sub;
-  assign \$6  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:748" *) idx[7:0];
-  assign \$8  = \$7  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:765" *) 1'h0;
-  assign \$10  = \$9  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:772" *) 1'h1;
-  assign \$12  = \$11  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:779" *) 2'h2;
-  assign \$14  = \$13  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:786" *) 2'h3;
-  assign \$16  = \$15  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:812" *) 1'h0;
-  assign \$18  = \$17  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:822" *) 1'h1;
-  assign \$20  = \$19  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:836" *) 2'h2;
-  assign \$22  = \$21  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:846" *) 2'h3;
-  assign \$23  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:856" *) { px[15:12], py[15:12] };
-  assign \$24  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:866" *) { px[15:12], py[15:12] };
+  assign \busy$20  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:703" *) state;
+  assign \$1  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:705" *) state;
+  assign dens_rd_valid = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:705" *) rvalid;
+  assign \$2  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:738" *) psram_init_done;
+  assign \$3  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:740" *) ready;
+  assign \$4  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:744" *) dens_rd_addr;
+  assign \$5  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:748" *) sub;
+  assign \$6  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:752" *) idx[7:0];
+  assign \$8  = \$7  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:769" *) 1'h0;
+  assign \$10  = \$9  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:776" *) 1'h1;
+  assign \$12  = \$11  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:783" *) 2'h2;
+  assign \$14  = \$13  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:790" *) 2'h3;
+  assign \$16  = \$15  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:816" *) 1'h0;
+  assign \$18  = \$17  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:826" *) 1'h1;
+  assign \$20  = \$19  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:840" *) 2'h2;
+  assign \$22  = \$21  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:850" *) 2'h3;
+  assign \$23  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:860" *) { px[15:12], py[15:12] };
+  assign \$24  = 12'ha40 + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:870" *) { px[15:12], py[15:12] };
   assign \$25  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) px[14:12];
   assign \$27  = px[15] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) \$26  : px[14:12];
   assign \$28  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) py[14:12];
   assign \$30  = py[15] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) \$29  : py[14:12];
   assign \$31  = \$27  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) \$30 ;
   assign \$32  = \$31  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) 3'h4;
-  assign \$33  = \$32  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:867" *) accum : 24'h000000;
-  assign \$34  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:734" *) psram_init_done;
-  assign \$35  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:736" *) ready;
-  assign \$36  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:744" *) sub;
-  assign \$37  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:755" *) 8'hff;
-  assign \$38  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:758" *) 1'h1;
-  assign \$41  = $signed(\$39 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:709" *) $signed(\$40 );
-  assign \$43  = $signed(px) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:709" *) $signed(\$42 );
-  assign \$46  = $signed(\$44 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:710" *) $signed(\$45 );
-  assign \$48  = $signed(py) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:710" *) $signed(\$47 );
-  assign \$51  = $signed(\$49 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:705" *) $signed(\$50 );
-  assign \$52  = $signed(vx) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:707" *) $signed(\$51 );
-  assign \$55  = $signed(\$53 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:706" *) $signed(\$54 );
-  assign \$56  = $signed(vy) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:708" *) $signed(\$55 );
-  assign \$57  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) idx;
-  assign \$58  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(prev_x);
-  assign \$59  = $signed(\$58 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(13'h1666);
-  assign \$60  = \$57  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$59 ;
-  assign \$61  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(prev_x);
-  assign \$62  = $signed(\$61 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(13'h099a);
-  assign \$63  = \$60  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$62 ;
-  assign \$64  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(prev_y);
-  assign \$65  = $signed(\$64 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(13'h1666);
-  assign \$66  = \$63  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$65 ;
-  assign \$67  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(prev_y);
-  assign \$68  = $signed(\$67 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(13'h099a);
-  assign \$69  = \$66  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$68 ;
-  assign \$70  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$71  = $signed(\$70 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$72  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$73  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$72 );
-  assign \$74  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$75  = \$71  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$73  : { \$74 [20], \$74  };
-  assign \$76  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$77  = $signed(\$76 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$78  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$79  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$78 );
-  assign \$80  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$81  = \$77  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$79  : { \$80 [20], \$80  };
-  assign \$82  = $signed(\$75 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$81 );
-  assign \$83  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$84  = $signed(\$83 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$85  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$86  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$85 );
-  assign \$87  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$88  = \$84  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$86  : { \$87 [20], \$87  };
-  assign \$89  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$90  = $signed(\$89 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$91  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$92  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$91 );
-  assign \$93  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$94  = \$90  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$92  : { \$93 [20], \$93  };
-  assign \$96  = $signed(\$88 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$95 );
-  assign \$97  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$98  = $signed(\$97 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$99  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$100  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$99 );
-  assign \$101  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$102  = \$98  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$100  : { \$101 [20], \$101  };
-  assign \$103  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$104  = $signed(\$103 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$105  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$106  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$105 );
-  assign \$107  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$108  = \$104  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$106  : { \$107 [20], \$107  };
-  assign \$110  = $signed(\$102 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$109 );
-  assign \$111  = \$82  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$96  : \$110 ;
-  assign \$112  = $signed(\$111 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$113  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$114  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$116  = $signed(\$113 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$115 );
-  assign \$117  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$116 );
-  assign \$118  = \$112  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) \$117  : { px[19], px[19], px[19], px };
-  assign \$119  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(prev_x);
-  assign \$121  = $signed(\$118 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:801" *) $signed(\$120 );
-  assign \$122  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$123  = $signed(\$122 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$124  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$125  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$124 );
-  assign \$126  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$127  = \$123  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$125  : { \$126 [20], \$126  };
-  assign \$128  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$129  = $signed(\$128 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$130  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$131  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$130 );
-  assign \$132  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$133  = \$129  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$131  : { \$132 [20], \$132  };
-  assign \$134  = $signed(\$127 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$133 );
-  assign \$135  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$136  = $signed(\$135 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$137  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$138  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$137 );
-  assign \$139  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$140  = \$136  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$138  : { \$139 [20], \$139  };
-  assign \$141  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$142  = $signed(\$141 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$143  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$144  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$143 );
-  assign \$145  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$146  = \$142  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$144  : { \$145 [20], \$145  };
-  assign \$148  = $signed(\$140 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$147 );
-  assign \$149  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$150  = $signed(\$149 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$151  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$152  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$151 );
-  assign \$153  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$154  = \$150  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$152  : { \$153 [20], \$153  };
-  assign \$155  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$156  = $signed(\$155 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$157  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$158  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$157 );
-  assign \$159  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$160  = \$156  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$158  : { \$159 [20], \$159  };
-  assign \$162  = $signed(\$154 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$161 );
-  assign \$163  = \$134  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$148  : \$162 ;
-  assign \$164  = $signed(\$163 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$165  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$166  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$168  = $signed(\$165 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$167 );
-  assign \$169  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$168 );
-  assign \$170  = \$164  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) \$169  : { px[19], px[19], px[19], px };
-  assign \$171  = \$69  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:801" *) \$121  : { \$170 [22], \$170  };
-  assign \$172  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) idx;
-  assign \$173  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(prev_x);
-  assign \$174  = $signed(\$173 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(13'h1666);
-  assign \$175  = \$172  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$174 ;
-  assign \$176  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(prev_x);
-  assign \$177  = $signed(\$176 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(13'h099a);
-  assign \$178  = \$175  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$177 ;
-  assign \$179  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(prev_y);
-  assign \$180  = $signed(\$179 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(13'h1666);
-  assign \$181  = \$178  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$180 ;
-  assign \$182  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(prev_y);
-  assign \$183  = $signed(\$182 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(13'h099a);
-  assign \$184  = \$181  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) \$183 ;
-  assign \$185  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$186  = $signed(\$185 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$187  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$188  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$187 );
-  assign \$189  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$190  = \$186  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$188  : { \$189 [20], \$189  };
-  assign \$191  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$192  = $signed(\$191 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$193  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$194  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$193 );
-  assign \$195  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$196  = \$192  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$194  : { \$195 [20], \$195  };
-  assign \$197  = $signed(\$190 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$196 );
-  assign \$198  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$199  = $signed(\$198 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$200  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$201  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$200 );
-  assign \$202  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$203  = \$199  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$201  : { \$202 [20], \$202  };
-  assign \$204  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$205  = $signed(\$204 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$206  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$207  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$206 );
-  assign \$208  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$209  = \$205  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$207  : { \$208 [20], \$208  };
-  assign \$211  = $signed(\$203 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$210 );
-  assign \$212  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$213  = $signed(\$212 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$214  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$215  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$214 );
-  assign \$216  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$217  = \$213  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$215  : { \$216 [20], \$216  };
-  assign \$218  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$219  = $signed(\$218 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$220  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$221  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$220 );
-  assign \$222  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$223  = \$219  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$221  : { \$222 [20], \$222  };
-  assign \$225  = $signed(\$217 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$224 );
-  assign \$226  = \$197  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$211  : \$225 ;
-  assign \$227  = $signed(\$226 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$228  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$229  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$231  = $signed(\$228 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$230 );
-  assign \$232  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$231 );
-  assign \$233  = \$227  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) \$232  : { py[19], py[19], py[19], py };
-  assign \$234  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(prev_y);
-  assign \$236  = $signed(\$233 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$235 );
-  assign \$237  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$238  = $signed(\$237 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$239  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$240  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$239 );
-  assign \$241  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$242  = \$238  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$240  : { \$241 [20], \$241  };
-  assign \$243  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$244  = $signed(\$243 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$245  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$246  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$245 );
-  assign \$247  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$248  = \$244  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$246  : { \$247 [20], \$247  };
-  assign \$249  = $signed(\$242 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$248 );
-  assign \$250  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$251  = $signed(\$250 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$252  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$253  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$252 );
-  assign \$254  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$255  = \$251  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$253  : { \$254 [20], \$254  };
-  assign \$256  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$257  = $signed(\$256 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$258  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$259  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$258 );
-  assign \$260  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$261  = \$257  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$259  : { \$260 [20], \$260  };
-  assign \$263  = $signed(\$255 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$262 );
-  assign \$264  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$265  = $signed(\$264 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$266  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$267  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$266 );
-  assign \$268  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$269  = \$265  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$267  : { \$268 [20], \$268  };
-  assign \$270  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$271  = $signed(\$270 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$272  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$273  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$272 );
-  assign \$274  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$275  = \$271  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$273  : { \$274 [20], \$274  };
-  assign \$277  = $signed(\$269 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$276 );
-  assign \$278  = \$249  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$263  : \$277 ;
-  assign \$279  = $signed(\$278 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$280  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$281  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$283  = $signed(\$280 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$282 );
-  assign \$284  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$283 );
-  assign \$285  = \$279  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) \$284  : { py[19], py[19], py[19], py };
-  assign \$286  = \$184  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) \$236  : { \$285 [22], \$285  };
-  assign \$287  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$288  = $signed(\$287 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$289  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$290  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$289 );
-  assign \$291  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$292  = \$288  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$290  : { \$291 [20], \$291  };
-  assign \$293  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$294  = $signed(\$293 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$295  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$296  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$295 );
-  assign \$297  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$298  = \$294  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$296  : { \$297 [20], \$297  };
-  assign \$299  = $signed(\$292 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$298 );
-  assign \$300  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$301  = $signed(\$300 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$302  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$303  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$302 );
-  assign \$304  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$305  = \$301  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$303  : { \$304 [20], \$304  };
-  assign \$306  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$307  = $signed(\$306 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$308  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$309  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$308 );
-  assign \$310  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$311  = \$307  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$309  : { \$310 [20], \$310  };
-  assign \$313  = $signed(\$305 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$312 );
-  assign \$314  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$315  = $signed(\$314 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$316  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$317  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$316 );
-  assign \$318  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$319  = \$315  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$317  : { \$318 [20], \$318  };
-  assign \$320  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$321  = $signed(\$320 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$322  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$323  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$322 );
-  assign \$324  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$325  = \$321  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$323  : { \$324 [20], \$324  };
-  assign \$327  = $signed(\$319 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$326 );
-  assign \$328  = \$299  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$313  : \$327 ;
-  assign \$329  = $signed(\$328 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$331  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$330 );
-  assign \$332  = \$329  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) \$331  : { vx[19], vx };
-  assign \$333  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$334  = $signed(\$333 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$335  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$336  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$335 );
-  assign \$337  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$338  = \$334  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$336  : { \$337 [20], \$337  };
-  assign \$339  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$340  = $signed(\$339 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$341  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$342  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$341 );
-  assign \$343  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$344  = \$340  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$342  : { \$343 [20], \$343  };
-  assign \$345  = $signed(\$338 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$344 );
-  assign \$346  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$347  = $signed(\$346 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$348  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$349  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$348 );
-  assign \$350  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$351  = \$347  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$349  : { \$350 [20], \$350  };
-  assign \$352  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$353  = $signed(\$352 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$354  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$355  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$354 );
-  assign \$356  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$357  = \$353  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$355  : { \$356 [20], \$356  };
-  assign \$359  = $signed(\$351 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$358 );
-  assign \$360  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$361  = $signed(\$360 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$362  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$363  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$362 );
-  assign \$364  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$365  = \$361  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$363  : { \$364 [20], \$364  };
-  assign \$366  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$367  = $signed(\$366 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$368  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$369  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$368 );
-  assign \$370  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$371  = \$367  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$369  : { \$370 [20], \$370  };
-  assign \$373  = $signed(\$365 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$372 );
-  assign \$374  = \$345  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$359  : \$373 ;
-  assign \$375  = $signed(\$374 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$377  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:804" *) $signed(\$376 );
-  assign \$378  = \$375  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:804" *) \$377  : { vy[19], vy };
-  assign \$379  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$380  = $signed(\$379 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$381  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$382  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$381 );
-  assign \$383  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$384  = \$380  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$382  : { \$383 [20], \$383  };
-  assign \$385  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$386  = $signed(\$385 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$387  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$388  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$387 );
-  assign \$389  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$390  = \$386  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$388  : { \$389 [20], \$389  };
-  assign \$391  = $signed(\$384 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$390 );
-  assign \$392  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$393  = $signed(\$392 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$394  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$395  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$394 );
-  assign \$396  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$397  = \$393  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$395  : { \$396 [20], \$396  };
-  assign \$398  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$399  = $signed(\$398 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$400  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$401  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$400 );
-  assign \$402  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$403  = \$399  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$401  : { \$402 [20], \$402  };
-  assign \$405  = $signed(\$397 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$404 );
-  assign \$406  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$407  = $signed(\$406 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$408  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$409  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$408 );
-  assign \$410  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$411  = \$407  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$409  : { \$410 [20], \$410  };
-  assign \$412  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$413  = $signed(\$412 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$414  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$415  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$414 );
-  assign \$416  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$417  = \$413  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$415  : { \$416 [20], \$416  };
-  assign \$419  = $signed(\$411 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$418 );
-  assign \$420  = \$391  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$405  : \$419 ;
-  assign \$421  = $signed(\$420 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$422  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$423  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$425  = $signed(\$422 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$424 );
-  assign \$426  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) $signed(\$425 );
-  assign \$427  = \$421  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:798" *) \$426  : { px[19], px[19], px[19], px };
-  assign \$428  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$429  = $signed(\$428 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$430  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$431  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$430 );
-  assign \$432  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$433  = \$429  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$431  : { \$432 [20], \$432  };
-  assign \$434  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$435  = $signed(\$434 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$436  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$437  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$436 );
-  assign \$438  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$439  = \$435  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$437  : { \$438 [20], \$438  };
-  assign \$440  = $signed(\$433 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$439 );
-  assign \$441  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$442  = $signed(\$441 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$443  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$444  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$443 );
-  assign \$445  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$446  = \$442  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$444  : { \$445 [20], \$445  };
-  assign \$447  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$448  = $signed(\$447 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$449  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$450  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$449 );
-  assign \$451  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$452  = \$448  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$450  : { \$451 [20], \$451  };
-  assign \$454  = $signed(\$446 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$453 );
-  assign \$455  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$456  = $signed(\$455 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(1'h0);
-  assign \$457  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$458  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$457 );
-  assign \$459  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$460  = \$456  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) \$458  : { \$459 [20], \$459  };
-  assign \$461  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$462  = $signed(\$461 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(1'h0);
-  assign \$463  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$464  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$463 );
-  assign \$465  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(17'h08000);
-  assign \$466  = \$462  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) \$464  : { \$465 [20], \$465  };
-  assign \$468  = $signed(\$460 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(\$467 );
-  assign \$469  = \$440  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) \$454  : \$468 ;
-  assign \$470  = $signed(\$469 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(16'h7c00);
-  assign \$471  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$472  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(17'h08000);
-  assign \$474  = $signed(\$471 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$473 );
-  assign \$475  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) $signed(\$474 );
-  assign \$476  = \$470  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:799" *) \$475  : { py[19], py[19], py[19], py };
-  assign \$477  = dens_rd_data[23:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:861" *) 13'h1000;
-  assign \$478  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:873" *) 8'hff;
-  assign \$479  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:876" *) 1'h1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:647" *)
+  assign \$33  = \$32  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:871" *) accum : 24'h000000;
+  assign \$34  = start & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:738" *) psram_init_done;
+  assign \$35  = dens_rd_req & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:740" *) ready;
+  assign \$36  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:748" *) sub;
+  assign \$37  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:759" *) 8'hff;
+  assign \$38  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:762" *) 1'h1;
+  assign \$41  = $signed(\$39 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$40 );
+  assign \$43  = $signed(px) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:713" *) $signed(\$42 );
+  assign \$46  = $signed(\$44 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$45 );
+  assign \$48  = $signed(py) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:714" *) $signed(\$47 );
+  assign \$51  = $signed(\$49 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:709" *) $signed(\$50 );
+  assign \$52  = $signed(vx) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:711" *) $signed(\$51 );
+  assign \$55  = $signed(\$53 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:710" *) $signed(\$54 );
+  assign \$56  = $signed(vy) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:712" *) $signed(\$55 );
+  assign \$57  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) idx;
+  assign \$58  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(prev_x);
+  assign \$59  = $signed(\$58 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:725" *) $signed(13'h1666);
+  assign \$60  = \$57  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$59 ;
+  assign \$61  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(prev_x);
+  assign \$62  = $signed(\$61 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:725" *) $signed(13'h099a);
+  assign \$63  = \$60  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$62 ;
+  assign \$64  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(prev_y);
+  assign \$65  = $signed(\$64 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:726" *) $signed(13'h1666);
+  assign \$66  = \$63  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$65 ;
+  assign \$67  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(prev_y);
+  assign \$68  = $signed(\$67 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:726" *) $signed(13'h099a);
+  assign \$69  = \$66  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$68 ;
+  assign \$70  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$71  = $signed(\$70 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$72  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$73  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$72 );
+  assign \$74  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$75  = \$71  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$73  : { \$74 [20], \$74  };
+  assign \$76  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$77  = $signed(\$76 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$78  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$79  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$78 );
+  assign \$80  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$81  = \$77  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$79  : { \$80 [20], \$80  };
+  assign \$82  = $signed(\$75 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$81 );
+  assign \$83  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$84  = $signed(\$83 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$85  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$86  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$85 );
+  assign \$87  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$88  = \$84  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$86  : { \$87 [20], \$87  };
+  assign \$89  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$90  = $signed(\$89 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$91  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$92  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$91 );
+  assign \$93  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$94  = \$90  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$92  : { \$93 [20], \$93  };
+  assign \$96  = $signed(\$88 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$95 );
+  assign \$97  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$98  = $signed(\$97 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$99  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$100  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$99 );
+  assign \$101  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$102  = \$98  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$100  : { \$101 [20], \$101  };
+  assign \$103  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$104  = $signed(\$103 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$105  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$106  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$105 );
+  assign \$107  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$108  = \$104  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$106  : { \$107 [20], \$107  };
+  assign \$110  = $signed(\$102 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$109 );
+  assign \$111  = \$82  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$96  : \$110 ;
+  assign \$112  = $signed(\$111 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$113  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$114  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$116  = $signed(\$113 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$115 );
+  assign \$117  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$116 );
+  assign \$118  = \$112  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) \$117  : { px[19], px[19], px[19], px };
+  assign \$119  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(prev_x);
+  assign \$121  = $signed(\$118 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:805" *) $signed(\$120 );
+  assign \$122  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$123  = $signed(\$122 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$124  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$125  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$124 );
+  assign \$126  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$127  = \$123  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$125  : { \$126 [20], \$126  };
+  assign \$128  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$129  = $signed(\$128 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$130  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$131  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$130 );
+  assign \$132  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$133  = \$129  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$131  : { \$132 [20], \$132  };
+  assign \$134  = $signed(\$127 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$133 );
+  assign \$135  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$136  = $signed(\$135 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$137  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$138  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$137 );
+  assign \$139  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$140  = \$136  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$138  : { \$139 [20], \$139  };
+  assign \$141  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$142  = $signed(\$141 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$143  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$144  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$143 );
+  assign \$145  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$146  = \$142  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$144  : { \$145 [20], \$145  };
+  assign \$148  = $signed(\$140 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$147 );
+  assign \$149  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$150  = $signed(\$149 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$151  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$152  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$151 );
+  assign \$153  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$154  = \$150  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$152  : { \$153 [20], \$153  };
+  assign \$155  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$156  = $signed(\$155 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$157  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$158  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$157 );
+  assign \$159  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$160  = \$156  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$158  : { \$159 [20], \$159  };
+  assign \$162  = $signed(\$154 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$161 );
+  assign \$163  = \$134  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$148  : \$162 ;
+  assign \$164  = $signed(\$163 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$165  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$166  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$168  = $signed(\$165 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$167 );
+  assign \$169  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$168 );
+  assign \$170  = \$164  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) \$169  : { px[19], px[19], px[19], px };
+  assign \$171  = \$69  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:805" *) \$121  : { \$170 [22], \$170  };
+  assign \$172  = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) idx;
+  assign \$173  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(prev_x);
+  assign \$174  = $signed(\$173 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:725" *) $signed(13'h1666);
+  assign \$175  = \$172  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$174 ;
+  assign \$176  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:721" *) $signed(prev_x);
+  assign \$177  = $signed(\$176 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:725" *) $signed(13'h099a);
+  assign \$178  = \$175  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$177 ;
+  assign \$179  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(prev_y);
+  assign \$180  = $signed(\$179 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:726" *) $signed(13'h1666);
+  assign \$181  = \$178  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$180 ;
+  assign \$182  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(prev_y);
+  assign \$183  = $signed(\$182 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:726" *) $signed(13'h099a);
+  assign \$184  = \$181  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:724" *) \$183 ;
+  assign \$185  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$186  = $signed(\$185 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$187  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$188  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$187 );
+  assign \$189  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$190  = \$186  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$188  : { \$189 [20], \$189  };
+  assign \$191  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$192  = $signed(\$191 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$193  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$194  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$193 );
+  assign \$195  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$196  = \$192  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$194  : { \$195 [20], \$195  };
+  assign \$197  = $signed(\$190 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$196 );
+  assign \$198  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$199  = $signed(\$198 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$200  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$201  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$200 );
+  assign \$202  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$203  = \$199  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$201  : { \$202 [20], \$202  };
+  assign \$204  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$205  = $signed(\$204 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$206  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$207  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$206 );
+  assign \$208  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$209  = \$205  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$207  : { \$208 [20], \$208  };
+  assign \$211  = $signed(\$203 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$210 );
+  assign \$212  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$213  = $signed(\$212 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$214  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$215  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$214 );
+  assign \$216  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$217  = \$213  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$215  : { \$216 [20], \$216  };
+  assign \$218  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$219  = $signed(\$218 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$220  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$221  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$220 );
+  assign \$222  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$223  = \$219  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$221  : { \$222 [20], \$222  };
+  assign \$225  = $signed(\$217 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$224 );
+  assign \$226  = \$197  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$211  : \$225 ;
+  assign \$227  = $signed(\$226 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$228  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$229  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$231  = $signed(\$228 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$230 );
+  assign \$232  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$231 );
+  assign \$233  = \$227  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) \$232  : { py[19], py[19], py[19], py };
+  assign \$234  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:722" *) $signed(prev_y);
+  assign \$236  = $signed(\$233 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:806" *) $signed(\$235 );
+  assign \$237  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$238  = $signed(\$237 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$239  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$240  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$239 );
+  assign \$241  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$242  = \$238  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$240  : { \$241 [20], \$241  };
+  assign \$243  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$244  = $signed(\$243 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$245  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$246  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$245 );
+  assign \$247  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$248  = \$244  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$246  : { \$247 [20], \$247  };
+  assign \$249  = $signed(\$242 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$248 );
+  assign \$250  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$251  = $signed(\$250 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$252  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$253  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$252 );
+  assign \$254  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$255  = \$251  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$253  : { \$254 [20], \$254  };
+  assign \$256  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$257  = $signed(\$256 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$258  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$259  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$258 );
+  assign \$260  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$261  = \$257  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$259  : { \$260 [20], \$260  };
+  assign \$263  = $signed(\$255 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$262 );
+  assign \$264  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$265  = $signed(\$264 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$266  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$267  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$266 );
+  assign \$268  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$269  = \$265  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$267  : { \$268 [20], \$268  };
+  assign \$270  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$271  = $signed(\$270 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$272  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$273  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$272 );
+  assign \$274  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$275  = \$271  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$273  : { \$274 [20], \$274  };
+  assign \$277  = $signed(\$269 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$276 );
+  assign \$278  = \$249  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$263  : \$277 ;
+  assign \$279  = $signed(\$278 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$280  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$281  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$283  = $signed(\$280 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$282 );
+  assign \$284  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$283 );
+  assign \$285  = \$279  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) \$284  : { py[19], py[19], py[19], py };
+  assign \$286  = \$184  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:806" *) \$236  : { \$285 [22], \$285  };
+  assign \$287  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$288  = $signed(\$287 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$289  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$290  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$289 );
+  assign \$291  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$292  = \$288  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$290  : { \$291 [20], \$291  };
+  assign \$293  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$294  = $signed(\$293 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$295  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$296  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$295 );
+  assign \$297  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$298  = \$294  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$296  : { \$297 [20], \$297  };
+  assign \$299  = $signed(\$292 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$298 );
+  assign \$300  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$301  = $signed(\$300 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$302  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$303  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$302 );
+  assign \$304  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$305  = \$301  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$303  : { \$304 [20], \$304  };
+  assign \$306  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$307  = $signed(\$306 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$308  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$309  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$308 );
+  assign \$310  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$311  = \$307  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$309  : { \$310 [20], \$310  };
+  assign \$313  = $signed(\$305 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$312 );
+  assign \$314  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$315  = $signed(\$314 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$316  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$317  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$316 );
+  assign \$318  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$319  = \$315  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$317  : { \$318 [20], \$318  };
+  assign \$320  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$321  = $signed(\$320 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$322  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$323  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$322 );
+  assign \$324  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$325  = \$321  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$323  : { \$324 [20], \$324  };
+  assign \$327  = $signed(\$319 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$326 );
+  assign \$328  = \$299  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$313  : \$327 ;
+  assign \$329  = $signed(\$328 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$331  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:807" *) $signed(\$330 );
+  assign \$332  = \$329  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:807" *) \$331  : { vx[19], vx };
+  assign \$333  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$334  = $signed(\$333 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$335  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$336  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$335 );
+  assign \$337  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$338  = \$334  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$336  : { \$337 [20], \$337  };
+  assign \$339  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$340  = $signed(\$339 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$341  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$342  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$341 );
+  assign \$343  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$344  = \$340  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$342  : { \$343 [20], \$343  };
+  assign \$345  = $signed(\$338 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$344 );
+  assign \$346  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$347  = $signed(\$346 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$348  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$349  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$348 );
+  assign \$350  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$351  = \$347  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$349  : { \$350 [20], \$350  };
+  assign \$352  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$353  = $signed(\$352 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$354  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$355  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$354 );
+  assign \$356  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$357  = \$353  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$355  : { \$356 [20], \$356  };
+  assign \$359  = $signed(\$351 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$358 );
+  assign \$360  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$361  = $signed(\$360 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$362  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$363  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$362 );
+  assign \$364  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$365  = \$361  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$363  : { \$364 [20], \$364  };
+  assign \$366  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$367  = $signed(\$366 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$368  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$369  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$368 );
+  assign \$370  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$371  = \$367  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$369  : { \$370 [20], \$370  };
+  assign \$373  = $signed(\$365 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$372 );
+  assign \$374  = \$345  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$359  : \$373 ;
+  assign \$375  = $signed(\$374 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$377  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:808" *) $signed(\$376 );
+  assign \$378  = \$375  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:808" *) \$377  : { vy[19], vy };
+  assign \$379  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$380  = $signed(\$379 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$381  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$382  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$381 );
+  assign \$383  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$384  = \$380  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$382  : { \$383 [20], \$383  };
+  assign \$385  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$386  = $signed(\$385 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$387  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$388  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$387 );
+  assign \$389  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$390  = \$386  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$388  : { \$389 [20], \$389  };
+  assign \$391  = $signed(\$384 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$390 );
+  assign \$392  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$393  = $signed(\$392 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$394  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$395  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$394 );
+  assign \$396  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$397  = \$393  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$395  : { \$396 [20], \$396  };
+  assign \$398  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$399  = $signed(\$398 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$400  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$401  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$400 );
+  assign \$402  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$403  = \$399  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$401  : { \$402 [20], \$402  };
+  assign \$405  = $signed(\$397 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$404 );
+  assign \$406  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$407  = $signed(\$406 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$408  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$409  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$408 );
+  assign \$410  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$411  = \$407  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$409  : { \$410 [20], \$410  };
+  assign \$412  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$413  = $signed(\$412 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$414  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$415  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$414 );
+  assign \$416  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$417  = \$413  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$415  : { \$416 [20], \$416  };
+  assign \$419  = $signed(\$411 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$418 );
+  assign \$420  = \$391  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$405  : \$419 ;
+  assign \$421  = $signed(\$420 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$422  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$423  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$425  = $signed(\$422 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$424 );
+  assign \$426  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) $signed(\$425 );
+  assign \$427  = \$421  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:802" *) \$426  : { px[19], px[19], px[19], px };
+  assign \$428  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$429  = $signed(\$428 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$430  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$431  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$430 );
+  assign \$432  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$433  = \$429  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$431  : { \$432 [20], \$432  };
+  assign \$434  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$435  = $signed(\$434 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$436  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$437  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$436 );
+  assign \$438  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$439  = \$435  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$437  : { \$438 [20], \$438  };
+  assign \$440  = $signed(\$433 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$439 );
+  assign \$441  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$442  = $signed(\$441 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$443  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$444  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$443 );
+  assign \$445  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$446  = \$442  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$444  : { \$445 [20], \$445  };
+  assign \$447  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$448  = $signed(\$447 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$449  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$450  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$449 );
+  assign \$451  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$452  = \$448  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$450  : { \$451 [20], \$451  };
+  assign \$454  = $signed(\$446 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$453 );
+  assign \$455  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$456  = $signed(\$455 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(1'h0);
+  assign \$457  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$458  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) $signed(\$457 );
+  assign \$459  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$460  = \$456  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:718" *) \$458  : { \$459 [20], \$459  };
+  assign \$461  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$462  = $signed(\$461 ) < (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(1'h0);
+  assign \$463  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$464  = - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) $signed(\$463 );
+  assign \$465  = $signed(px) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:715" *) $signed(17'h08000);
+  assign \$466  = \$462  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:717" *) \$464  : { \$465 [20], \$465  };
+  assign \$468  = $signed(\$460 ) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) $signed(\$467 );
+  assign \$469  = \$440  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:719" *) \$454  : \$468 ;
+  assign \$470  = $signed(\$469 ) > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:720" *) $signed(16'h7c00);
+  assign \$471  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$472  = $signed(py) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:716" *) $signed(17'h08000);
+  assign \$474  = $signed(\$471 ) - (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$473 );
+  assign \$475  = $signed(17'h08000) + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) $signed(\$474 );
+  assign \$476  = \$470  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:803" *) \$475  : { py[19], py[19], py[19], py };
+  assign \$477  = dens_rd_data[23:0] + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:865" *) 13'h1000;
+  assign \$478  = idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:877" *) 8'hff;
+  assign \$479  = idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:880" *) 1'h1;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:651" *)
   always @(posedge clk)
     done <= \$480 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:688" *)
-  always @(posedge clk)
-    idx <= \$481 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:687" *)
-  always @(posedge clk)
-    sub <= \$482 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:686" *)
-  always @(posedge clk)
-    state <= \$483 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:690" *)
-  always @(posedge clk)
-    px <= \$484 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:691" *)
-  always @(posedge clk)
-    py <= \$485 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:692" *)
   always @(posedge clk)
-    vx <= \$486 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:693" *)
+    idx <= \$481 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:691" *)
   always @(posedge clk)
-    vy <= \$487 ;
+    sub <= \$482 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:690" *)
+  always @(posedge clk)
+    state <= \$483 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:694" *)
   always @(posedge clk)
-    prev_x <= \$488 ;
+    px <= \$484 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:695" *)
   always @(posedge clk)
-    prev_y <= \$489 ;
+    py <= \$485 ;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:696" *)
   always @(posedge clk)
+    vx <= \$486 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:697" *)
+  always @(posedge clk)
+    vy <= \$487 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:698" *)
+  always @(posedge clk)
+    prev_x <= \$488 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:699" *)
+  always @(posedge clk)
+    prev_y <= \$489 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:700" *)
+  always @(posedge clk)
     accum <= \$490 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:671" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:675" *)
   \tt_um_flip_pendant.tt.system.core.psram  psram (
     .addr(addr),
     .busy(psram_busy),
@@ -4640,159 +4640,130 @@ module \tt_um_flip_pendant.tt.system.i2c (clk, rst, cmd_start, cmd_stop, cmd_wri
   assign sda_o = 1'h0;
 endmodule
 
-(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:512" *)
+(* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:532" *)
 (* generator = "Amaranth" *)
-module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_req, dens_rd_valid, dens_rd_data, i2c_cmd_valid, i2c_cmd_start, i2c_cmd_write, i2c_tx_data, i2c_cmd_stop, dens_rd_req, done, dens_rd_addr, clk);
+module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_req, dens_rd_valid, dens_rd_data, i2c_cmd_valid, i2c_cmd_start, i2c_cmd_write, i2c_tx_data, i2c_cmd_stop, dens_rd_req, dens_rd_addr, done, clk);
   reg \$auto$verilog_backend.cc:2524:dump_module$7  = 0;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
   input rst;
   wire rst;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:508" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:528" *)
   input i2c_cmd_ready;
   wire i2c_cmd_ready;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:494" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:514" *)
   input init_req;
   wire init_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:495" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:515" *)
   input frame_req;
   wire frame_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:501" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:521" *)
   input dens_rd_valid;
   wire dens_rd_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:502" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:522" *)
   input [31:0] dens_rd_data;
   wire [31:0] dens_rd_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:507" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:527" *)
   output i2c_cmd_valid;
   reg i2c_cmd_valid;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:504" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:524" *)
   output i2c_cmd_start;
   reg i2c_cmd_start;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:506" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:526" *)
   output i2c_cmd_write;
   reg i2c_cmd_write;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:509" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:529" *)
   output [7:0] i2c_tx_data;
   reg [7:0] i2c_tx_data;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:505" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:525" *)
   output i2c_cmd_stop;
   reg i2c_cmd_stop;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:499" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:519" *)
   output dens_rd_req;
   reg dens_rd_req;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:497" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:520" *)
+  output [7:0] dens_rd_addr;
+  reg [7:0] dens_rd_addr;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:517" *)
   output done;
   reg done = 1'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:516" *)
-  output [7:0] dens_rd_addr;
-  reg [7:0] dens_rd_addr = 8'h00;
   (* src = "/home/ttuser/Pendent/src/Amaranth/tb.py:40" *)
   input clk;
   wire clk;
   wire \$1 ;
-  wire \$10 ;
+  wire [3:0] \$10 ;
   wire \$11 ;
-  wire \$12 ;
-  wire [3:0] \$13 ;
-  wire [3:0] \$14 ;
-  wire \$15 ;
-  wire [1:0] \$16 ;
+  wire [2:0] \$12 ;
+  wire [31:0] \$13 ;
+  wire \$14 ;
+  wire [31:0] \$15 ;
+  wire [7:0] \$16 ;
   wire \$17 ;
-  wire [2:0] \$18 ;
-  wire [2:0] \$19 ;
-  wire [2:0] \$2 ;
-  wire [2:0] \$20 ;
-  wire [2:0] \$21 ;
-  wire [2:0] \$22 ;
-  wire [2:0] \$23 ;
-  wire [3:0] \$24 ;
-  wire \$25 ;
-  wire \$26 ;
-  wire \$27 ;
-  wire \$28 ;
-  wire \$29 ;
-  wire [2:0] \$3 ;
-  wire [8:0] \$30 ;
-  wire [31:0] \$31 ;
-  wire \$32 ;
-  wire [31:0] \$33 ;
-  wire [7:0] \$34 ;
-  wire \$35 ;
-  wire [8:0] \$36 ;
-  reg \$37 ;
-  reg [2:0] \$38 ;
-  reg [2:0] \$39 ;
-  wire [2:0] \$4 ;
-  reg [2:0] \$40 ;
-  reg [7:0] \$41 ;
-  reg [7:0] \$42 ;
-  wire [2:0] \$5 ;
-  wire [2:0] \$6 ;
-  wire [2:0] \$7 ;
+  wire [8:0] \$18 ;
+  reg \$19 ;
+  wire \$2 ;
+  reg [1:0] \$20 ;
+  reg [2:0] \$21 ;
+  reg [2:0] \$22 ;
+  reg [7:0] \$23 ;
+  reg [7:0] \$24 ;
+  wire [5:0] \$3 ;
+  wire [5:0] \$4 ;
+  wire \$5 ;
+  wire \$6 ;
+  wire \$7 ;
   wire [3:0] \$8 ;
-  wire \$9 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:496" *)
+  wire [3:0] \$9 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:516" *)
   wire busy;
-  (* init = 8'h00 *)
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:516" *)
-  wire [7:0] cell_scan;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:518" *)
-  reg [2:0] page_sel = 3'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:517" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:537" *)
+  reg [7:0] \cell  = 8'h00;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:536" *)
+  reg [1:0] cmd_idx = 2'h0;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:546" *)
+  wire [7:0] init_dat;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:545" *)
+  wire [7:0] init_reg;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:538" *)
   reg [7:0] pwm_byte = 8'h00;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:514" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:534" *)
   reg [2:0] state = 3'h0;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:515" *)
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:535" *)
   reg [2:0] step = 3'h0;
-  assign busy = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:524" *) state;
-  assign \$1  = step >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) 3'h5;
-  assign \$2  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) dens_rd_addr[6:4];
-  assign \$4  = dens_rd_addr[7] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) \$3  : dens_rd_addr[6:4];
-  assign \$5  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) dens_rd_addr[2:0];
-  assign \$7  = dens_rd_addr[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) \$6  : dens_rd_addr[2:0];
-  assign \$8  = \$4  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) \$7 ;
-  assign \$9  = \$8  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) 3'h4;
-  assign \$10  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) \$9 ;
-  assign \$11  = \$1  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) \$10 ;
-  assign \$12  = step == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:593" *) 3'h5;
-  assign \$13  = step + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:541" *) 1'h1;
-  assign \$14  = step + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:544" *) 1'h1;
-  assign \$15  = page_sel == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:558" *) 3'h4;
-  assign \$16  = \$15  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:558" *) 2'h2 : 2'h3;
-  assign \$17  = step >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) 3'h5;
-  assign \$18  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) dens_rd_addr[6:4];
-  assign \$20  = dens_rd_addr[7] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:30" *) \$19  : dens_rd_addr[6:4];
-  assign \$21  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) dens_rd_addr[2:0];
-  assign \$23  = dens_rd_addr[3] ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:31" *) \$22  : dens_rd_addr[2:0];
-  assign \$24  = \$20  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) \$23 ;
-  assign \$25  = \$24  >= (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:32" *) 3'h4;
-  assign \$26  = ~ (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) \$25 ;
-  assign \$27  = \$17  & (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:588" *) \$26 ;
-  assign \$28  = step == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:593" *) 3'h5;
-  assign \$29  = dens_rd_addr == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:589" *) 8'hff;
-  assign \$30  = dens_rd_addr + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:592" *) 1'h1;
-  assign \$32  = \$31  > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:598" *) 8'hff;
-  assign \$34  = \$32  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:598" *) 8'hff : \$33 [7:0];
-  assign \$35  = dens_rd_addr == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:622" *) 8'hff;
-  assign \$36  = dens_rd_addr + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:625" *) 1'h1;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:497" *)
-  always @(posedge clk)
-    done <= \$37 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:518" *)
-  always @(posedge clk)
-    page_sel <= \$38 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:515" *)
-  always @(posedge clk)
-    step <= \$39 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:514" *)
-  always @(posedge clk)
-    state <= \$40 ;
-  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:516" *)
-  always @(posedge clk)
-    dens_rd_addr <= \$41 ;
+  assign \$1  = cmd_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:548" *) 1'h1;
+  assign \$2  = cmd_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:549" *) 2'h2;
+  assign \$3  = \$2  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:549" *) 6'h36 : 6'h35;
+  assign \$4  = \$1  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:548" *) 6'h31 : \$3 ;
+  assign \$5  = ! (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:550" *) cmd_idx;
+  assign \$6  = cmd_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:551" *) 1'h1;
+  assign \$7  = cmd_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:552" *) 2'h2;
+  assign \$8  = \$7  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:552" *) 4'hf : 4'h3;
+  assign \$9  = \$6  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:551" *) 4'h3 : \$8 ;
+  assign \$10  = \$5  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:550" *) 4'h1 : \$9 ;
+  assign busy = | (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:555" *) state;
+  assign \$11  = cmd_idx == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:583" *) 2'h3;
+  assign \$12  = cmd_idx + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:586" *) 1'h1;
+  assign \$14  = \$13  > (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:615" *) 8'hff;
+  assign \$16  = \$14  ? (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:615" *) 8'hff : \$15 [7:0];
+  assign \$17  = \cell  == (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:626" *) 8'hff;
+  assign \$18  = \cell  + (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:629" *) 1'h1;
   (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:517" *)
   always @(posedge clk)
-    pwm_byte <= \$42 ;
+    done <= \$19 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:536" *)
+  always @(posedge clk)
+    cmd_idx <= \$20 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:535" *)
+  always @(posedge clk)
+    step <= \$21 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:534" *)
+  always @(posedge clk)
+    state <= \$22 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:537" *)
+  always @(posedge clk)
+    \cell  <= \$23 ;
+  (* src = "/home/ttuser/Pendent/src/Amaranth/asic.py:538" *)
+  always @(posedge clk)
+    pwm_byte <= \$24 ;
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
     i2c_cmd_valid = 1'h0;
@@ -4808,12 +4779,12 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
             i2c_cmd_valid = 1'h1;
           end
       3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-          end else if (i2c_cmd_ready) begin
+          /* empty */;
+      3'h4:
+          if (i2c_cmd_ready) begin
             i2c_cmd_valid = 1'h1;
           end
-      3'h4:
+      3'h5:
           if (i2c_cmd_ready) begin
             i2c_cmd_valid = 1'h1;
           end
@@ -4828,7 +4799,7 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
       3'h1:
           if (i2c_cmd_ready) begin
             casez (step)
-              3'h0, 3'h5:
+              3'h0:
                   i2c_cmd_start = 1'h1;
             endcase
           end
@@ -4836,23 +4807,6 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
           if (i2c_cmd_ready) begin
             casez (step)
               3'h0:
-                  /* empty */;
-              3'h1:
-                  /* empty */;
-              3'h2:
-                  i2c_cmd_start = 1'h1;
-            endcase
-          end
-      3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  /* empty */;
-              3'h1:
-                  /* empty */;
-              3'h2:
                   i2c_cmd_start = 1'h1;
             endcase
           end
@@ -4866,19 +4820,14 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
           /* empty */;
       3'h1:
           if (i2c_cmd_ready) begin
-            (* full_case = 32'd1 *)
             casez (step)
-              3'h0, 3'h5:
+              3'h0:
                   /* empty */;
-              3'h1, 3'h6:
+              3'h1:
                   i2c_cmd_write = 1'h1;
               3'h2:
                   i2c_cmd_write = 1'h1;
               3'h3:
-                  i2c_cmd_write = 1'h1;
-              3'h4:
-                  /* empty */;
-              3'h7:
                   i2c_cmd_write = 1'h1;
             endcase
           end
@@ -4886,39 +4835,20 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
           if (i2c_cmd_ready) begin
             casez (step)
               3'h0:
-                  i2c_cmd_write = 1'h1;
+                  /* empty */;
               3'h1:
-                  /* empty */;
+                  i2c_cmd_write = 1'h1;
               3'h2:
-                  /* empty */;
+                  i2c_cmd_write = 1'h1;
               3'h3:
-                  i2c_cmd_write = 1'h1;
-              3'h4:
-                  i2c_cmd_write = 1'h1;
-              3'h5:
-                  i2c_cmd_write = 1'h1;
-              3'h6:
                   i2c_cmd_write = 1'h1;
             endcase
           end
       3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  i2c_cmd_write = 1'h1;
-              3'h1:
-                  /* empty */;
-              3'h2:
-                  /* empty */;
-              3'h3:
-                  i2c_cmd_write = 1'h1;
-              3'h4:
-                  i2c_cmd_write = 1'h1;
-              3'h6:
-                  i2c_cmd_write = 1'h1;
-            endcase
+          /* empty */;
+      3'h4:
+          if (i2c_cmd_ready) begin
+            i2c_cmd_write = 1'h1;
           end
     endcase
   end
@@ -4930,59 +4860,35 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
           /* empty */;
       3'h1:
           if (i2c_cmd_ready) begin
-            (* full_case = 32'd1 *)
             casez (step)
-              3'h0, 3'h5:
+              3'h0:
                   /* empty */;
-              3'h1, 3'h6:
-                  i2c_tx_data = 8'h60;
+              3'h1:
+                  i2c_tx_data = 8'h70;
               3'h2:
-                  i2c_tx_data = 8'hfe;
+                  i2c_tx_data = { 2'h0, \$4  };
               3'h3:
-                  i2c_tx_data = 8'hc5;
-              3'h4:
-                  /* empty */;
-              3'h7:
-                  i2c_tx_data = 8'hfd;
+                  i2c_tx_data = { 4'h0, \$10  };
             endcase
           end
       3'h2:
           if (i2c_cmd_ready) begin
             casez (step)
               3'h0:
-                  i2c_tx_data = 8'h04;
+                  /* empty */;
               3'h1:
-                  /* empty */;
+                  i2c_tx_data = 8'h70;
               3'h2:
-                  /* empty */;
+                  i2c_tx_data = 8'h80;
               3'h3:
-                  i2c_tx_data = 8'h60;
-              3'h4:
                   i2c_tx_data = 8'h00;
-              3'h5:
-                  i2c_tx_data = 8'h01;
-              3'h6:
-                  i2c_tx_data = 8'hff;
             endcase
           end
       3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  i2c_tx_data = 8'h00;
-              3'h1:
-                  /* empty */;
-              3'h2:
-                  /* empty */;
-              3'h3:
-                  i2c_tx_data = 8'h60;
-              3'h4:
-                  i2c_tx_data = 8'h00;
-              3'h6:
-                  i2c_tx_data = pwm_byte;
-            endcase
+          /* empty */;
+      3'h4:
+          if (i2c_cmd_ready) begin
+            i2c_tx_data = pwm_byte;
           end
     endcase
   end
@@ -4995,9 +4901,9 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
       3'h1:
           if (i2c_cmd_ready) begin
             casez (step)
-              3'h0, 3'h5:
+              3'h0:
                   /* empty */;
-              3'h1, 3'h6:
+              3'h1:
                   /* empty */;
               3'h2:
                   /* empty */;
@@ -5008,26 +4914,12 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
             endcase
           end
       3'h2:
-          if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  /* empty */;
-              3'h1:
-                  i2c_cmd_stop = 1'h1;
-            endcase
-          end
+          /* empty */;
       3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  /* empty */;
-              3'h1:
-                  i2c_cmd_stop = 1'h1;
-            endcase
-          end
+          /* empty */;
       3'h4:
+          /* empty */;
+      3'h5:
           if (i2c_cmd_ready) begin
             i2c_cmd_stop = 1'h1;
           end
@@ -5044,156 +4936,165 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
       3'h2:
           /* empty */;
       3'h3:
-          if (\$11 ) begin
-          end else if (\$12 ) begin
-            dens_rd_req = 1'h1;
-          end
+          dens_rd_req = 1'h1;
     endcase
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$37  = 1'h0;
+    dens_rd_addr = 8'h00;
     casez (state)
       3'h0:
           /* empty */;
       3'h1:
           /* empty */;
+      3'h2:
+          /* empty */;
+      3'h3:
+          dens_rd_addr = \cell ;
+    endcase
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
+    \$19  = 1'h0;
+    casez (state)
+      3'h0:
+          /* empty */;
+      3'h1:
+          if (i2c_cmd_ready) begin
+            casez (step)
+              3'h0:
+                  /* empty */;
+              3'h1:
+                  /* empty */;
+              3'h2:
+                  /* empty */;
+              3'h3:
+                  /* empty */;
+              3'h4:
+                  if (\$11 ) begin
+                    \$19  = 1'h1;
+                  end
+            endcase
+          end
       3'h2:
           /* empty */;
       3'h3:
           /* empty */;
       3'h4:
+          /* empty */;
+      3'h5:
           if (i2c_cmd_ready) begin
-            \$37  = 1'h1;
+            \$19  = 1'h1;
           end
     endcase
     if (rst) begin
-      \$37  = 1'h0;
+      \$19  = 1'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$38  = page_sel;
+    \$20  = cmd_idx;
     casez (state)
       3'h0:
           if (init_req) begin
-            \$38  = 3'h4;
-          end else if (frame_req) begin
-            \$38  = 3'h0;
-          end
-    endcase
-    if (rst) begin
-      \$38  = 3'h0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$39  = step;
-    casez (state)
-      3'h0:
-          if (init_req) begin
-            \$39  = 3'h0;
-          end else if (frame_req) begin
-            \$39  = 3'h0;
+            \$20  = 2'h0;
           end
       3'h1:
           if (i2c_cmd_ready) begin
-            (* full_case = 32'd1 *)
-            casez (step)
-              3'h0, 3'h5:
-                  \$39  = \$13 [2:0];
-              3'h1, 3'h6:
-                  \$39  = \$14 [2:0];
-              3'h2:
-                  \$39  = 3'h3;
-              3'h3:
-                  \$39  = 3'h4;
-              3'h4:
-                  \$39  = 3'h5;
-              3'h7:
-                  \$39  = 3'h0;
-            endcase
-          end
-      3'h2:
-          if (i2c_cmd_ready) begin
             casez (step)
               3'h0:
-                  \$39  = 3'h1;
+                  /* empty */;
               3'h1:
-                  \$39  = 3'h2;
+                  /* empty */;
               3'h2:
-                  \$39  = 3'h3;
+                  /* empty */;
               3'h3:
-                  \$39  = 3'h4;
+                  /* empty */;
               3'h4:
-                  \$39  = 3'h5;
-              3'h5:
-                  \$39  = 3'h6;
-              3'h6:
-                  \$39  = 3'h0;
-            endcase
-          end
-      3'h3:
-          if (\$27 ) begin
-            if (\$29 ) begin
-              \$39  = 3'h0;
-            end
-          end else if (\$28 ) begin
-            if (dens_rd_valid) begin
-              \$39  = 3'h6;
-            end
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  \$39  = 3'h1;
-              3'h1:
-                  \$39  = 3'h2;
-              3'h2:
-                  \$39  = 3'h3;
-              3'h3:
-                  \$39  = 3'h4;
-              3'h4:
-                  \$39  = 3'h5;
-              3'h6:
                   (* full_case = 32'd1 *)
-                  if (\$35 ) begin
-                    \$39  = 3'h0;
+                  if (\$11 ) begin
                   end else begin
-                    \$39  = 3'h5;
+                    \$20  = \$12 [1:0];
                   end
             endcase
           end
     endcase
     if (rst) begin
-      \$39  = 3'h0;
+      \$20  = 2'h0;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$40  = state;
+    \$21  = step;
     casez (state)
       3'h0:
           if (init_req) begin
-            \$40  = 3'h1;
+            \$21  = 3'h0;
           end else if (frame_req) begin
-            \$40  = 3'h1;
+            \$21  = 3'h0;
           end
       3'h1:
           if (i2c_cmd_ready) begin
-            (* full_case = 32'd1 *)
             casez (step)
-              3'h0, 3'h5:
+              3'h0:
+                  \$21  = 3'h1;
+              3'h1:
+                  \$21  = 3'h2;
+              3'h2:
+                  \$21  = 3'h3;
+              3'h3:
+                  \$21  = 3'h4;
+              3'h4:
+                  (* full_case = 32'd1 *)
+                  if (\$11 ) begin
+                  end else begin
+                    \$21  = 3'h0;
+                  end
+            endcase
+          end
+      3'h2:
+          if (i2c_cmd_ready) begin
+            casez (step)
+              3'h0:
+                  \$21  = 3'h1;
+              3'h1:
+                  \$21  = 3'h2;
+              3'h2:
+                  \$21  = 3'h3;
+              3'h3:
+                  \$21  = 3'h0;
+            endcase
+          end
+    endcase
+    if (rst) begin
+      \$21  = 3'h0;
+    end
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
+    \$22  = state;
+    casez (state)
+      3'h0:
+          if (init_req) begin
+            \$22  = 3'h1;
+          end else if (frame_req) begin
+            \$22  = 3'h2;
+          end
+      3'h1:
+          if (i2c_cmd_ready) begin
+            casez (step)
+              3'h0:
                   /* empty */;
-              3'h1, 3'h6:
+              3'h1:
                   /* empty */;
               3'h2:
                   /* empty */;
               3'h3:
                   /* empty */;
               3'h4:
-                  /* empty */;
-              3'h7:
-                  \$40  = { 1'h0, \$16  };
+                  if (\$11 ) begin
+                    \$22  = 3'h0;
+                  end
             endcase
           end
       3'h2:
@@ -5206,70 +5107,44 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
               3'h2:
                   /* empty */;
               3'h3:
-                  /* empty */;
-              3'h4:
-                  /* empty */;
-              3'h5:
-                  /* empty */;
-              3'h6:
-                  \$40  = 3'h4;
+                  \$22  = 3'h3;
             endcase
           end
       3'h3:
-          if (\$27 ) begin
-            if (\$29 ) begin
-              \$40  = 3'h4;
-            end
-          end else if (\$28 ) begin
-          end else if (i2c_cmd_ready) begin
-            casez (step)
-              3'h0:
-                  /* empty */;
-              3'h1:
-                  /* empty */;
-              3'h2:
-                  /* empty */;
-              3'h3:
-                  /* empty */;
-              3'h4:
-                  /* empty */;
-              3'h6:
-                  if (\$35 ) begin
-                    \$40  = 3'h4;
-                  end
-            endcase
+          if (dens_rd_valid) begin
+            \$22  = 3'h4;
           end
       3'h4:
           if (i2c_cmd_ready) begin
-            \$40  = 3'h0;
-          end
-    endcase
-    if (rst) begin
-      \$40  = 3'h0;
-    end
-  end
-  always @* begin
-    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$41  = dens_rd_addr;
-    casez (state)
-      3'h0:
-          if (init_req) begin
-          end else if (frame_req) begin
-            \$41  = 8'h00;
-          end
-      3'h1:
-          /* empty */;
-      3'h2:
-          /* empty */;
-      3'h3:
-          if (\$27 ) begin
             (* full_case = 32'd1 *)
-            if (\$29 ) begin
+            if (\$17 ) begin
+              \$22  = 3'h5;
             end else begin
-              \$41  = \$30 [7:0];
+              \$22  = 3'h3;
             end
-          end else if (\$28 ) begin
-          end else if (i2c_cmd_ready) begin
+          end
+      3'h5:
+          if (i2c_cmd_ready) begin
+            \$22  = 3'h0;
+          end
+    endcase
+    if (rst) begin
+      \$22  = 3'h0;
+    end
+  end
+  always @* begin
+    if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
+    \$23  = \cell ;
+    casez (state)
+      3'h0:
+          if (init_req) begin
+          end else if (frame_req) begin
+            \$23  = 8'h00;
+          end
+      3'h1:
+          /* empty */;
+      3'h2:
+          if (i2c_cmd_ready) begin
             casez (step)
               3'h0:
                   /* empty */;
@@ -5278,25 +5153,27 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
               3'h2:
                   /* empty */;
               3'h3:
-                  /* empty */;
-              3'h4:
-                  /* empty */;
-              3'h6:
-                  (* full_case = 32'd1 *)
-                  if (\$35 ) begin
-                  end else begin
-                    \$41  = \$36 [7:0];
-                  end
+                  \$23  = 8'h00;
             endcase
+          end
+      3'h3:
+          /* empty */;
+      3'h4:
+          if (i2c_cmd_ready) begin
+            (* full_case = 32'd1 *)
+            if (\$17 ) begin
+            end else begin
+              \$23  = \$18 [7:0];
+            end
           end
     endcase
     if (rst) begin
-      \$41  = 8'h00;
+      \$23  = 8'h00;
     end
   end
   always @* begin
     if (\$auto$verilog_backend.cc:2524:dump_module$7 ) begin end
-    \$42  = pwm_byte;
+    \$24  = pwm_byte;
     casez (state)
       3'h0:
           /* empty */;
@@ -5305,22 +5182,16 @@ module \tt_um_flip_pendant.tt.system.leds (rst, i2c_cmd_ready, init_req, frame_r
       3'h2:
           /* empty */;
       3'h3:
-          if (\$27 ) begin
-          end else if (\$28 ) begin
-            if (dens_rd_valid) begin
-              \$42  = \$34 ;
-            end
+          if (dens_rd_valid) begin
+            \$24  = \$16 ;
           end
     endcase
     if (rst) begin
-      \$42  = 8'h00;
+      \$24  = 8'h00;
     end
   end
-  assign cell_scan = dens_rd_addr;
-  assign \$3  = \$2 ;
-  assign \$6  = \$5 ;
-  assign \$19  = \$18 ;
-  assign \$22  = \$21 ;
-  assign \$31  = { 5'h00, dens_rd_data[31:5] };
-  assign \$33  = { 5'h00, dens_rd_data[31:5] };
+  assign init_reg = { 2'h0, \$4  };
+  assign init_dat = { 4'h0, \$10  };
+  assign \$13  = { 5'h00, dens_rd_data[31:5] };
+  assign \$15  = { 5'h00, dens_rd_data[31:5] };
 endmodule

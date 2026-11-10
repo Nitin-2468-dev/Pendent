@@ -4,7 +4,7 @@
 # Hardware peripherals on the pendant PCB:
 #   - ESP-PSRAM64H (QPI PSRAM at 12.5 MHz) for storing particles & 16x16 grid
 #   - LIS2DW12 accelerometer (I2C 0x18/0x19) for gravity tilt (gx, gy) + sleep wake
-#   - IS31FL3741A 216-LED matrix driver (I2C 0x30) for rendering water density
+#   - HT16D33B 16x16 LED matrix driver (I2C 0x70) for rendering water density
 
 from amaranth import Cat, Const, Elaboratable, Module, Mux, Signal, signed, unsigned
 
@@ -230,7 +230,7 @@ class PsramController(Elaboratable):
 
 
 class I2CMaster(Elaboratable):
-    """Simple 400 kHz open-drain I2C master for LIS2DW12 and IS31FL3741A."""
+    """Simple 400 kHz open-drain I2C master for LIS2DW12 and HT16D33B."""
     ST_IDLE    = 0
     ST_START_A = 1
     ST_START_B = 2
@@ -488,8 +488,28 @@ class LIS2DW12Controller(Elaboratable):
         return m
 
 
-class IS31FL3741AController(Elaboratable):
-    """Unlocks IS31FL3741A (0x30) and streams 216 LED PWM brightness bytes."""
+class HT16D33BController(Elaboratable):
+    """HT16D33B 16x16 LED matrix driver (I2C 0x70) with single 256-byte PWM RAM burst.
+
+    Init: 4 short commands to 0x70 (0x38 << 1):
+      0x35, 0x01: System oscillator on (SON=1)
+      0x31, 0x03: 16x16 matrix mode, 8-bit grayscale PWM
+      0x36, 0x0F: Max constant current sink
+      0x35, 0x03: Display on (DON=1, SON=1)
+
+    Frame: Single linear burst into PWM RAM (0x00..0xFF):
+      Start -> 0x70 -> 0x80 (Write RAM) -> 0x00 (Start addr) -> 256 PWM bytes -> Stop
+
+    RAM address Cat(y, x) = y*16 + x maps to cell (x, y); corners are already
+    0 in PSRAM (cell_ok=0), so streaming all 256 bytes blanks them automatically.
+    """
+    S_IDLE       = 0
+    S_INIT       = 1
+    S_FRAME_HDR  = 2
+    S_FRAME_READ = 3
+    S_FRAME_WR   = 4
+    S_FRAME_END  = 5
+
     def __init__(self):
         self.init_req = Signal()
         self.frame_req = Signal()
@@ -511,123 +531,107 @@ class IS31FL3741AController(Elaboratable):
     def elaborate(self, platform):
         m = Module()
 
-        state = Signal(3, init=0)
+        state = Signal(3, init=self.S_IDLE)
         step = Signal(3)
-        cell_scan = Signal(8)
+        cmd_idx = Signal(2)
+        cell = Signal(8)
         pwm_byte = Signal(8)
-        page_sel = Signal(3)
 
-        scan_inside = inside_circle(cell_scan[4:8], cell_scan[0:4])
-
+        # Init command pair selection based on cmd_idx:
+        #   0 -> (0x35, 0x01)  SON=1
+        #   1 -> (0x31, 0x03)  16x16 mode, 8-bit grayscale PWM
+        #   2 -> (0x36, 0x0F)  I_MAX
+        #   3 -> (0x35, 0x03)  DON=1, SON=1
+        init_reg = Signal(8)
+        init_dat = Signal(8)
         m.d.comb += [
-            self.dens_rd_addr.eq(cell_scan),
-            self.busy.eq(state != 0),
+            init_reg.eq(Mux(cmd_idx == 1, 0x31,
+                        Mux(cmd_idx == 2, 0x36, 0x35))),
+            init_dat.eq(Mux(cmd_idx == 0, 0x01,
+                        Mux(cmd_idx == 1, 0x03,
+                        Mux(cmd_idx == 2, 0x0F, 0x03)))),
         ]
+
+        m.d.comb += self.busy.eq(state != self.S_IDLE)
         m.d.sync += self.done.eq(0)
 
         with m.Switch(state):
-            with m.Case(0):
+            with m.Case(self.S_IDLE):
                 with m.If(self.init_req):
-                    m.d.sync += [page_sel.eq(4), step.eq(0), state.eq(1)]
+                    m.d.sync += [cmd_idx.eq(0), step.eq(0), state.eq(self.S_INIT)]
                 with m.Elif(self.frame_req):
-                    m.d.sync += [page_sel.eq(0), cell_scan.eq(0), step.eq(0), state.eq(1)]
+                    m.d.sync += [step.eq(0), cell.eq(0), state.eq(self.S_FRAME_HDR)]
 
-            with m.Case(1):  # Unlock Command Register (0xFE = 0xC5) and select Page (0xFD = page_sel)
-                with m.If(self.i2c_cmd_ready):
-                    m.d.comb += self.i2c_cmd_valid.eq(1)
-                    with m.Switch(step):
-                        with m.Case(0, 5):
-                            m.d.comb += self.i2c_cmd_start.eq(1)
-                            m.d.sync += step.eq(step + 1)
-                        with m.Case(1, 6):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x60)]
-                            m.d.sync += step.eq(step + 1)
-                        with m.Case(2):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0xFE)]
-                            m.d.sync += step.eq(3)
-                        with m.Case(3):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0xC5)]
-                            m.d.sync += step.eq(4)
-                        with m.Case(4):
-                            m.d.comb += self.i2c_cmd_stop.eq(1)
-                            m.d.sync += step.eq(5)
-                        with m.Case(7):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0xFD)]
-                            m.d.sync += [
-                                step.eq(0),
-                                state.eq(Mux(page_sel == 4, 2, 3)),
-                            ]
-
-            with m.Case(2):  # Finish Page 4 select, then write Config (0x00=0x01 SSD=1) & GCC (0x01=0xFF)
+            with m.Case(self.S_INIT):
                 with m.If(self.i2c_cmd_ready):
                     m.d.comb += self.i2c_cmd_valid.eq(1)
                     with m.Switch(step):
                         with m.Case(0):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x04)]
+                            m.d.comb += self.i2c_cmd_start.eq(1)
                             m.d.sync += step.eq(1)
                         with m.Case(1):
-                            m.d.comb += self.i2c_cmd_stop.eq(1)
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x70)]
                             m.d.sync += step.eq(2)
                         with m.Case(2):
-                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(init_reg)]
                             m.d.sync += step.eq(3)
                         with m.Case(3):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x60)]
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(init_dat)]
                             m.d.sync += step.eq(4)
                         with m.Case(4):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
-                            m.d.sync += step.eq(5)
-                        with m.Case(5):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x01)]
-                            m.d.sync += step.eq(6)
-                        with m.Case(6):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0xFF)]
-                            m.d.sync += [step.eq(0), state.eq(4)]
-
-            with m.Case(3):  # Finish Page 0 select, then burst-write 216 PWM bytes starting at reg 0x00
-                with m.If((step >= 5) & ~scan_inside):
-                    with m.If(cell_scan == 255):
-                        m.d.sync += [step.eq(0), state.eq(4)]
-                    with m.Else():
-                        m.d.sync += cell_scan.eq(cell_scan + 1)
-                with m.Elif(step == 5):
-                    m.d.comb += self.dens_rd_req.eq(1)
-                    with m.If(self.dens_rd_valid):
-                        scaled = self.dens_rd_data >> 5
-                        m.d.sync += [
-                            pwm_byte.eq(Mux(scaled > 255, 255, scaled[:8])),
-                            step.eq(6),
-                        ]
-                with m.Elif(self.i2c_cmd_ready):
-                    m.d.comb += self.i2c_cmd_valid.eq(1)
-                    with m.Switch(step):
-                        with m.Case(0):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
-                            m.d.sync += step.eq(1)
-                        with m.Case(1):
                             m.d.comb += self.i2c_cmd_stop.eq(1)
-                            m.d.sync += step.eq(2)
-                        with m.Case(2):
-                            m.d.comb += self.i2c_cmd_start.eq(1)
-                            m.d.sync += step.eq(3)
-                        with m.Case(3):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x60)]
-                            m.d.sync += step.eq(4)
-                        with m.Case(4):
-                            # Send starting register sub-address 0x00 before streaming PWM data bytes
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
-                            m.d.sync += step.eq(5)
-                        with m.Case(6):
-                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(pwm_byte)]
-                            with m.If(cell_scan == 255):
-                                m.d.sync += [step.eq(0), state.eq(4)]
+                            with m.If(cmd_idx == 3):
+                                m.d.sync += [self.done.eq(1), state.eq(self.S_IDLE)]
                             with m.Else():
-                                m.d.sync += [cell_scan.eq(cell_scan + 1), step.eq(5)]
+                                m.d.sync += [cmd_idx.eq(cmd_idx + 1), step.eq(0)]
 
-            with m.Case(4):
+            with m.Case(self.S_FRAME_HDR):
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += self.i2c_cmd_valid.eq(1)
+                    with m.Switch(step):
+                        with m.Case(0):
+                            m.d.comb += self.i2c_cmd_start.eq(1)
+                            m.d.sync += step.eq(1)
+                        with m.Case(1):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x70)]
+                            m.d.sync += step.eq(2)
+                        with m.Case(2):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x80)]
+                            m.d.sync += step.eq(3)
+                        with m.Case(3):
+                            m.d.comb += [self.i2c_cmd_write.eq(1), self.i2c_tx_data.eq(0x00)]
+                            m.d.sync += [step.eq(0), cell.eq(0), state.eq(self.S_FRAME_READ)]
+
+            with m.Case(self.S_FRAME_READ):
+                # Request density byte for the current cell (0..255)
+                m.d.comb += [
+                    self.dens_rd_req.eq(1),
+                    self.dens_rd_addr.eq(cell),
+                ]
+                with m.If(self.dens_rd_valid):
+                    # Same scaling as IS31FL3741A path: density>>5 clamped to 255
+                    scaled = self.dens_rd_data >> 5
+                    m.d.sync += [
+                        pwm_byte.eq(Mux(scaled > 255, 255, scaled[:8])),
+                        state.eq(self.S_FRAME_WR),
+                    ]
+
+            with m.Case(self.S_FRAME_WR):
+                with m.If(self.i2c_cmd_ready):
+                    m.d.comb += [
+                        self.i2c_cmd_valid.eq(1),
+                        self.i2c_cmd_write.eq(1),
+                        self.i2c_tx_data.eq(pwm_byte),
+                    ]
+                    with m.If(cell == 255):
+                        m.d.sync += state.eq(self.S_FRAME_END)
+                    with m.Else():
+                        m.d.sync += [cell.eq(cell + 1), state.eq(self.S_FRAME_READ)]
+
+            with m.Case(self.S_FRAME_END):
                 with m.If(self.i2c_cmd_ready):
                     m.d.comb += [self.i2c_cmd_valid.eq(1), self.i2c_cmd_stop.eq(1)]
-                    m.d.sync += [self.done.eq(1), state.eq(0)]
+                    m.d.sync += [self.done.eq(1), state.eq(self.S_IDLE)]
 
         return m
 
@@ -896,7 +900,7 @@ class PendantSystemTop(Elaboratable):
         self.core = PsramStreamFlipCore(sys_clk_hz=sys_clk_hz, qpi_clk_hz=qpi_clk_hz)
         self.i2c = I2CMaster(sys_clk_hz=sys_clk_hz, i2c_clk_hz=i2c_clk_hz)
         self.accel = LIS2DW12Controller()
-        self.leds = IS31FL3741AController()
+        self.leds = HT16D33BController()          # <-- was IS31FL3741AController()
 
         self.frame_sync = Signal()
         self.lis_int2_sleep = Signal()
