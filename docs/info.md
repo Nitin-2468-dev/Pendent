@@ -5,16 +5,15 @@ sections.
 
 ## How it works
 
-`tt_um_flip_pendant` is a dedicated hardware implementation of a 256-particle Q4.12 fixed-point PIC/FLIP fluid simulation engine designed for a 16x16 circular LED matrix pendant (216 active LEDs).
+`tt_um_flip_pendant` is a dedicated hardware implementation of a 256-particle Q4.12 fixed-point PIC/FLIP fluid simulation. It is being developed for PENDENT, a pendant with a 16x16 circular LED display containing 216 active LEDs.
 
-Each frame executes a 5-stage hardware pipeline:
-1. **Gravity & Advection:** Updates 256 particle velocities and positions in Q4.12 fixed-point using the 8-bit `(gx, gy)` gravity vector polled from the external **LIS2DW12** accelerometer.
-2. **Spatial-Hash 2-Pass Particle Separation & Circular Wall Collision:** Builds an $O(N)$ 16x16 spatial hash linked list in hardware, pushes overlapping particle pairs apart via a 64-entry repulsion ROM (`PUSH_LUT`), and projects exterior particles back onto the $R = 7.75$ circular boundary via an inverse-radius ROM (`WALL_INV_R_LUT`).
-3. **Particle-to-Grid (P2G) & Cell Classification:** Scatters particle velocities and weights onto staggered $U$ ($17 \times 16$), $V$ ($16 \times 17$), and density ($16 \times 16$) grids using wire-sliced bilinear weights, normalizes face velocities, and classifies cells as `AIR`, `WATER`, or `SOLID`.
-4. **30-Iteration Red-Black Gauss-Seidel Pressure Solver:** Solves for divergence-free velocity fields with density drift compensation and an over-relaxation LUT (`OMEGA_INV_S_LUT`).
-5. **Grid-to-Particle (G2P) & Autonomous Sleep:** Blends PIC (5%) and FLIP (95%) velocities back onto the 256 particles. When the fluid settles and the accelerometer reports no motion for 90 consecutive frames (1.5 s), the controller asserts `clock_gated_sleep` until woken by `lis_int2_sleep` or `shake_btn`.
+The ASIC performs the fluid simulation. The simulation uses particle and grid-based calculations, with Q4.12 fixed-point arithmetic to represent values in hardware.
 
-Particle state is stored in an external **ESP-PSRAM64H** (8 MB QPI PSRAM) via a 4-lane QPI burst controller and 5V-to-3.3V level-shifter control signals (`psram_trans_dir`, `psram_trans_oe_n`). Display output and accelerometer polling run over a shared 400 kHz open-drain I2C master connected to the **LIS2DW12** (`0x19`) and **IS31FL3741A** (`0x30`).
+![PENDENT GF180MCU ASIC layout](https://cdn.hackclub.com/01a1c782-e337-7242-a7be-d90b00ccf6d1/RENDER.png)
+
+_The GF180MCU GDS render._
+
+The RP2040 is a separate component on the pendant's single PCB. In the current design, its only responsibility is selecting PENDENT's tile on the shared Tiny Tapeout chip. It does not run the fluid simulation or handle the ASIC's general communication. Its responsibilities may change in a later revision, but tile selection is all it does at present.
 
 ## How to test
 
@@ -23,7 +22,7 @@ Particle state is stored in an external **ESP-PSRAM64H** (8 MB QPI PSRAM) via a 
    python tb.py --export-only
    cp build/standalone_tb/project.v src/project.v
    ```
-2. Run the standalone 10-frame Verilator differential stress suite (compares RTL against the golden Python Q4.12 reference model across `dense_cluster`, `wall_mixed`, and `four_clusters` with 0 LSB error):
+2. Run the standalone 10-frame Verilator differential test suite:
    ```bash
    python tb.py --frames 10 --seed 1
    ```
@@ -34,6 +33,29 @@ Particle state is stored in an external **ESP-PSRAM64H** (8 MB QPI PSRAM) via a 
 
 ## External hardware
 
-* **ESP-PSRAM64H** (3.3V 64 Mbit QPI PSRAM) + 5V/3.3V bidirectional level translator on `uo[2:0]`, `uio[3:0]`, and `uio[6]`.
-* **LIS2DW12** 3-axis accelerometer on the I2C bus (`uio[4]` SDA, `uio[5]` SCL) + `INT2` wake pin on `ui[0]`.
-* **IS31FL3741A** LED matrix driver (Adafruit 5201) driving 216 monochrome LEDs on the I2C bus (`uio[4]` SDA, `uio[5]` SCL) + `SDB` on `uio[7]`.
+The pendant's external hardware is designed around the ASIC and is mounted on the same PCB.
+
+### Display
+
+The display is a circular arrangement of 216 monochrome LEDs, mapped onto a 16x16 grid with no centre LED.
+
+![PENDENT 216 LED arrangement](<https://cdn.hackclub.com/01a1c781-dae6-7ccc-94b9-0011786a703d/Counting_leds_(216).png>)
+
+_The 216-LED layout._
+
+- **ESP-PSRAM64H** — 3.3V, 64 Mbit (8 MB) external QPI PSRAM intended for the simulation's working memory.
+
+![ESP-PSRAM64H schematic](https://cdn.hackclub.com/01a1c7b2-2596-738b-a631-a399bee432cb/Memory.png)
+
+- **LIS2DW12** — 3-axis accelerometer, intended for movement detection and shake-to-wake.
+
+![LIS2DW12 accelerometer](https://cdn.hackclub.com/01a1c781-e7bd-72f0-bf1e-41a53d6b73e4/Accerometer.png)
+
+- **HT16D33B** — the current LED-driver choice for the 216 monochrome LEDs. It replaces the earlier IS31FL3741A choice because its 16x16 arrangement better suits the display mapping.
+- **RP2040** — currently used only to select PENDENT's tile on the shared Tiny Tapeout chip.
+
+![RP2040 and supporting components](https://cdn.hackclub.com/01a1c782-e9a9-7463-81b6-3afcb39e0328/rp2040_and_stuff.png)
+
+- **W25Q16JV** — 16 Mbit (2 MB) QSPI flash. It is intended for the RP2040 firmware, based on the devboard guide used for the design.
+
+The carrier-board schematic still needs to be updated for the HT16D33B, and the PCB layout has not yet been completed.
