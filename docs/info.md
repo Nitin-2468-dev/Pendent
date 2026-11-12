@@ -9,7 +9,7 @@ sections.
 
 The ASIC performs the fluid simulation. The simulation uses particle and grid-based calculations, with Q4.12 fixed-point arithmetic to represent values in hardware.
 
-![PENDENT GF180MCU ASIC layout](https://cdn.hackclub.com/01a1c782-e337-7242-a7be-d90b00ccf6d1/RENDER.png)
+![PENDENT GF180MCU ASIC layout](images/pendent-render.png)
 
 _The GF180MCU GDS render._
 
@@ -39,22 +39,22 @@ The pendant's external hardware is designed around the ASIC and is mounted on th
 
 The display is a circular arrangement of 216 monochrome LEDs, mapped onto a 16x16 grid with no centre LED.
 
-![PENDENT 216 LED arrangement](<https://cdn.hackclub.com/01a1c781-dae6-7ccc-94b9-0011786a703d/Counting_leds_(216).png>)
+![PENDENT 216 LED arrangement](images/pendent-216-led-layout.png)
 
 _The 216-LED layout._
 
 - **ESP-PSRAM64H** — 3.3V, 64 Mbit (8 MB) external QPI PSRAM intended for the simulation's working memory.
 
-![ESP-PSRAM64H schematic](https://cdn.hackclub.com/01a1c7b2-2596-738b-a631-a399bee432cb/Memory.png)
+![ESP-PSRAM64H schematic](images/esp-psram64h-memory.png)
 
 - **LIS2DW12** — 3-axis accelerometer, intended for movement detection and shake-to-wake.
 
-![LIS2DW12 accelerometer](https://cdn.hackclub.com/01a1c781-e7bd-72f0-bf1e-41a53d6b73e4/Accerometer.png)
+![LIS2DW12 accelerometer](images/lis2dw12-accelerometer.png)
 
 - **HT16D33B** — the current LED-driver choice for the 216 monochrome LEDs. It replaces the earlier IS31FL3741A choice because its 16x16 arrangement better suits the display mapping.
 - **RP2040** — currently used only to select PENDENT's tile on the shared Tiny Tapeout chip.
 
-![RP2040 and supporting components](https://cdn.hackclub.com/01a1c782-e9a9-7463-81b6-3afcb39e0328/rp2040_and_stuff.png)
+![RP2040 and supporting components](images/rp2040-components.png)
 
 - **W25Q16JV** — 16 Mbit (2 MB) QSPI flash. It is intended for the RP2040 firmware, based on the devboard guide used for the design.
 

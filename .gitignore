@@ -19,3 +19,4 @@ run.sh
 src/Amaranth/build
 Pendent.zip
 list
+download_datasheet_images.sh
